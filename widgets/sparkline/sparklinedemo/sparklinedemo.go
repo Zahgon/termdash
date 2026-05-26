@@ -18,7 +18,6 @@ package main
 
 import (
 	"context"
-	"math/rand"
 	"time"
 
 	"github.com/mum4k/termdash"
@@ -33,46 +32,15 @@ import (
 // playSparkLine continuously adds values to the SparkLine, once every delay.
 // Exits when the context expires.
 func playSparkLine(ctx context.Context, sl *sparkline.SparkLine, delay time.Duration) {
-	const max = 100
-
-	ticker := time.NewTicker(delay)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			v := int(rand.Int31n(max + 1))
-			if err := sl.Add([]int{v}); err != nil {
-				panic(err)
-			}
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // fillSparkLine continuously fills the SparkLine up to its capacity with
 // random values.
 func fillSparkLine(ctx context.Context, sl *sparkline.SparkLine, delay time.Duration) {
-	const max = 100
-
-	ticker := time.NewTicker(delay)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			var values []int
-			for i := 0; i < sl.ValueCapacity(); i++ {
-				values = append(values, int(rand.Int31n(max+1)))
-			}
-			if err := sl.Add(values); err != nil {
-				panic(err)
-			}
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

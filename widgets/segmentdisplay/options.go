@@ -15,8 +15,6 @@
 package segmentdisplay
 
 import (
-	"fmt"
-
 	"github.com/mum4k/termdash/align"
 )
 
@@ -33,10 +31,12 @@ type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// options holds the provided options.
+	return
 }
 
-// options holds the provided options.
 type options struct {
 	hAlign          align.Horizontal
 	vAlign          align.Vertical
@@ -45,48 +45,25 @@ type options struct {
 }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	if min, max := 0, 100; o.gapPercent < min || o.gapPercent > max {
-		return fmt.Errorf("invalid GapPercent %d, must be %d <= value <= %d", o.gapPercent, min, max)
-	}
-	return nil
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // newOptions returns options with the default values set.
-func newOptions() *options {
-	return &options{
-		hAlign:     align.HorizontalCenter,
-		vAlign:     align.VerticalMiddle,
-		gapPercent: DefaultGapPercent,
-	}
-}
+func newOptions() *options { _ = "STUB: not implemented"; return nil }
 
 // AlignHorizontal sets the horizontal alignment for the individual display
 // segments. Defaults to alignment in the center.
-func AlignHorizontal(h align.Horizontal) Option {
-	return option(func(opts *options) {
-		opts.hAlign = h
-	})
-}
+func AlignHorizontal(h align.Horizontal) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // AlignVertical sets the vertical alignment for the individual display
 // segments. Defaults to alignment in the middle
-func AlignVertical(v align.Vertical) Option {
-	return option(func(opts *options) {
-		opts.vAlign = v
-	})
-}
+func AlignVertical(v align.Vertical) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // MaximizeSegmentHeight tells the widget to maximize the height of the
 // individual display segments.
 // When this option is set and the user has provided more text than we can fit
 // on the canvas, the widget will prefer to maximize height of individual
 // characters which will result in earlier trimming of the text.
-func MaximizeSegmentHeight() Option {
-	return option(func(opts *options) {
-		opts.maximizeSegSize = true
-	})
-}
+func MaximizeSegmentHeight() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // MaximizeDisplayedText tells the widget to maximize the amount of characters
 // that are displayed.
@@ -94,19 +71,11 @@ func MaximizeSegmentHeight() Option {
 // on the canvas, the widget will prefer to decrease the height of individual
 // characters and fit more of them on the canvas.
 // This is the default behavior.
-func MaximizeDisplayedText() Option {
-	return option(func(opts *options) {
-		opts.maximizeSegSize = false
-	})
-}
+func MaximizeDisplayedText() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultGapPercent is the default value for the GapPercent option.
 const DefaultGapPercent = 20
 
 // GapPercent sets the size of the horizontal gap between individual segments
 // (characters) expressed as a percentage of the segment height.
-func GapPercent(perc int) Option {
-	return option(func(opts *options) {
-		opts.gapPercent = perc
-	})
-}
+func GapPercent(perc int) Option { _ = "STUB: not implemented"; return *new(Option) }

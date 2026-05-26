@@ -15,11 +15,8 @@
 package tcell
 
 import (
-	"image"
-
 	tcell "github.com/gdamore/tcell/v2"
 	"github.com/mum4k/termdash/keyboard"
-	"github.com/mum4k/termdash/mouse"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 )
 
@@ -88,111 +85,32 @@ var tcellToTd = map[tcell.Key]keyboard.Key{
 
 // convKey converts a tcell keyboard event to the termdash format.
 func convKey(event *tcell.EventKey) terminalapi.Event {
-	tcellKey := event.Key()
-
-	if tcellKey == tcell.KeyRune {
-		ch := event.Rune()
-		return &terminalapi.Keyboard{
-			Key: keyboard.Key(ch),
-		}
-	}
-
-	k, ok := tcellToTd[tcellKey]
-	if !ok {
-		return terminalapi.NewErrorf("unknown keyboard key '%v' in a keyboard event %v", tcellKey, event.Name())
-	}
-
-	return &terminalapi.Keyboard{
-		Key: k,
-	}
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
 
 // convMouse converts a tcell mouse event to the termdash format.
 // Since tcell supports many combinations of mouse events, such as multiple mouse buttons pressed at the same time,
 // this function returns nil if the event is unsupported by termdash.
 func convMouse(event *tcell.EventMouse) terminalapi.Event {
-	var button mouse.Button
-	x, y := event.Position()
-
-	tcellBtn := event.Buttons()
-
-	// tcell uses signed int16 for button masks, and negative values are invalid
-	if tcellBtn < 0 {
-		return terminalapi.NewErrorf("unknown mouse key %v in a mouse event", tcellBtn)
-	}
-
-	// Get wheel events
-	if tcellBtn&tcell.WheelUp != 0 {
-		button = mouse.ButtonWheelUp
-	} else if tcellBtn&tcell.WheelDown != 0 {
-		button = mouse.ButtonWheelDown
-	}
-
-	// Return wheel event if found
-	if button > 0 {
-		return &terminalapi.Mouse{
-			Position: image.Point{X: x, Y: y},
-			Button:   button,
-		}
-	}
-
-	switch tcellBtn = event.Buttons(); tcellBtn {
-	case tcell.ButtonNone:
-		button = mouse.ButtonRelease
-	case tcell.Button1:
-		button = mouse.ButtonLeft
-	case tcell.Button2:
-		button = mouse.ButtonRight
-	case tcell.Button3:
-		button = mouse.ButtonMiddle
-	default:
-		// Unknown event to termdash
-		return nil
-	}
-
-	return &terminalapi.Mouse{
-		Position: image.Point{X: x, Y: y},
-		Button:   button,
-	}
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
+
+// tcell uses signed int16 for button masks, and negative values are invalid
+
+// Get wheel events
+
+// Return wheel event if found
+
+// Unknown event to termdash
 
 // convResize converts a tcell resize event to the termdash format.
 func convResize(event *tcell.EventResize) terminalapi.Event {
-	w, h := event.Size()
-	size := image.Point{X: w, Y: h}
-	if size.X < 0 || size.Y < 0 {
-		return terminalapi.NewErrorf("terminal resized to negative size: %v", size)
-	}
-	return &terminalapi.Resize{
-		Size: size,
-	}
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
 
 // toTermdashEvents converts a tcell event to the termdash event format.
 // This function returns nil if the event is unsupported by termdash.
-func toTermdashEvents(event tcell.Event) []terminalapi.Event {
-	switch event := event.(type) {
-	case *tcell.EventInterrupt:
-		return []terminalapi.Event{
-			terminalapi.NewError("event type EventInterrupt isn't supported"),
-		}
-	case *tcell.EventKey:
-		return []terminalapi.Event{convKey(event)}
-	case *tcell.EventMouse:
-		mouseEvent := convMouse(event)
-		if mouseEvent != nil {
-			return []terminalapi.Event{mouseEvent}
-		}
-		return nil
-	case *tcell.EventResize:
-		return []terminalapi.Event{convResize(event)}
-	case *tcell.EventError:
-		return []terminalapi.Event{
-			terminalapi.NewErrorf("encountered tcell error event: %v", event),
-		}
-	default:
-		return []terminalapi.Event{
-			terminalapi.NewErrorf("unknown tcell event type: %v", event),
-		}
-	}
-}
+func toTermdashEvents(event tcell.Event) []terminalapi.Event { _ = "STUB: not implemented"; return nil }

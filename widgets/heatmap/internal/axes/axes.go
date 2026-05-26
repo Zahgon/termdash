@@ -16,10 +16,7 @@
 package axes
 
 import (
-	"errors"
 	"image"
-
-	"github.com/mum4k/termdash/private/runewidth"
 )
 
 // axisWidth is width of an axis.
@@ -45,26 +42,14 @@ type YDetails struct {
 // RequiredWidth calculates the minimum width required
 // in order to draw the Y axis and its labels.
 // The parameter ls is the longest string in yLabels.
-func RequiredWidth(ls string) int {
-	return runewidth.StringWidth(ls) + axisWidth
-}
+func RequiredWidth(ls string) int { _ = "STUB: not implemented"; return 0 }
 
 // NewYDetails retrieves details about the Y axis required
 // to draw it on a canvas of the provided area.
-func NewYDetails(labels []string) (*YDetails, error) {
-	return nil, errors.New("not implemented")
-}
+func NewYDetails(labels []string) (*YDetails, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // LongestString returns the length of the longest string in the string array.
-func LongestString(strings []string) int {
-	var widest int
-	for _, s := range strings {
-		if l := runewidth.StringWidth(s); l > widest {
-			widest = l
-		}
-	}
-	return widest
-}
+func LongestString(strings []string) int { _ = "STUB: not implemented"; return 0 }
 
 // XDetails contain information about the X axis
 // that will NOT be drawn onto the canvas.
@@ -83,5 +68,6 @@ type XDetails struct {
 // of the provided area.
 // The yEnd is the point where the Y axis ends.
 func NewXDetails(cvsAr image.Rectangle, yEnd image.Point, labels []string, cellWidth int) (*XDetails, error) {
-	return nil, errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -16,7 +16,6 @@
 package testbraille
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/cell"
@@ -26,52 +25,34 @@ import (
 )
 
 // MustNew returns a new canvas or panics.
-func MustNew(area image.Rectangle) *braille.Canvas {
-	cvs, err := braille.New(area)
-	if err != nil {
-		panic(fmt.Sprintf("braille.New => unexpected error: %v", err))
-	}
-	return cvs
-}
+func MustNew(area image.Rectangle) *braille.Canvas { _ = "STUB: not implemented"; return nil }
 
 // MustApply applies the canvas on the terminal or panics.
-func MustApply(bc *braille.Canvas, t *faketerm.Terminal) {
-	if err := bc.Apply(t); err != nil {
-		panic(fmt.Sprintf("braille.Apply => unexpected error: %v", err))
-	}
-}
+func MustApply(bc *braille.Canvas, t *faketerm.Terminal) { _ = "STUB: not implemented"; return }
 
 // MustSetPixel sets the specified pixel or panics.
 func MustSetPixel(bc *braille.Canvas, p image.Point, opts ...cell.Option) {
-	if err := bc.SetPixel(p, opts...); err != nil {
-		panic(fmt.Sprintf("braille.SetPixel => unexpected error: %v", err))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MustClearPixel clears the specified pixel or panics.
 func MustClearPixel(bc *braille.Canvas, p image.Point, opts ...cell.Option) {
-	if err := bc.ClearPixel(p, opts...); err != nil {
-		panic(fmt.Sprintf("braille.ClearPixel => unexpected error: %v", err))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MustCopyTo copies the braille canvas onto the provided canvas or panics.
-func MustCopyTo(bc *braille.Canvas, dst *canvas.Canvas) {
-	if err := bc.CopyTo(dst); err != nil {
-		panic(fmt.Sprintf("bc.CopyTo => unexpected error: %v", err))
-	}
-}
+func MustCopyTo(bc *braille.Canvas, dst *canvas.Canvas) { _ = "STUB: not implemented"; return }
 
 // MustSetCellOpts sets the cell options or panics.
 func MustSetCellOpts(bc *braille.Canvas, cellPoint image.Point, opts ...cell.Option) {
-	if err := bc.SetCellOpts(cellPoint, opts...); err != nil {
-		panic(fmt.Sprintf("bc.SetCellOpts => unexpected error: %v", err))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MustSetAreaCellOpts sets the cell options in the area or panics.
 func MustSetAreaCellOpts(bc *braille.Canvas, cellArea image.Rectangle, opts ...cell.Option) {
-	if err := bc.SetAreaCellOpts(cellArea, opts...); err != nil {
-		panic(fmt.Sprintf("bc.SetAreaCellOpts => unexpected error: %v", err))
-	}
+	_ = "STUB: not implemented"
+	return
 }

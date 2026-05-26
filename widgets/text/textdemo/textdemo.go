@@ -18,8 +18,6 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/mum4k/termdash/terminal/tcell"
@@ -48,23 +46,8 @@ var quotations = []string{
 // writeLines writes a line of text to the text widget every delay.
 // Exits when the context expires.
 func writeLines(ctx context.Context, t *text.Text, delay time.Duration) {
-	s := rand.NewSource(time.Now().Unix())
-	r := rand.New(s)
-	ticker := time.NewTicker(delay)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-ticker.C:
-			i := r.Intn(len(quotations))
-			if err := t.Write(fmt.Sprintf("%s\n", quotations[i])); err != nil {
-				panic(err)
-			}
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

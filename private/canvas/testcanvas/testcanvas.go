@@ -16,7 +16,6 @@
 package testcanvas
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/cell"
@@ -26,52 +25,28 @@ import (
 )
 
 // MustNew returns a new canvas or panics.
-func MustNew(area image.Rectangle) *canvas.Canvas {
-	cvs, err := canvas.New(area)
-	if err != nil {
-		panic(fmt.Sprintf("canvas.New => unexpected error: %v", err))
-	}
-	return cvs
-}
+func MustNew(area image.Rectangle) *canvas.Canvas { _ = "STUB: not implemented"; return nil }
 
 // MustApply applies the canvas on the terminal or panics.
-func MustApply(c *canvas.Canvas, t *faketerm.Terminal) {
-	if err := c.Apply(t); err != nil {
-		panic(fmt.Sprintf("canvas.Apply => unexpected error: %v", err))
-	}
-}
+func MustApply(c *canvas.Canvas, t *faketerm.Terminal) { _ = "STUB: not implemented"; return }
 
 // MustSetCell sets the cell value or panics. Returns the number of cells the
 // rune occupies, wide runes can occupy multiple cells when printed on the
 // terminal. See http://www.unicode.org/reports/tr11/.
 func MustSetCell(c *canvas.Canvas, p image.Point, r rune, opts ...cell.Option) int {
-	cells, err := c.SetCell(p, r, opts...)
-	if err != nil {
-		panic(fmt.Sprintf("canvas.SetCell => unexpected error: %v", err))
-	}
-	return cells
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // MustSetAreaCells sets the cells in the area  or panics.
 func MustSetAreaCells(c *canvas.Canvas, cellArea image.Rectangle, r rune, opts ...cell.Option) {
-	if err := c.SetAreaCells(cellArea, r, opts...); err != nil {
-		panic(fmt.Sprintf("canvas.SetAreaCells => unexpected error: %v", err))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MustCell returns the cell or panics.
-func MustCell(c *canvas.Canvas, p image.Point) *buffer.Cell {
-	cell, err := c.Cell(p)
-	if err != nil {
-		panic(fmt.Sprintf("canvas.Cell => unexpected error: %v", err))
-	}
-	return cell
-}
+func MustCell(c *canvas.Canvas, p image.Point) *buffer.Cell { _ = "STUB: not implemented"; return nil }
 
 // MustCopyTo copies the content of the source canvas onto the destination
 // canvas or panics.
-func MustCopyTo(src, dst *canvas.Canvas) {
-	if err := src.CopyTo(dst); err != nil {
-		panic(fmt.Sprintf("canvas.CopyTo => unexpected error: %v", err))
-	}
-}
+func MustCopyTo(src, dst *canvas.Canvas) { _ = "STUB: not implemented"; return }

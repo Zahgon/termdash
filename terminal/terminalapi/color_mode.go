@@ -20,12 +20,7 @@ package terminalapi
 type ColorMode int
 
 // String implements fmt.Stringer()
-func (cm ColorMode) String() string {
-	if n, ok := colorModeNames[cm]; ok {
-		return n
-	}
-	return "ColorModeUnknown"
-}
+func (cm ColorMode) String() string { _ = "STUB: not implemented"; return "" }
 
 // colorModeNames maps ColorMode values to human readable names.
 var colorModeNames = map[ColorMode]string{

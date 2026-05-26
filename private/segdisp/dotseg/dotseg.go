@@ -38,25 +38,15 @@ The following outlines segments in the display and their names.
 package dotseg
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/private/canvas"
-	"github.com/mum4k/termdash/private/segdisp"
-	"github.com/mum4k/termdash/private/segdisp/segment"
 )
 
 // Segment represents a single segment in the display.
 type Segment int
 
 // String implements fmt.Stringer()
-func (s Segment) String() string {
-	if n, ok := segmentNames[s]; ok {
-		return n
-	}
-	return "SegmentUnknown"
-}
+func (s Segment) String() string { _ = "STUB: not implemented"; return "" }
 
 // segmentNames maps Segment values to human readable names.
 var segmentNames = map[Segment]string{
@@ -85,22 +75,10 @@ var characterSegments = map[rune][]Segment{
 }
 
 // SupportedChars returns all characters this display supports.
-func SupportedChars() string {
-	var b strings.Builder
-	for r := range characterSegments {
-		b.WriteRune(r)
-	}
-	return b.String()
-}
+func SupportedChars() string { _ = "STUB: not implemented"; return "" }
 
 // AllSegments returns all segments in an undefined order.
-func AllSegments() []Segment {
-	var res []Segment
-	for s := range segmentNames {
-		res = append(res, s)
-	}
-	return res
-}
+func AllSegments() []Segment { _ = "STUB: not implemented"; return nil }
 
 // Option is used to provide options.
 type Option interface {
@@ -113,15 +91,13 @@ type option func(*Display)
 
 // set implements Option.set.
 func (o option) set(d *Display) {
-	o(d)
+	_ = "STUB: not implemented"
+
+	// CellOpts sets the cell options on the cells that contain the segment display.
+	return
 }
 
-// CellOpts sets the cell options on the cells that contain the segment display.
-func CellOpts(cOpts ...cell.Option) Option {
-	return option(func(d *Display) {
-		d.cellOpts = cOpts
-	})
-}
+func CellOpts(cOpts ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Display represents the segment display.
 // This object is not thread-safe.
@@ -134,105 +110,34 @@ type Display struct {
 
 // New creates a new segment display.
 // Initially all the segments are off.
-func New(opts ...Option) *Display {
-	d := &Display{
-		segments: map[Segment]bool{},
-	}
-
-	for _, opt := range opts {
-		opt.set(d)
-	}
-	return d
-}
+func New(opts ...Option) *Display { _ = "STUB: not implemented"; return nil }
 
 // Clear clears the entire display, turning all segments off.
-func (d *Display) Clear(opts ...Option) {
-	for _, opt := range opts {
-		opt.set(d)
-	}
-
-	d.segments = map[Segment]bool{}
-}
+func (d *Display) Clear(opts ...Option) { _ = "STUB: not implemented"; return }
 
 // SetSegment sets the specified segment on.
 // This method is idempotent.
-func (d *Display) SetSegment(s Segment) error {
-	if s <= segmentUnknown || s >= segmentMax {
-		return fmt.Errorf("unknown segment %v(%d)", s, s)
-	}
-	d.segments[s] = true
-	return nil
-}
+func (d *Display) SetSegment(s Segment) error { _ = "STUB: not implemented"; return nil }
 
 // ClearSegment sets the specified segment off.
 // This method is idempotent.
-func (d *Display) ClearSegment(s Segment) error {
-	if s <= segmentUnknown || s >= segmentMax {
-		return fmt.Errorf("unknown segment %v(%d)", s, s)
-	}
-	d.segments[s] = false
-	return nil
-}
+func (d *Display) ClearSegment(s Segment) error { _ = "STUB: not implemented"; return nil }
 
 // ToggleSegment toggles the state of the specified segment, i.e it either sets
 // or clears it depending on its current state.
-func (d *Display) ToggleSegment(s Segment) error {
-	if s <= segmentUnknown || s >= segmentMax {
-		return fmt.Errorf("unknown segment %v(%d)", s, s)
-	}
-	if d.segments[s] {
-		d.segments[s] = false
-	} else {
-		d.segments[s] = true
-	}
-	return nil
-}
+func (d *Display) ToggleSegment(s Segment) error { _ = "STUB: not implemented"; return nil }
 
 // SetCharacter sets all the segments that are needed to display the provided
 // character.
 // The display only supports characters returned by SupportedsChars().
 // Doesn't clear the display of segments set previously.
-func (d *Display) SetCharacter(c rune) error {
-	seg, ok := characterSegments[c]
-	if !ok {
-		return fmt.Errorf("display doesn't support character %q rune(%v)", c, c)
-	}
-
-	for _, s := range seg {
-		if err := d.SetSegment(s); err != nil {
-			return err
-		}
-	}
-	return nil
-}
+func (d *Display) SetCharacter(c rune) error { _ = "STUB: not implemented"; return nil }
 
 // Draw draws the current state of the segment display onto the canvas.
 // The canvas must be at least MinCols x MinRows cells, or an error will be
 // returned.
 // Any options provided to draw overwrite the values provided to New.
 func (d *Display) Draw(cvs *canvas.Canvas, opts ...Option) error {
-	for _, o := range opts {
-		o.set(d)
-	}
-
-	bc, bcAr, err := segdisp.ToBraille(cvs)
-	if err != nil {
-		return err
-	}
-
-	attr := newAttributes(bcAr)
-	for seg, isSet := range d.segments {
-		if !isSet {
-			continue
-		}
-
-		ar, err := attr.segArea(seg)
-		if err != nil {
-			return err
-		}
-		if err := segment.HV(bc, ar, segment.Vertical, segment.CellOpts(d.cellOpts...)); err != nil {
-			return err
-		}
-	}
-	return bc.CopyTo(cvs)
+	_ = "STUB: not implemented"
+	return nil
 }

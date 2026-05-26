@@ -17,24 +17,17 @@ package draw
 // braille_line.go contains code that draws lines on a braille canvas.
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/private/canvas/braille"
-	"github.com/mum4k/termdash/private/numbers"
 )
 
 // braillePixelChange represents an action on a pixel on the braille canvas.
 type braillePixelChange int
 
 // String implements fmt.Stringer()
-func (bpc braillePixelChange) String() string {
-	if n, ok := braillePixelChangeNames[bpc]; ok {
-		return n
-	}
-	return "braillePixelChangeUnknown"
-}
+func (bpc braillePixelChange) String() string { _ = "STUB: not implemented"; return "" }
 
 // braillePixelChangeNames maps braillePixelChange values to human readable names.
 var braillePixelChangeNames = map[braillePixelChange]string{
@@ -62,36 +55,32 @@ type brailleLineOptions struct {
 }
 
 // newBrailleLineOptions returns a new brailleLineOptions instance.
-func newBrailleLineOptions() *brailleLineOptions {
-	return &brailleLineOptions{
-		pixelChange: braillePixelChangeSet,
-	}
-}
+func newBrailleLineOptions() *brailleLineOptions { _ = "STUB: not implemented"; return nil }
 
 // brailleLineOption implements BrailleLineOption.
 type brailleLineOption func(*brailleLineOptions)
 
 // set implements BrailleLineOption.set.
 func (o brailleLineOption) set(opts *brailleLineOptions) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// BrailleLineCellOpts sets options on the cells that contain the line.
+	// Cell options on a braille canvas can only be set on the entire cell, not per
+	// pixel.
+	return
 }
 
-// BrailleLineCellOpts sets options on the cells that contain the line.
-// Cell options on a braille canvas can only be set on the entire cell, not per
-// pixel.
 func BrailleLineCellOpts(cOpts ...cell.Option) BrailleLineOption {
-	return brailleLineOption(func(opts *brailleLineOptions) {
-		opts.cellOpts = cOpts
-	})
+	_ = "STUB: not implemented"
+	return *new(BrailleLineOption)
 }
 
 // BrailleLineClearPixels changes the behavior of BrailleLine, so that it
 // clears the pixels belonging to the line instead of setting them.
 // Useful in order to "erase" a line from the canvas as opposed to drawing one.
 func BrailleLineClearPixels() BrailleLineOption {
-	return brailleLineOption(func(opts *brailleLineOptions) {
-		opts.pixelChange = braillePixelChangeClear
-	})
+	_ = "STUB: not implemented"
+	return *new(BrailleLineOption)
 }
 
 // BrailleLine draws an approximated line segment on the braille canvas between
@@ -101,104 +90,24 @@ func BrailleLineClearPixels() BrailleLineOption {
 // canvas.
 // The start or end coordinates must not be negative.
 func BrailleLine(bc *braille.Canvas, start, end image.Point, opts ...BrailleLineOption) error {
-	if start.X < 0 || start.Y < 0 {
-		return fmt.Errorf("the start coordinates cannot be negative, got: %v", start)
-	}
-	if end.X < 0 || end.Y < 0 {
-		return fmt.Errorf("the end coordinates cannot be negative, got: %v", end)
-	}
-
-	opt := newBrailleLineOptions()
-	for _, o := range opts {
-		o.set(opt)
-	}
-
-	points := brailleLinePoints(start, end)
-	for _, p := range points {
-		switch opt.pixelChange {
-		case braillePixelChangeSet:
-			if err := bc.SetPixel(p, opt.cellOpts...); err != nil {
-				return fmt.Errorf("bc.SetPixel(%v) => %v", p, err)
-			}
-		case braillePixelChangeClear:
-			if err := bc.ClearPixel(p, opt.cellOpts...); err != nil {
-				return fmt.Errorf("bc.ClearPixel(%v) => %v", p, err)
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // brailleLinePoints returns the points to set when drawing the line.
 func brailleLinePoints(start, end image.Point) []image.Point {
+	_ = "STUB: not implemented"
 	// Implements Bresenham's line algorithm.
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-
-	vertProj := numbers.Abs(end.Y - start.Y)
-	horizProj := numbers.Abs(end.X - start.X)
-	if vertProj < horizProj {
-		if start.X > end.X {
-			return lineLow(end.X, end.Y, start.X, start.Y)
-		}
-		return lineLow(start.X, start.Y, end.X, end.Y)
-	}
-	if start.Y > end.Y {
-		return lineHigh(end.X, end.Y, start.X, start.Y)
-	}
-	return lineHigh(start.X, start.Y, end.X, end.Y)
+	return nil
 }
 
 // lineLow returns points that create a line whose horizontal projection
 // (end.X - start.X) is longer than its vertical projection
 // (end.Y - start.Y).
-func lineLow(x0, y0, x1, y1 int) []image.Point {
-	deltaX := x1 - x0
-	deltaY := y1 - y0
-
-	stepY := 1
-	if deltaY < 0 {
-		stepY = -1
-		deltaY = -deltaY
-	}
-
-	var res []image.Point
-	diff := 2*deltaY - deltaX
-	y := y0
-	for x := x0; x <= x1; x++ {
-		res = append(res, image.Point{x, y})
-		if diff > 0 {
-			y += stepY
-			diff -= 2 * deltaX
-		}
-		diff += 2 * deltaY
-	}
-	return res
-}
+func lineLow(x0, y0, x1, y1 int) []image.Point { _ = "STUB: not implemented"; return nil }
 
 // lineHigh returns points that createa line whose vertical projection
 // (end.Y - start.Y) is longer than its horizontal projection
 // (end.X - start.X).
-func lineHigh(x0, y0, x1, y1 int) []image.Point {
-	deltaX := x1 - x0
-	deltaY := y1 - y0
-
-	stepX := 1
-	if deltaX < 0 {
-		stepX = -1
-		deltaX = -deltaX
-	}
-
-	var res []image.Point
-	diff := 2*deltaX - deltaY
-	x := x0
-	for y := y0; y <= y1; y++ {
-		res = append(res, image.Point{x, y})
-
-		if diff > 0 {
-			x += stepX
-			diff -= 2 * deltaY
-		}
-		diff += 2 * deltaX
-	}
-	return res
-}
+func lineHigh(x0, y0, x1, y1 int) []image.Point { _ = "STUB: not implemented"; return nil }

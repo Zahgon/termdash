@@ -17,11 +17,9 @@ package main
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	"github.com/mum4k/termdash"
-	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/container"
 	"github.com/mum4k/termdash/linestyle"
 	"github.com/mum4k/termdash/terminal/tcell"
@@ -32,32 +30,8 @@ import (
 // clock displays the current time on the segment display.
 // Exists when the context expires.
 func clock(ctx context.Context, sd *segmentdisplay.SegmentDisplay) {
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			now := time.Now()
-			nowStr := now.Format("15 04")
-			parts := strings.Split(nowStr, " ")
-
-			spacer := " "
-			if now.Second()%2 == 0 {
-				spacer = ":"
-			}
-			chunks := []*segmentdisplay.TextChunk{
-				segmentdisplay.NewChunk(parts[0], segmentdisplay.WriteCellOpts(cell.FgColor(cell.ColorNumber(33)))),
-				segmentdisplay.NewChunk(spacer),
-				segmentdisplay.NewChunk(parts[1], segmentdisplay.WriteCellOpts(cell.FgColor(cell.ColorRed))),
-			}
-			if err := sd.Write(chunks); err != nil {
-				panic(err)
-			}
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // rotate returns a new slice with inputs rotated by step.
@@ -67,51 +41,13 @@ func clock(ctx context.Context, sd *segmentdisplay.SegmentDisplay) {
 //	inputs[1] -> inputs[0]
 //
 // And so on.
-func rotate(inputs []rune, step int) []rune {
-	return append(inputs[step:], inputs[:step]...)
-}
+func rotate(inputs []rune, step int) []rune { _ = "STUB: not implemented"; return nil }
 
 // rollText rolls a text across the segment display.
 // Exists when the context expires.
 func rollText(ctx context.Context, sd *segmentdisplay.SegmentDisplay) {
-	const text = "Termdash"
-	colors := map[rune]cell.Color{
-		'T': cell.ColorNumber(33),
-		'e': cell.ColorRed,
-		'r': cell.ColorYellow,
-		'm': cell.ColorNumber(33),
-		'd': cell.ColorGreen,
-		'a': cell.ColorRed,
-		's': cell.ColorGreen,
-		'h': cell.ColorRed,
-	}
-
-	var state []rune
-	for i := 0; i < len(text); i++ {
-		state = append(state, ' ')
-	}
-	state = append(state, []rune(text)...)
-	ticker := time.NewTicker(1 * time.Second)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			var chunks []*segmentdisplay.TextChunk
-			for i := 0; i < len(text); i++ {
-				chunks = append(chunks, segmentdisplay.NewChunk(
-					string(state[i]),
-					segmentdisplay.WriteCellOpts(cell.FgColor(colors[state[i]])),
-				))
-			}
-			if err := sd.Write(chunks); err != nil {
-				panic(err)
-			}
-			state = rotate(state, 1)
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

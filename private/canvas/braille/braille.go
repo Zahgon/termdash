@@ -42,7 +42,6 @@ same cell options.
 package braille
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/cell"
@@ -94,112 +93,55 @@ type Canvas struct {
 }
 
 // New returns a new braille canvas for the provided area.
-func New(ar image.Rectangle) (*Canvas, error) {
-	rc, err := canvas.New(ar)
-	if err != nil {
-		return nil, err
-	}
-	return &Canvas{
-		regular: rc,
-	}, nil
-}
+func New(ar image.Rectangle) (*Canvas, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Size returns the size of the braille canvas in pixels.
-func (c *Canvas) Size() image.Point {
-	s := c.regular.Size()
-	return image.Point{s.X * ColMult, s.Y * RowMult}
-}
+func (c *Canvas) Size() image.Point { _ = "STUB: not implemented"; return *new(image.Point) }
 
 // CellArea returns the area of the underlying cell canvas in cells.
 func (c *Canvas) CellArea() image.Rectangle {
-	return c.regular.Area()
+	_ = "STUB: not implemented"
+	return *
+
+	// Area returns the area of the braille canvas in pixels.
+	// This will be zero-based area that is two times wider and four times taller
+	// than the area used to create the braille canvas.
+	new(image.Rectangle)
 }
 
-// Area returns the area of the braille canvas in pixels.
-// This will be zero-based area that is two times wider and four times taller
-// than the area used to create the braille canvas.
-func (c *Canvas) Area() image.Rectangle {
-	ar := c.regular.Area()
-	return image.Rect(0, 0, ar.Dx()*ColMult, ar.Dy()*RowMult)
-}
+func (c *Canvas) Area() image.Rectangle { _ = "STUB: not implemented"; return *new(image.Rectangle) }
 
 // Clear clears all the content on the canvas.
-func (c *Canvas) Clear() error {
-	return c.regular.Clear()
-}
+func (c *Canvas) Clear() error { _ = "STUB: not implemented"; return nil }
 
 // SetPixel turns on pixel at the specified point.
 // The provided cell options will be applied to the entire cell (all of its
 // pixels). This method is idempotent.
 func (c *Canvas) SetPixel(p image.Point, opts ...cell.Option) error {
-	cp, err := c.cellPoint(p)
-	if err != nil {
-		return err
-	}
-	cell, err := c.regular.Cell(cp)
-	if err != nil {
-		return err
-	}
-
-	var r rune
-	if isBraille(cell.Rune) {
-		// If the cell already has a braille pattern rune, we will be adding
-		// the pixel.
-		r = cell.Rune
-	} else {
-		r = brailleCharOffset
-	}
-
-	r |= pixelRunes[pixelPoint(p)]
-	if _, err := c.regular.SetCell(cp, r, opts...); err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// If the cell already has a braille pattern rune, we will be adding
+// the pixel.
 
 // ClearPixel turns off pixel at the specified point.
 // The provided cell options will be applied to the entire cell (all of its
 // pixels). This method is idempotent.
 func (c *Canvas) ClearPixel(p image.Point, opts ...cell.Option) error {
-	cp, err := c.cellPoint(p)
-	if err != nil {
-		return err
-	}
-	cell, err := c.regular.Cell(cp)
-	if err != nil {
-		return err
-	}
-
-	// Clear is idempotent.
-	if !isBraille(cell.Rune) || !pixelSet(cell.Rune, p) {
-		return nil
-	}
-
-	r := cell.Rune & ^pixelRunes[pixelPoint(p)]
-	if _, err := c.regular.SetCell(cp, r, opts...); err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Clear is idempotent.
 
 // TogglePixel toggles the state of the pixel at the specified point, i.e. it
 // either sets or clear it depending on its current state.
 // The provided cell options will be applied to the entire cell (all of its
 // pixels).
 func (c *Canvas) TogglePixel(p image.Point, opts ...cell.Option) error {
-	cp, err := c.cellPoint(p)
-	if err != nil {
-		return err
-	}
-	curCell, err := c.regular.Cell(cp)
-	if err != nil {
-		return err
-	}
-
-	if isBraille(curCell.Rune) && pixelSet(curCell.Rune, p) {
-		return c.ClearPixel(p, opts...)
-	}
-	return c.SetPixel(p, opts...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetCellOpts sets options on the specified cell of the braille canvas without
@@ -207,78 +149,40 @@ func (c *Canvas) TogglePixel(p image.Point, opts ...cell.Option) error {
 // Sets the default cell options if no options are provided.
 // This method is idempotent.
 func (c *Canvas) SetCellOpts(cellPoint image.Point, opts ...cell.Option) error {
-	curCell, err := c.regular.Cell(cellPoint)
-	if err != nil {
-		return err
-	}
-
-	if len(opts) == 0 {
-		// Set the default options.
-		opts = []cell.Option{
-			cell.FgColor(cell.ColorDefault),
-			cell.BgColor(cell.ColorDefault),
-		}
-	}
-	if _, err := c.regular.SetCell(cellPoint, curCell.Rune, opts...); err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Set the default options.
 
 // SetAreaCellOpts is like SetCellOpts, but sets the specified options on all
 // the cells within the provided area.
 func (c *Canvas) SetAreaCellOpts(cellArea image.Rectangle, opts ...cell.Option) error {
-	haveArea := c.regular.Area()
-	if !cellArea.In(haveArea) {
-		return fmt.Errorf("unable to set cell options in area %v, it must fit inside the available cell area is %v", cellArea, haveArea)
-	}
-	for col := cellArea.Min.X; col < cellArea.Max.X; col++ {
-		for row := cellArea.Min.Y; row < cellArea.Max.Y; row++ {
-			if err := c.SetCellOpts(image.Point{col, row}, opts...); err != nil {
-				return err
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Apply applies the canvas to the corresponding area of the terminal.
 // Guarantees to stay within limits of the area the canvas was created with.
-func (c *Canvas) Apply(t terminalapi.Terminal) error {
-	return c.regular.Apply(t)
-}
+func (c *Canvas) Apply(t terminalapi.Terminal) error { _ = "STUB: not implemented"; return nil }
 
 // CopyTo copies the content of this canvas onto the destination canvas.
 // This canvas can have an offset when compared to the destination canvas, i.e.
 // the area of this canvas doesn't have to be zero-based.
-func (c *Canvas) CopyTo(dst *canvas.Canvas) error {
-	return c.regular.CopyTo(dst)
-}
+func (c *Canvas) CopyTo(dst *canvas.Canvas) error { _ = "STUB: not implemented"; return nil }
 
 // cellPoint determines the point (coordinate) of the character cell given
 // coordinates in pixels.
 func (c *Canvas) cellPoint(p image.Point) (image.Point, error) {
-	if p.X < 0 || p.Y < 0 {
-		return image.ZP, fmt.Errorf("pixels cannot have negative coordinates: %v", p)
-	}
-	cp := image.Point{p.X / ColMult, p.Y / RowMult}
-	if ar := c.regular.Area(); !cp.In(ar) {
-		return image.ZP, fmt.Errorf("pixel at%v would be in a character cell at%v which falls outside of the canvas area %v", p, cp, ar)
-	}
-	return cp, nil
+	_ = "STUB: not implemented"
+	return *new(image.Point), nil
 }
 
 // isBraille determines if the rune is a braille pattern rune.
-func isBraille(r rune) bool {
-	return r >= brailleCharOffset && r <= brailleLastChar
-}
+func isBraille(r rune) bool { _ = "STUB: not implemented"; return false }
 
 // pixelSet returns true if the provided rune has the specified pixel set.
-func pixelSet(r rune, p image.Point) bool {
-	return r&pixelRunes[pixelPoint(p)] > 0
-}
+func pixelSet(r rune, p image.Point) bool { _ = "STUB: not implemented"; return false }
 
 // pixelPoint translates point within canvas to point within the target cell.
-func pixelPoint(p image.Point) image.Point {
-	return image.Point{p.X % ColMult, p.Y % RowMult}
-}
+func pixelPoint(p image.Point) image.Point { _ = "STUB: not implemented"; return *new(image.Point) }

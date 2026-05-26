@@ -17,21 +17,14 @@
 package button
 
 import (
-	"errors"
-	"fmt"
 	"image"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/mum4k/termdash/align"
-	"github.com/mum4k/termdash/cell"
-	"github.com/mum4k/termdash/mouse"
-	"github.com/mum4k/termdash/private/alignfor"
 	"github.com/mum4k/termdash/private/attrrange"
 	"github.com/mum4k/termdash/private/button"
 	"github.com/mum4k/termdash/private/canvas"
-	"github.com/mum4k/termdash/private/draw"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	"github.com/mum4k/termdash/widgetapi"
 )
@@ -55,12 +48,7 @@ type TextChunk struct {
 }
 
 // NewChunk creates a new text chunk. Each chunk of text can have its own cell options.
-func NewChunk(text string, tOpts ...TextOption) *TextChunk {
-	return &TextChunk{
-		text:  text,
-		tOpts: newTextOptions(tOpts...),
-	}
-}
+func NewChunk(text string, tOpts ...TextOption) *TextChunk { _ = "STUB: not implemented"; return nil }
 
 // Button can be pressed using a mouse click or a configured keyboard key.
 //
@@ -102,62 +90,19 @@ type Button struct {
 // The callback function can be nil in which case pressing the button is a
 // no-op.
 func New(text string, cFn CallbackFn, opts ...Option) (*Button, error) {
-	return NewFromChunks([]*TextChunk{NewChunk(text)}, cFn, opts...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewFromChunks is like New, but allows specifying write options for
 // individual chunks of text displayed in the button.
 func NewFromChunks(chunks []*TextChunk, cFn CallbackFn, opts ...Option) (*Button, error) {
-	if len(chunks) == 0 {
-		return nil, errors.New("at least one text chunk must be specified")
-	}
-
-	var (
-		text       strings.Builder
-		givenTOpts []*textOptions
-	)
-	tOptsTracker := attrrange.NewTracker()
-	for i, tc := range chunks {
-		if tc.text == "" {
-			return nil, fmt.Errorf("text chunk[%d] is empty, all chunks must contains some text", i)
-		}
-
-		pos := text.Len()
-		givenTOpts = append(givenTOpts, tc.tOpts)
-		tOptsIdx := len(givenTOpts) - 1
-		if err := tOptsTracker.Add(pos, pos+len(tc.text), tOptsIdx); err != nil {
-			return nil, err
-		}
-		text.WriteString(tc.text)
-	}
-
-	opt := newOptions(text.String())
-	for _, o := range opts {
-		o.set(opt)
-	}
-	if err := opt.validate(); err != nil {
-		return nil, err
-	}
-
-	for _, tOpts := range givenTOpts {
-		tOpts.setDefaultFgColor(opt.textColor)
-	}
-	return &Button{
-		text:         text,
-		givenTOpts:   givenTOpts,
-		tOptsTracker: tOptsTracker,
-		mouseFSM:     button.NewFSM(mouse.ButtonLeft, image.ZR),
-		callback:     cFn,
-		opts:         opt,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetCallback replaces the callback function of the button with the one provided.
-func (b *Button) SetCallback(cFn CallbackFn) {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-	b.callback = cFn
-}
+func (b *Button) SetCallback(cFn CallbackFn) { _ = "STUB: not implemented"; return }
 
 // Vars to be replaced from tests.
 var (
@@ -175,108 +120,23 @@ var (
 // Draw draws the Button widget onto the canvas.
 // Implements widgetapi.Widget.Draw.
 func (b *Button) Draw(cvs *canvas.Canvas, meta *widgetapi.Meta) error {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
-	if b.keyTriggerTime != nil {
-		since := timeSince(*b.keyTriggerTime)
-		if since > b.opts.keyUpDelay {
-			b.state = button.Up
-		}
-	}
-
-	cvsAr := cvs.Area()
-	b.mouseFSM.UpdateArea(cvsAr)
-
-	sw := b.shadowWidth()
-	shadowAr := image.Rect(sw, sw, cvsAr.Dx(), cvsAr.Dy())
-	if !b.opts.disableShadow {
-		if err := cvs.SetAreaCells(shadowAr, shadowRune, cell.BgColor(b.opts.shadowColor)); err != nil {
-			return err
-		}
-	}
-
-	buttonAr := image.Rect(0, 0, cvsAr.Dx()-sw, cvsAr.Dy()-sw)
-	if b.state == button.Down && !b.opts.disableShadow {
-		buttonAr = shadowAr
-	}
-
-	var fillColor cell.Color
-	switch {
-	case b.state == button.Down && b.opts.pressedFillColor != nil:
-		fillColor = *b.opts.pressedFillColor
-	case meta.Focused && b.opts.focusedFillColor != nil:
-		fillColor = *b.opts.focusedFillColor
-	default:
-		fillColor = b.opts.fillColor
-	}
-
-	if err := cvs.SetAreaCells(buttonAr, buttonRune, cell.BgColor(fillColor)); err != nil {
-		return err
-	}
-	return b.drawText(cvs, meta, buttonAr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // drawText draws the text inside the button.
 func (b *Button) drawText(cvs *canvas.Canvas, meta *widgetapi.Meta, buttonAr image.Rectangle) error {
-	pad := b.opts.textHorizontalPadding
-	textAr := image.Rect(buttonAr.Min.X+pad, buttonAr.Min.Y, buttonAr.Dx()-pad, buttonAr.Max.Y)
-	start, err := alignfor.Text(textAr, b.text.String(), align.HorizontalCenter, align.VerticalMiddle)
-	if err != nil {
-		return err
-	}
-
-	maxCells := buttonAr.Max.X - start.X
-	trimmed, err := draw.TrimText(b.text.String(), maxCells, draw.OverrunModeThreeDot)
-	if err != nil {
-		return err
-	}
-
-	optRange, err := b.tOptsTracker.ForPosition(0) // Text options for the current byte.
-	if err != nil {
-		return err
-	}
-
-	cur := start
-	for i, r := range trimmed {
-		if i >= optRange.High { // Get the next write options.
-			or, err := b.tOptsTracker.ForPosition(i)
-			if err != nil {
-				return err
-			}
-			optRange = or
-		}
-
-		tOpts := b.givenTOpts[optRange.AttrIdx]
-		var cellOpts []cell.Option
-		switch {
-		case b.state == button.Down && len(tOpts.pressedCellOpts) > 0:
-			cellOpts = tOpts.pressedCellOpts
-		case meta.Focused && len(tOpts.focusedCellOpts) > 0:
-			cellOpts = tOpts.focusedCellOpts
-		default:
-			cellOpts = tOpts.cellOpts
-		}
-		cells, err := cvs.SetCell(cur, r, cellOpts...)
-		if err != nil {
-			return err
-		}
-		cur = image.Point{cur.X + cells, cur.Y}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Text options for the current byte.
+
+// Get the next write options.
+
 // activated asserts whether the keyboard event activated the button.
 func (b *Button) keyActivated(k *terminalapi.Keyboard, meta *widgetapi.EventMeta) bool {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
-	if b.opts.globalKeys[k.Key] || (b.opts.focusedKeys[k.Key] && meta.Focused) {
-		b.state = button.Down
-		now := time.Now().UTC()
-		b.keyTriggerTime = &now
-		return true
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
@@ -285,71 +145,37 @@ func (b *Button) keyActivated(k *terminalapi.Keyboard, meta *widgetapi.EventMeta
 //
 // Implements widgetapi.Widget.Keyboard.
 func (b *Button) Keyboard(k *terminalapi.Keyboard, meta *widgetapi.EventMeta) error {
-	if b.keyActivated(k, meta) {
-		if b.callback != nil {
-			// Mutex must be released when calling the callback.
-			// Users might call container methods from the callback like the
-			// Container.Update, see #205.
-			return b.callback()
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Mutex must be released when calling the callback.
+// Users might call container methods from the callback like the
+// Container.Update, see #205.
+
 // mouseActivated asserts whether the mouse event activated the button.
-func (b *Button) mouseActivated(m *terminalapi.Mouse) bool {
-	b.mu.Lock()
-	defer b.mu.Unlock()
-
-	clicked, state := b.mouseFSM.Event(m)
-	b.state = state
-	b.keyTriggerTime = nil
-
-	return clicked
-}
+func (b *Button) mouseActivated(m *terminalapi.Mouse) bool { _ = "STUB: not implemented"; return false }
 
 // Mouse processes mouse events, acts as a button press if both the press and
 // the release happen inside the button.
 //
 // Implements widgetapi.Widget.Mouse.
 func (b *Button) Mouse(m *terminalapi.Mouse, meta *widgetapi.EventMeta) error {
-	if b.mouseActivated(m) {
-		if b.callback != nil {
-			// Mutex must be released when calling the callback.
-			// Users might call container methods from the callback like the
-			// Container.Update, see #205.
-			return b.callback()
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Mutex must be released when calling the callback.
+// Users might call container methods from the callback like the
+// Container.Update, see #205.
+
 // shadowWidth returns the width of the shadow under the button or zero if the
 // button shouldn't have any shadow.
-func (b *Button) shadowWidth() int {
-	if b.opts.disableShadow {
-		return 0
-	}
-	return 1
-}
+func (b *Button) shadowWidth() int { _ = "STUB: not implemented"; return 0 }
 
 // Options implements widgetapi.Widget.Options.
 func (b *Button) Options() widgetapi.Options {
+	_ = "STUB: not implemented"
 	// No need to lock, as the height and width get fixed when New is called.
-
-	width := b.opts.width + b.shadowWidth() + 2*b.opts.textHorizontalPadding
-	height := b.opts.height + b.shadowWidth()
-
-	var keyScope widgetapi.KeyScope
-	if len(b.opts.focusedKeys) > 0 || len(b.opts.globalKeys) > 0 {
-		keyScope = widgetapi.KeyScopeGlobal
-	} else {
-		keyScope = widgetapi.KeyScopeNone
-	}
-	return widgetapi.Options{
-		MinimumSize:  image.Point{width, height},
-		MaximumSize:  image.Point{width, height},
-		WantKeyboard: keyScope,
-		WantMouse:    widgetapi.MouseScopeGlobal,
-	}
+	return *new(widgetapi.Options)
 }

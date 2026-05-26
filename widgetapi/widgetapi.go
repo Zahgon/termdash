@@ -27,12 +27,7 @@ import (
 type KeyScope int
 
 // String implements fmt.Stringer()
-func (ks KeyScope) String() string {
-	if n, ok := keyScopeNames[ks]; ok {
-		return n
-	}
-	return "KeyScopeUnknown"
-}
+func (ks KeyScope) String() string { _ = "STUB: not implemented"; return "" }
 
 // keyScopeNames maps KeyScope values to human readable names.
 var keyScopeNames = map[KeyScope]string{
@@ -60,12 +55,7 @@ const (
 type MouseScope int
 
 // String implements fmt.Stringer()
-func (ms MouseScope) String() string {
-	if n, ok := mouseScopeNames[ms]; ok {
-		return n
-	}
-	return "MouseScopeUnknown"
-}
+func (ms MouseScope) String() string { _ = "STUB: not implemented"; return "" }
 
 // mouseScopeNames maps MouseScope values to human readable names.
 var mouseScopeNames = map[MouseScope]string{

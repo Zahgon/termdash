@@ -15,8 +15,6 @@
 package text
 
 import (
-	"fmt"
-
 	"github.com/mum4k/termdash/keyboard"
 	"github.com/mum4k/termdash/mouse"
 	"github.com/mum4k/termdash/private/wrap"
@@ -47,61 +45,25 @@ type options struct {
 }
 
 // newOptions returns a new options instance.
-func newOptions(opts ...Option) *options {
-	opt := &options{
-		scrollUp:        DefaultScrollUpRune,
-		scrollDown:      DefaultScrollDownRune,
-		mouseUpButton:   DefaultScrollMouseButtonUp,
-		mouseDownButton: DefaultScrollMouseButtonDown,
-		keyUp:           DefaultScrollKeyUp,
-		keyDown:         DefaultScrollKeyDown,
-		keyPgUp:         DefaultScrollKeyPageUp,
-		keyPgDown:       DefaultScrollKeyPageDown,
-		maxTextCells:    DefaultMaxTextCells,
-	}
-	for _, o := range opts {
-		o.set(opt)
-	}
-	return opt
-}
+func newOptions(opts ...Option) *options { _ = "STUB: not implemented"; return nil }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	keys := map[keyboard.Key]bool{
-		o.keyUp:     true,
-		o.keyDown:   true,
-		o.keyPgUp:   true,
-		o.keyPgDown: true,
-	}
-	if len(keys) != 4 {
-		return fmt.Errorf("invalid ScrollKeys(up:%v, down:%v, pageUp:%v, pageDown:%v), the keys must be unique", o.keyUp, o.keyDown, o.keyPgUp, o.keyPgDown)
-	}
-	if o.mouseUpButton == o.mouseDownButton {
-		return fmt.Errorf("invalid ScrollMouseButtons(up:%v, down:%v), the buttons must be unique", o.mouseUpButton, o.mouseDownButton)
-	}
-	if o.maxTextCells < 0 {
-		return fmt.Errorf("invalid MaxTextCells(%d), must be zero or a positive integer", o.maxTextCells)
-	}
-	return nil
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // option implements Option.
 type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// ScrollRunes configures the text widgets scroll runes, shown at the top and
+	// bottom of a scrollable text widget. If not provided, the default scroll
+	// runes will be used.
+	return
 }
 
-// ScrollRunes configures the text widgets scroll runes, shown at the top and
-// bottom of a scrollable text widget. If not provided, the default scroll
-// runes will be used.
-func ScrollRunes(up, down rune) Option {
-	return option(func(opts *options) {
-		opts.scrollUp = up
-		opts.scrollDown = down
-	})
-}
+func ScrollRunes(up, down rune) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // The default scroll runes for content scrolling
 const (
@@ -112,37 +74,21 @@ const (
 // WrapAtWords configures the text widget so that it automatically wraps lines
 // that are longer than the width of the widget at word boundaries. If not
 // provided, long lines are trimmed instead.
-func WrapAtWords() Option {
-	return option(func(opts *options) {
-		opts.wrapMode = wrap.AtWords
-	})
-}
+func WrapAtWords() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // WrapAtRunes configures the text widget so that it automatically wraps lines
 // that are longer than the width of the widget at rune boundaries. If not
 // provided, long lines are trimmed instead.
-func WrapAtRunes() Option {
-	return option(func(opts *options) {
-		opts.wrapMode = wrap.AtRunes
-	})
-}
+func WrapAtRunes() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // RollContent configures the text widget so that it rolls the text content up
 // if more text than the size of the container is added. If not provided, the
 // content is trimmed instead.
-func RollContent() Option {
-	return option(func(opts *options) {
-		opts.rollContent = true
-	})
-}
+func RollContent() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DisableScrolling disables the scrolling of the content using keyboard and
 // mouse.
-func DisableScrolling() Option {
-	return option(func(opts *options) {
-		opts.disableScrolling = true
-	})
-}
+func DisableScrolling() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // The default mouse buttons for content scrolling.
 const (
@@ -154,10 +100,8 @@ const (
 // The provided buttons must be unique, e.g. the same button cannot be both up
 // and down.
 func ScrollMouseButtons(up, down mouse.Button) Option {
-	return option(func(opts *options) {
-		opts.mouseUpButton = up
-		opts.mouseDownButton = down
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // The default keys for content scrolling.
@@ -172,12 +116,8 @@ const (
 // The provided keys must be unique, e.g. the same key cannot be both up and
 // down.
 func ScrollKeys(up, down, pageUp, pageDown keyboard.Key) Option {
-	return option(func(opts *options) {
-		opts.keyUp = up
-		opts.keyDown = down
-		opts.keyPgUp = pageUp
-		opts.keyPgDown = pageDown
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // The default value for the MaxTextCells option.
@@ -194,8 +134,4 @@ const (
 // new one.
 // Note the count is in cells, not runes, some wide runes can take multiple
 // terminal cells.
-func MaxTextCells(max int) Option {
-	return option(func(opts *options) {
-		opts.maxTextCells = max
-	})
-}
+func MaxTextCells(max int) Option { _ = "STUB: not implemented"; return *new(Option) }

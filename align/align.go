@@ -19,12 +19,7 @@ package align
 type Horizontal int
 
 // String implements fmt.Stringer()
-func (h Horizontal) String() string {
-	if n, ok := horizontalNames[h]; ok {
-		return n
-	}
-	return "HorizontalUnknown"
-}
+func (h Horizontal) String() string { _ = "STUB: not implemented"; return "" }
 
 // horizontalNames maps Horizontal values to human readable names.
 var horizontalNames = map[Horizontal]string{
@@ -46,12 +41,7 @@ const (
 type Vertical int
 
 // String implements fmt.Stringer()
-func (v Vertical) String() string {
-	if n, ok := verticalNames[v]; ok {
-		return n
-	}
-	return "VerticalUnknown"
-}
+func (v Vertical) String() string { _ = "STUB: not implemented"; return "" }
 
 // verticalNames maps Vertical values to human readable names.
 var verticalNames = map[Vertical]string{

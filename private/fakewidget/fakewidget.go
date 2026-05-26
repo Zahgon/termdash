@@ -17,15 +17,10 @@
 package fakewidget
 
 import (
-	"fmt"
 	"image"
 	"sync"
 
-	"github.com/mum4k/termdash/keyboard"
-	"github.com/mum4k/termdash/mouse"
-	"github.com/mum4k/termdash/private/area"
 	"github.com/mum4k/termdash/private/canvas"
-	"github.com/mum4k/termdash/private/draw"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	"github.com/mum4k/termdash/widgetapi"
 )
@@ -85,12 +80,7 @@ type Mirror struct {
 
 // New returns a new fake widget.
 // The widget will return the provided options on a call to Options().
-func New(opts widgetapi.Options) *Mirror {
-	return &Mirror{
-		lines: make([]string, outputLines),
-		opts:  opts,
-	}
-}
+func New(opts widgetapi.Options) *Mirror { _ = "STUB: not implemented"; return nil }
 
 // Draw draws up to there lines on the canvas, assuming there is space for
 // them. Returns an error if the canvas is so small that it cannot even draw a
@@ -98,59 +88,24 @@ func New(opts widgetapi.Options) *Mirror {
 // width of the canvas.
 // Draw implements widgetapi.Widget.Draw.
 func (mi *Mirror) Draw(cvs *canvas.Canvas, meta *widgetapi.Meta) error {
-	mi.mu.Lock()
-	defer mi.mu.Unlock()
-	if meta.Focused {
-		mi.lines[focusLine] = "focus"
-	}
-
-	if err := cvs.Clear(); err != nil {
-		return err
-	}
-	if err := draw.Border(cvs, cvs.Area()); err != nil {
-		return err
-	}
-
-	mi.lines[sizeLine] = fmt.Sprintf("%s%s", cvs.Size().String(), mi.text)
-	usable := area.ExcludeBorder(cvs.Area())
-	start := cvs.Area().Intersect(usable).Min
-	for i := 0; i < outputLines; i++ {
-		if i >= usable.Dy() {
-			break
-		}
-
-		if err := draw.Text(cvs, mi.lines[i], start, draw.TextMaxX(usable.Max.X)); err != nil {
-			return err
-		}
-		start = image.Point{start.X, start.Y + 1}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Text stores a text that should be displayed right after the canvas size on
 // the first line of the output.
 func (mi *Mirror) Text(txt string) {
-	mi.text = txt
+	_ = "STUB: not implemented"
+
+	// Keyboard draws the received key on the canvas.
+	// Sending the keyboard.KeyEsc causes this widget to forget the last keyboard
+	// event and return an error instead.
+	// Keyboard implements widgetapi.Widget.Keyboard.
+	return
 }
 
-// Keyboard draws the received key on the canvas.
-// Sending the keyboard.KeyEsc causes this widget to forget the last keyboard
-// event and return an error instead.
-// Keyboard implements widgetapi.Widget.Keyboard.
 func (mi *Mirror) Keyboard(k *terminalapi.Keyboard, meta *widgetapi.EventMeta) error {
-	mi.mu.Lock()
-	defer mi.mu.Unlock()
-
-	if k.Key == keyboard.KeyEsc {
-		mi.lines[keyboardLine] = ""
-		return fmt.Errorf("fakewidget received keyboard event: %v", k)
-	}
-	if meta.Focused {
-		mi.lines[keyboardLine] = fmt.Sprintf("F:%s", k.Key.String())
-	} else {
-		mi.lines[keyboardLine] = k.Key.String()
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -160,72 +115,38 @@ func (mi *Mirror) Keyboard(k *terminalapi.Keyboard, meta *widgetapi.EventMeta) e
 // event and return an error instead.
 // Mouse implements widgetapi.Widget.Mouse.
 func (mi *Mirror) Mouse(m *terminalapi.Mouse, meta *widgetapi.EventMeta) error {
-	mi.mu.Lock()
-	defer mi.mu.Unlock()
-
-	if m.Button == mouse.ButtonRight {
-		mi.lines[mouseLine] = ""
-		return fmt.Errorf("fakewidget received mouse event: %v", m)
-	}
-	if meta.Focused {
-		mi.lines[mouseLine] = fmt.Sprintf("F:%v%v", m.Position, m.Button)
-	} else {
-		mi.lines[mouseLine] = fmt.Sprintf("%v%v", m.Position, m.Button)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Options implements widgetapi.Widget.Options.
 func (mi *Mirror) Options() widgetapi.Options {
-	return mi.opts
+	_ = "STUB: not implemented"
+
+	// Draw draws the content that would be expected after placing the Mirror
+	// widget onto the provided canvas and forwarding the given events.
+	return *new(widgetapi.Options)
 }
 
-// Draw draws the content that would be expected after placing the Mirror
-// widget onto the provided canvas and forwarding the given events.
 func Draw(t terminalapi.Terminal, cvs *canvas.Canvas, meta *widgetapi.Meta, opts widgetapi.Options, events ...*Event) error {
-	mirror := New(opts)
-	return DrawWithMirror(mirror, t, cvs, meta, events...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MustDraw is like Draw, but panics on all errors.
 func MustDraw(t terminalapi.Terminal, cvs *canvas.Canvas, meta *widgetapi.Meta, opts widgetapi.Options, events ...*Event) {
-	if err := Draw(t, cvs, meta, opts, events...); err != nil {
-		panic(fmt.Sprintf("Draw => %v", err))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // DrawWithMirror is like Draw, but uses the provided Mirror instead of creating one.
 func DrawWithMirror(mirror *Mirror, t terminalapi.Terminal, cvs *canvas.Canvas, meta *widgetapi.Meta, events ...*Event) error {
-	for _, ev := range events {
-		switch e := ev.Ev.(type) {
-		case *terminalapi.Mouse:
-			if mirror.opts.WantMouse == widgetapi.MouseScopeNone {
-				continue
-			}
-			if err := mirror.Mouse(e, ev.Meta); err != nil {
-				return err
-			}
-		case *terminalapi.Keyboard:
-			if mirror.opts.WantKeyboard == widgetapi.KeyScopeNone {
-				continue
-			}
-			if err := mirror.Keyboard(e, ev.Meta); err != nil {
-				return err
-			}
-		default:
-			return fmt.Errorf("unsupported event type %T", e)
-		}
-	}
-
-	if err := mirror.Draw(cvs, meta); err != nil {
-		return err
-	}
-	return cvs.Apply(t)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MustDrawWithMirror is like DrawWithMirror, but panics on all errors.
 func MustDrawWithMirror(mirror *Mirror, t terminalapi.Terminal, cvs *canvas.Canvas, meta *widgetapi.Meta, events ...*Event) {
-	if err := DrawWithMirror(mirror, t, cvs, meta, events...); err != nil {
-		panic(fmt.Sprintf("DrawWithMirror => %v", err))
-	}
+	_ = "STUB: not implemented"
+	return
 }

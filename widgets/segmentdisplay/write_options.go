@@ -31,43 +31,36 @@ type writeOptions struct {
 }
 
 // newWriteOptions returns new writeOptions instance.
-func newWriteOptions(wOpts ...WriteOption) *writeOptions {
-	wo := &writeOptions{}
-	for _, o := range wOpts {
-		o.set(wo)
-	}
-	return wo
-}
+func newWriteOptions(wOpts ...WriteOption) *writeOptions { _ = "STUB: not implemented"; return nil }
 
 // writeOption implements WriteOption.
 type writeOption func(*writeOptions)
 
 // set implements WriteOption.set.
 func (wo writeOption) set(wOpts *writeOptions) {
-	wo(wOpts)
+	_ = "STUB: not implemented"
+
+	// WriteCellOpts sets options on the cells that contain the text.
+	return
 }
 
-// WriteCellOpts sets options on the cells that contain the text.
 func WriteCellOpts(opts ...cell.Option) WriteOption {
-	return writeOption(func(wOpts *writeOptions) {
-		wOpts.cellOpts = opts
-	})
+	_ = "STUB: not implemented"
+	return *new(WriteOption)
 }
 
 // WriteSanitize instructs Write to sanitize the text, replacing all characters
 // the display doesn't support with a space ' ' character.
 // This is the default behavior.
 func WriteSanitize(opts ...cell.Option) WriteOption {
-	return writeOption(func(wOpts *writeOptions) {
-		wOpts.errOnUnsupported = false
-	})
+	_ = "STUB: not implemented"
+	return *new(WriteOption)
 }
 
 // WriteErrOnUnsupported instructs Write to return an error when the text
 // contains a character the display doesn't support.
 // The default behavior is to sanitize the text, see WriteSanitize().
 func WriteErrOnUnsupported(opts ...cell.Option) WriteOption {
-	return writeOption(func(wOpts *writeOptions) {
-		wOpts.errOnUnsupported = true
-	})
+	_ = "STUB: not implemented"
+	return *new(WriteOption)
 }

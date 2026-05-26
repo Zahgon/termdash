@@ -18,7 +18,6 @@ package draw
 // canvas in vertical columns instead of lines.
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/cell"
@@ -43,14 +42,15 @@ type verticalTextOption func(*verticalTextOptions)
 
 // set implements VerticalTextOption.set.
 func (vto verticalTextOption) set(vtOpts *verticalTextOptions) {
-	vto(vtOpts)
+	_ = "STUB: not implemented"
+
+	// VerticalTextCellOpts sets options on the cells that contain the text.
+	return
 }
 
-// VerticalTextCellOpts sets options on the cells that contain the text.
 func VerticalTextCellOpts(opts ...cell.Option) VerticalTextOption {
-	return verticalTextOption(func(vtOpts *verticalTextOptions) {
-		vtOpts.cellOpts = opts
-	})
+	_ = "STUB: not implemented"
+	return *new(VerticalTextOption)
 }
 
 // VerticalTextMaxY sets a limit on the Y coordinate (row) of the drawn text.
@@ -58,9 +58,8 @@ func VerticalTextCellOpts(opts ...cell.Option) VerticalTextOption {
 // start.Y <= Y < VerticalTextMaxY.
 // If not provided, the height of the canvas is used as VerticalTextMaxY.
 func VerticalTextMaxY(y int) VerticalTextOption {
-	return verticalTextOption(func(vtOpts *verticalTextOptions) {
-		vtOpts.maxY = y
-	})
+	_ = "STUB: not implemented"
+	return *new(VerticalTextOption)
 }
 
 // VerticalTextOverrunMode indicates what to do with text that overruns the
@@ -68,9 +67,8 @@ func VerticalTextMaxY(y int) VerticalTextOption {
 // specified.
 // Defaults to OverrunModeStrict.
 func VerticalTextOverrunMode(om OverrunMode) VerticalTextOption {
-	return verticalTextOption(func(vtOpts *verticalTextOptions) {
-		vtOpts.overrunMode = om
-	})
+	_ = "STUB: not implemented"
+	return *new(VerticalTextOption)
 }
 
 // VerticalText prints the provided text on the canvas starting at the provided point.
@@ -82,40 +80,6 @@ func VerticalTextOverrunMode(om OverrunMode) VerticalTextOption {
 //	l
 //	o
 func VerticalText(c *canvas.Canvas, text string, start image.Point, opts ...VerticalTextOption) error {
-	ar := c.Area()
-	if !start.In(ar) {
-		return fmt.Errorf("the requested start point %v falls outside of the provided canvas %v", start, ar)
-	}
-
-	opt := &verticalTextOptions{}
-	for _, o := range opts {
-		o.set(opt)
-	}
-
-	if opt.maxY < 0 || opt.maxY > ar.Max.Y {
-		return fmt.Errorf("invalid VerticalTextMaxY(%v), must be a positive number that is <= canvas.width %v", opt.maxY, ar.Dy())
-	}
-
-	var wantMaxY int
-	if opt.maxY == 0 {
-		wantMaxY = ar.Max.Y
-	} else {
-		wantMaxY = opt.maxY
-	}
-
-	maxCells := wantMaxY - start.Y
-	trimmed, err := TrimText(text, maxCells, opt.overrunMode)
-	if err != nil {
-		return err
-	}
-
-	cur := start
-	for _, r := range trimmed {
-		cells, err := c.SetCell(cur, r, opt.cellOpts...)
-		if err != nil {
-			return err
-		}
-		cur = image.Point{cur.X, cur.Y + cells}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }

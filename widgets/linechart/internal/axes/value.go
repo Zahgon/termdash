@@ -16,13 +16,6 @@ package axes
 
 // value.go contains code dealing with values on the line chart.
 
-import (
-	"fmt"
-	"math"
-
-	"github.com/mum4k/termdash/private/numbers"
-)
-
 // ValueOption is used to provide options to the NewValue function.
 type ValueOption interface {
 	// set sets the provided option.
@@ -38,14 +31,15 @@ type valueOption func(opts *valueOptions)
 
 // set implements ValueOption.set.
 func (vo valueOption) set(opts *valueOptions) {
-	vo(opts)
+	_ = "STUB: not implemented"
+
+	// ValueFormatter sets a custom formatter for the value.
+	return
 }
 
-// ValueFormatter sets a custom formatter for the value.
 func ValueFormatter(formatter func(float64) string) ValueOption {
-	return valueOption(func(opts *valueOptions) {
-		opts.formatter = formatter
-	})
+	_ = "STUB: not implemented"
+	return *new(ValueOption)
 }
 
 // Value represents one value.
@@ -70,60 +64,22 @@ type Value struct {
 }
 
 // String implements fmt.Stringer.
-func (v *Value) String() string {
-	return fmt.Sprintf("Value{Round(%v) => %v}", v.Value, v.Rounded)
-}
+func (v *Value) String() string { _ = "STUB: not implemented"; return "" }
 
 // NewValue returns a new instance representing the provided value, rounding
 // the value up to the specified number of non-zero decimal places.
 func NewValue(v float64, nonZeroDecimals int, opts ...ValueOption) *Value {
-	opt := &valueOptions{}
-	for _, o := range opts {
-		o.set(opt)
-	}
-
-	r, zd := numbers.RoundToNonZeroPlaces(v, nonZeroDecimals)
-	return &Value{
-		Value:           v,
-		Rounded:         r,
-		ZeroDecimals:    zd,
-		NonZeroDecimals: nonZeroDecimals,
-		formatter:       opt.formatter,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewTextValue constructs a value out of the provided text.
-func NewTextValue(text string) *Value {
-	return &Value{
-		Value:   math.NaN(),
-		Rounded: math.NaN(),
-		text:    text,
-	}
-}
+func NewTextValue(text string) *Value { _ = "STUB: not implemented"; return nil }
 
 // Text returns textual representation of the value.
-func (v *Value) Text() string {
-	if v.text != "" {
-		return v.text
-	}
-
-	if v.formatter != nil {
-		return v.formatter(v.Value)
-	}
-
-	return defaultFormatter(v.Rounded, v.NonZeroDecimals, v.ZeroDecimals)
-}
+func (v *Value) Text() string { _ = "STUB: not implemented"; return "" }
 
 func defaultFormatter(value float64, nonZeroDecimals, zeroDecimals int) string {
-	if math.Ceil(value) == value {
-		return fmt.Sprintf("%.0f", value)
-	}
-
-	format := fmt.Sprintf("%%.%df", nonZeroDecimals+zeroDecimals)
-	t := fmt.Sprintf(format, value)
-	if len(t) > 10 {
-		t = fmt.Sprintf("%.2e", value)
-	}
-
-	return t
+	_ = "STUB: not implemented"
+	return ""
 }

@@ -16,10 +16,7 @@
 package axes
 
 import (
-	"fmt"
 	"image"
-
-	"github.com/mum4k/termdash/private/runewidth"
 )
 
 const (
@@ -55,13 +52,11 @@ type YDetails struct {
 // axis and its labels when displaying values that have this minimum and
 // maximum among all the series.
 func RequiredWidth(minVal, maxVal float64) int {
+	_ = "STUB: not implemented"
 	// This is an estimation only, it is possible that more labels in the
 	// middle will be generated and might be wider than this. Such cases are
 	// handled on the call to Details when the size of canvas is known.
-	return longestLabel([]*Label{
-		{Value: NewValue(minVal, nonZeroDecimals)},
-		{Value: NewValue(maxVal, nonZeroDecimals)},
-	}) + axisWidth
+	return 0
 }
 
 // YProperties are the properties of the Y axis.
@@ -81,61 +76,23 @@ type YProperties struct {
 // NewYDetails retrieves details about the Y axis required to draw it on a
 // canvas of the provided area.
 func NewYDetails(cvsAr image.Rectangle, yp *YProperties) (*YDetails, error) {
-	cvsWidth := cvsAr.Dx()
-	cvsHeight := cvsAr.Dy()
-	maxWidth := cvsWidth - 1 // Reserve one column for the line chart itself.
-	if req := RequiredWidth(yp.Min, yp.Max); maxWidth < req {
-		return nil, fmt.Errorf("the available maxWidth %d is smaller than the reported required width %d", maxWidth, req)
-	}
-
-	graphHeight := cvsHeight - yp.ReqXHeight
-	scale, err := NewYScale(yp.Min, yp.Max, graphHeight, nonZeroDecimals, yp.ScaleMode, yp.ValueFormatter)
-	if err != nil {
-		return nil, err
-	}
-
-	// See how the labels would look like on the entire maxWidth.
-	maxLabelWidth := maxWidth - axisWidth
-	labels, err := yLabels(scale, maxLabelWidth)
-	if err != nil {
-		return nil, err
-	}
-
-	var width int
-	// Determine the largest label, which might be less than maxWidth.
-	// Such case would allow us to save more space for the line chart itself.
-	widest := longestLabel(labels)
-	if widest < maxLabelWidth {
-		// Save the space and recalculate the labels, since they need to be realigned.
-		l, err := yLabels(scale, widest)
-		if err != nil {
-			return nil, err
-		}
-		labels = l
-		width = widest + axisWidth // One for the axis itself.
-	} else {
-		width = maxWidth
-	}
-
-	return &YDetails{
-		Width:  width,
-		Start:  image.Point{width - 1, 0},
-		End:    image.Point{width - 1, graphHeight},
-		Scale:  scale,
-		Labels: labels,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Reserve one column for the line chart itself.
+
+// See how the labels would look like on the entire maxWidth.
+
+// Determine the largest label, which might be less than maxWidth.
+// Such case would allow us to save more space for the line chart itself.
+
+// Save the space and recalculate the labels, since they need to be realigned.
+
+// One for the axis itself.
 
 // longestLabel returns the width of the widest label.
-func longestLabel(labels []*Label) int {
-	var widest int
-	for _, label := range labels {
-		if l := runewidth.StringWidth(label.Value.Text()); l > widest {
-			widest = l
-		}
-	}
-	return widest
-}
+func longestLabel(labels []*Label) int { _ = "STUB: not implemented"; return 0 }
 
 // XDetails contain information about the X axis that will be drawn onto the
 // canvas.
@@ -157,9 +114,7 @@ type XDetails struct {
 }
 
 // String implements fmt.Stringer.
-func (xd *XDetails) String() string {
-	return fmt.Sprintf("XDetails{Scale:%v}", xd.Scale)
-}
+func (xd *XDetails) String() string { _ = "STUB: not implemented"; return "" }
 
 // XProperties are the properties of the X axis.
 type XProperties struct {
@@ -185,56 +140,26 @@ type XProperties struct {
 // customLabels are the desired labels for the X axis, these are preferred if
 // provided.
 func NewXDetails(cvsAr image.Rectangle, xp *XProperties) (*XDetails, error) {
-	cvsHeight := cvsAr.Dy()
-	maxHeight := cvsHeight - 1 // Reserve one row for the line chart itself.
-	reqHeight := RequiredHeight(xp.Max, xp.CustomLabels, xp.LO)
-	if maxHeight < reqHeight {
-		return nil, fmt.Errorf("the available maxHeight %d is smaller than the reported required height %d", maxHeight, reqHeight)
-	}
-
-	// The space between the start of the axis and the end of the canvas.
-	graphWidth := cvsAr.Dx() - xp.ReqYWidth - 1
-	scale, err := NewXScale(xp.Min, xp.Max, graphWidth, nonZeroDecimals)
-	if err != nil {
-		return nil, err
-	}
-
-	// See how the labels would look like on the entire reqHeight.
-	graphZero := image.Point{
-		// Reserve one point horizontally for the Y axis.
-		xp.ReqYWidth + 1,
-		cvsAr.Dy() - reqHeight - 1,
-	}
-	labels, err := xLabels(scale, graphZero, xp.CustomLabels, xp.LO)
-	if err != nil {
-		return nil, err
-	}
-
-	return &XDetails{
-		Start:      image.Point{xp.ReqYWidth, cvsAr.Dy() - reqHeight}, // Space for the labels.
-		End:        image.Point{xp.ReqYWidth + graphWidth, cvsAr.Dy() - reqHeight},
-		Scale:      scale,
-		Labels:     labels,
-		Properties: xp,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Reserve one row for the line chart itself.
+
+// The space between the start of the axis and the end of the canvas.
+
+// See how the labels would look like on the entire reqHeight.
+
+// Reserve one point horizontally for the Y axis.
+
+// Space for the labels.
 
 // RequiredHeight calculates the minimum height required in order to draw the X
 // axis and its labels.
 func RequiredHeight(max int, customLabels map[int]string, lo LabelOrientation) int {
-	if lo == LabelOrientationHorizontal {
-		// One row for the X axis and one row for its labels flowing
-		// horizontally.
-		return axisWidth + 1
-	}
-
-	labels := []*Label{
-		{Value: NewValue(float64(max), nonZeroDecimals)},
-	}
-	for _, cl := range customLabels {
-		labels = append(labels, &Label{
-			Value: NewTextValue(cl),
-		})
-	}
-	return longestLabel(labels) + axisWidth
+	_ = "STUB: not implemented"
+	return 0
 }
+
+// One row for the X axis and one row for its labels flowing
+// horizontally.

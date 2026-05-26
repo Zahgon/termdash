@@ -17,10 +17,7 @@ package faketerm
 
 import (
 	"context"
-	"fmt"
 	"image"
-	"log"
-	"strings"
 	"sync"
 
 	"github.com/mum4k/termdash/cell"
@@ -40,17 +37,15 @@ type option func(*Terminal)
 
 // set implements Option.set.
 func (o option) set(t *Terminal) {
-	o(t)
+	_ = "STUB: not implemented"
+
+	// WithEventQueue provides a queue of events.
+	// One event will be consumed from the queue each time Event() is called. If
+	// not provided, Event() returns an error on each call.
+	return
 }
 
-// WithEventQueue provides a queue of events.
-// One event will be consumed from the queue each time Event() is called. If
-// not provided, Event() returns an error on each call.
-func WithEventQueue(eq *eventqueue.Unbound) Option {
-	return option(func(t *Terminal) {
-		t.events = eq
-	})
-}
+func WithEventQueue(eq *eventqueue.Unbound) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Terminal is a fake terminal.
 // This implementation is thread-safe.
@@ -67,145 +62,61 @@ type Terminal struct {
 
 // New returns a new fake Terminal.
 func New(size image.Point, opts ...Option) (*Terminal, error) {
-	b, err := buffer.New(size)
-	if err != nil {
-		return nil, err
-	}
-
-	t := &Terminal{
-		buffer: b,
-	}
-	for _, opt := range opts {
-		opt.set(t)
-	}
-	return t, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MustNew is like New, but panics on all errors.
-func MustNew(size image.Point, opts ...Option) *Terminal {
-	ft, err := New(size, opts...)
-	if err != nil {
-		panic(fmt.Sprintf("New => unexpected error: %v", err))
-	}
-	return ft
-}
+func MustNew(size image.Point, opts ...Option) *Terminal { _ = "STUB: not implemented"; return nil }
 
 // Resize resizes the terminal to the provided size.
 // This also clears the internal buffer.
-func (t *Terminal) Resize(size image.Point) error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	b, err := buffer.New(size)
-	if err != nil {
-		return err
-	}
-
-	t.buffer = b
-	return nil
-}
+func (t *Terminal) Resize(size image.Point) error { _ = "STUB: not implemented"; return nil }
 
 // BackBuffer returns the back buffer of the fake terminal.
 func (t *Terminal) BackBuffer() buffer.Buffer {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	return t.buffer
+	_ = "STUB: not implemented"
+	return *new(buffer.Buffer)
 }
 
 // String prints out the buffer into a string.
 // This includes the cell runes only, cell options are ignored.
 // Implements fmt.Stringer.
-func (t *Terminal) String() string {
-	size := t.Size()
-	var b strings.Builder
-	for row := 0; row < size.Y; row++ {
-		for col := 0; col < size.X; col++ {
-			r := t.buffer[col][row].Rune
-			p := image.Point{col, row}
-			partial, err := t.buffer.IsPartial(p)
-			if err != nil {
-				panic(fmt.Errorf("unable to determine if point %v is a partial rune: %v", p, err))
-			}
-			if r == 0 && !partial {
-				r = ' '
-			}
-			b.WriteRune(r)
-		}
-		b.WriteRune('\n')
-	}
-	return b.String()
-}
+func (t *Terminal) String() string { _ = "STUB: not implemented"; return "" }
 
 // Size implements terminalapi.Terminal.Size.
-func (t *Terminal) Size() image.Point {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	return t.buffer.Size()
-}
+func (t *Terminal) Size() image.Point { _ = "STUB: not implemented"; return *new(image.Point) }
 
 // Area returns the area of the fake terminal.
-func (t *Terminal) Area() image.Rectangle {
-	s := t.Size()
-	return image.Rect(0, 0, s.X, s.Y)
-}
+func (t *Terminal) Area() image.Rectangle { _ = "STUB: not implemented"; return *new(image.Rectangle) }
 
 // Clear implements terminalapi.Terminal.Clear.
-func (t *Terminal) Clear(opts ...cell.Option) error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	b, err := buffer.New(t.buffer.Size())
-	if err != nil {
-		return err
-	}
-	t.buffer = b
-	return nil
-}
+func (t *Terminal) Clear(opts ...cell.Option) error { _ = "STUB: not implemented"; return nil }
 
 // Flush implements terminalapi.Terminal.Flush.
 func (t *Terminal) Flush() error {
-	return nil // nowhere to flush to.
+	_ = "STUB: not implemented"
+	// nowhere to flush to.
+	return nil
 }
 
 // SetCursor implements terminalapi.Terminal.SetCursor.
-func (t *Terminal) SetCursor(p image.Point) {
-	log.Fatal("unimplemented")
-}
+func (t *Terminal) SetCursor(p image.Point) { _ = "STUB: not implemented"; return }
 
 // HideCursor implements terminalapi.Terminal.HideCursor.
-func (t *Terminal) HideCursor() {
-	log.Fatal("unimplemented")
-}
+func (t *Terminal) HideCursor() { _ = "STUB: not implemented"; return }
 
 // SetCell implements terminalapi.Terminal.SetCell.
 func (t *Terminal) SetCell(p image.Point, r rune, opts ...cell.Option) error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	if _, err := t.buffer.SetCell(p, r, opts...); err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Event implements terminalapi.Terminal.Event.
 func (t *Terminal) Event(ctx context.Context) terminalapi.Event {
-	if t.events == nil {
-		return terminalapi.NewErrorf("no event queue provided, use the WithEventQueue option when creating the fake terminal")
-	}
-
-	ev := t.events.Pull(ctx)
-	if ev == nil {
-		return nil
-	}
-
-	if res, ok := ev.(*terminalapi.Resize); ok {
-		t.Resize(res.Size)
-	}
-	return ev
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
 
 // Close closes the terminal. This is a no-op on the fake terminal.
-func (t *Terminal) Close() {}
+func (t *Terminal) Close() { _ = "STUB: not implemented"; return }

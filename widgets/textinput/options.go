@@ -17,14 +17,9 @@ package textinput
 // options.go contains configurable options for TextInput.
 
 import (
-	"errors"
-	"fmt"
-
 	"github.com/mum4k/termdash/align"
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/linestyle"
-	"github.com/mum4k/termdash/private/runewidth"
-	"github.com/mum4k/termdash/private/wrap"
 )
 
 // Option is used to provide options.
@@ -38,10 +33,12 @@ type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// options holds the provided options.
+	return
 }
 
-// options holds the provided options.
 type options struct {
 	fillColor        cell.Color
 	textColor        cell.Color
@@ -69,63 +66,21 @@ type options struct {
 }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	if min, max, perc := 0, 100, o.widthPerc; perc != nil && (*perc <= min || *perc > max) {
-		return fmt.Errorf("invalid WidthPerc(%d), must be value in range %d < value <= %d", *perc, min, max)
-	}
-	if min, cells := 4, o.maxWidthCells; cells != nil && *cells < min {
-		return fmt.Errorf("invalid MaxWidthCells(%d), must be value in range %d <= value", *cells, min)
-	}
-	if r := o.hideTextWith; r != 0 {
-		if err := wrap.ValidText(string(r)); err != nil {
-			return fmt.Errorf("invalid HideTextWidth rune %c(%d): %v", r, r, err)
-		}
-		if got, want := runewidth.RuneWidth(r), 1; got != want {
-			return fmt.Errorf("invalid HideTextWidth rune %c(%d), has rune width of %d cells, only runes with width of %d are accepted", r, r, got, want)
-		}
-	}
-	if o.defaultText != "" {
-		if err := wrap.ValidText(o.defaultText); err != nil {
-			return fmt.Errorf("invalid DefaultText: %v", err)
-		}
-		for _, r := range o.defaultText {
-			if r == '\n' {
-				return errors.New("invalid DefaultText: newline characters aren't allowed")
-			}
-		}
-	}
-	return nil
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // newOptions returns options with the default values set.
-func newOptions() *options {
-	return &options{
-		fillColor:        cell.ColorNumber(DefaultFillColorNumber),
-		placeHolderColor: cell.ColorNumber(DefaultPlaceHolderColorNumber),
-		highlightedColor: cell.ColorNumber(DefaultHighlightedColorNumber),
-		cursorColor:      cell.ColorNumber(DefaultCursorColorNumber),
-		labelAlign:       DefaultLabelAlign,
-	}
-}
+func newOptions() *options { _ = "STUB: not implemented"; return nil }
 
 // DefaultFillColorNumber is the default color number for the FillColor option.
 const DefaultFillColorNumber = 33
 
 // FillColor sets the fill color for the text input field.
 // Defaults to DefaultFillColorNumber.
-func FillColor(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.fillColor = c
-	})
-}
+func FillColor(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // TextColor sets the color of the text in the input field.
 // Defaults to the default terminal color.
-func TextColor(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.textColor = c
-	})
-}
+func TextColor(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultHighlightedColorNumber is the default color number for the
 // HighlightedColor option.
@@ -133,11 +88,7 @@ const DefaultHighlightedColorNumber = 0
 
 // HighlightedColor sets the color of the text rune directly under the cursor.
 // Defaults to the default terminal color.
-func HighlightedColor(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.highlightedColor = c
-	})
-}
+func HighlightedColor(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultCursorColorNumber is the default color number for the CursorColor
 // option.
@@ -145,53 +96,31 @@ const DefaultCursorColorNumber = 250
 
 // CursorColor sets the color of the cursor.
 // Defaults to DefaultCursorColorNumber.
-func CursorColor(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.cursorColor = c
-	})
-}
+func CursorColor(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Border adds a border around the text input field.
-func Border(ls linestyle.LineStyle) Option {
-	return option(func(opts *options) {
-		opts.border = ls
-	})
-}
+func Border(ls linestyle.LineStyle) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // BorderColor sets the color of the border.
 // Defaults to the default terminal color.
-func BorderColor(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.borderColor = c
-	})
-}
+func BorderColor(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // WidthPerc sets the width for the text input field as a percentage of the
 // container width. Must be a value in the range 0 < perc <= 100.
 // Defaults to the width adjusted automatically base on the label length.
-func WidthPerc(perc int) Option {
-	return option(func(opts *options) {
-		opts.widthPerc = &perc
-	})
-}
+func WidthPerc(perc int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // MaxWidthCells sets the maximum width of the text input field as an absolute value
 // in cells. Must be a value in the range 4 <= cells.
 // This doesn't limit the text that the user can input, if the text overflows
 // the width of the input field, it scrolls to the left.
 // Defaults to using all available width in the container.
-func MaxWidthCells(cells int) Option {
-	return option(func(opts *options) {
-		opts.maxWidthCells = &cells
-	})
-}
+func MaxWidthCells(cells int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Label adds a text label to the left of the input field.
 func Label(label string, cOpts ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.label = label
-		opts.labelCellOpts = cOpts
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // DefaultLabelAlign is the default value for the LabelAlign option.
@@ -201,19 +130,11 @@ const DefaultLabelAlign = align.HorizontalLeft
 // The label is placed to the left of the input field. The width of this area
 // can be specified using the LabelWidthPerc option.
 // Defaults to DefaultLabelAlign.
-func LabelAlign(la align.Horizontal) Option {
-	return option(func(opts *options) {
-		opts.labelAlign = la
-	})
-}
+func LabelAlign(la align.Horizontal) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // PlaceHolder sets text to be displayed in the input field when it is empty.
 // This text disappears when the text input field becomes focused.
-func PlaceHolder(text string) Option {
-	return option(func(opts *options) {
-		opts.placeHolder = text
-	})
-}
+func PlaceHolder(text string) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultPlaceHolderColorNumber is the default color number for the
 // PlaceHolderColor option.
@@ -221,21 +142,13 @@ const DefaultPlaceHolderColorNumber = 194
 
 // PlaceHolderColor sets the color of the placeholder text.
 // Defaults to DefaultPlaceHolderColorNumber.
-func PlaceHolderColor(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.placeHolderColor = c
-	})
-}
+func PlaceHolderColor(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // HideTextWith sets the rune that should be displayed instead of displaying
 // the text. Useful for fields that accept sensitive information like
 // passwords.
 // The rune must be a printable rune with cell width of one.
-func HideTextWith(r rune) Option {
-	return option(func(opts *options) {
-		opts.hideTextWith = r
-	})
-}
+func HideTextWith(r rune) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // FilterFn if provided can be used to filter runes that are allowed in the
 // text input field. Any rune for which this function returns false will be
@@ -244,11 +157,7 @@ type FilterFn func(rune) bool
 
 // Filter sets a function that will be used to filter characters the user can
 // input.
-func Filter(fn FilterFn) Option {
-	return option(func(opts *options) {
-		opts.filter = fn
-	})
-}
+func Filter(fn FilterFn) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // SubmitFn if provided is called when the user submits the content of the text
 // input field, the argument text contains all the text in the field.
@@ -264,11 +173,7 @@ type SubmitFn func(text string) error
 // in any way as while the SubmitFn is executing, the TextInput is mutex
 // locked. If the intention is to clear the content on submission, use the
 // ClearOnSubmit() option.
-func OnSubmit(fn SubmitFn) Option {
-	return option(func(opts *options) {
-		opts.onSubmit = fn
-	})
-}
+func OnSubmit(fn SubmitFn) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ChangeFn when passed to OnChage will be called with all the text in the text
 // input each time it gets modified.
@@ -279,33 +184,17 @@ type ChangeFn func(data string)
 
 // OnChange sets a function that will be called when the content of the text input
 // field changes.
-func OnChange(fn ChangeFn) Option {
-	return option(func(opts *options) {
-		opts.onChange = fn
-	})
-}
+func OnChange(fn ChangeFn) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ClearOnSubmit sets the text input to be cleared when a submit of the content
 // is triggered by the user pressing the Enter key.
-func ClearOnSubmit() Option {
-	return option(func(opts *options) {
-		opts.clearOnSubmit = true
-	})
-}
+func ClearOnSubmit() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ExclusiveKeyboardOnFocus when set ensures that when this widget is focused,
 // no other widget receives any keyboard events.
-func ExclusiveKeyboardOnFocus() Option {
-	return option(func(opts *options) {
-		opts.exclusiveKeyboardOnFocus = true
-	})
-}
+func ExclusiveKeyboardOnFocus() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultText sets the text to be present in a newly created input field.
 // The text must not contain any control or space characters other than ' '.
 // The user can edit this text as normal.
-func DefaultText(text string) Option {
-	return option(func(opts *options) {
-		opts.defaultText = text
-	})
-}
+func DefaultText(text string) Option { _ = "STUB: not implemented"; return *new(Option) }

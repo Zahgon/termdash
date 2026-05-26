@@ -40,42 +40,8 @@ const (
 // playDonut continuously changes the displayed percent value on the donut by the
 // step once every delay. Exits when the context expires.
 func playDonut(ctx context.Context, d *donut.Donut, start, step int, delay time.Duration, pt playType) {
-	progress := start
-	mult := 1
-
-	ticker := time.NewTicker(delay)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			switch pt {
-			case playTypePercent:
-				if err := d.Percent(progress); err != nil {
-					panic(err)
-				}
-			case playTypeAbsolute:
-				if err := d.Absolute(progress, 100); err != nil {
-					panic(err)
-				}
-			}
-
-			progress += step * mult
-			if progress > 100 || 100-progress < step {
-				progress = 100
-			} else if progress < 0 || progress < step {
-				progress = 0
-			}
-
-			if progress == 100 {
-				mult = -1
-			} else if progress == 0 {
-				mult = 1
-			}
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

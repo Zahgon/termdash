@@ -26,12 +26,7 @@ import (
 type State int
 
 // String implements fmt.Stringer()
-func (s State) String() string {
-	if n, ok := stateNames[s]; ok {
-		return n
-	}
-	return "StateUnknown"
-}
+func (s State) String() string { _ = "STUB: not implemented"; return "" }
 
 // stateNames maps State values to human readable names.
 var stateNames = map[State]string{
@@ -68,13 +63,7 @@ type FSM struct {
 
 // NewFSM creates a new FSM instance that tracks the state of the specified
 // mouse button through button events that fall within the provided area.
-func NewFSM(button mouse.Button, area image.Rectangle) *FSM {
-	return &FSM{
-		button: button,
-		area:   area,
-		state:  wantPress,
-	}
-}
+func NewFSM(button mouse.Button, area image.Rectangle) *FSM { _ = "STUB: not implemented"; return nil }
 
 // Event is used to forward mouse events to the state machine.
 // Only events related to the button specified on a call to NewFSM are
@@ -85,51 +74,39 @@ func NewFSM(button mouse.Button, area image.Rectangle) *FSM {
 // The bool is true if the button click should take an effect, i.e. if the
 // FSM saw both the button click and its release.
 func (fsm *FSM) Event(m *terminalapi.Mouse) (bool, State) {
-	clicked, bs, next := fsm.state(fsm, m)
-	fsm.state = next
-	return clicked, bs
+	_ = "STUB: not implemented"
+	return false, *new(State)
 }
 
 // UpdateArea informs FSM of an area change.
 // This method is idempotent.
 func (fsm *FSM) UpdateArea(area image.Rectangle) {
-	fsm.area = area
+	_ = "STUB: not implemented"
+
+	// stateFn is a single state in the state machine.
+	// Returns bool indicating if a click happened, the state of the button and the
+	// next state of the FSM.
+	return
 }
 
-// stateFn is a single state in the state machine.
-// Returns bool indicating if a click happened, the state of the button and the
-// next state of the FSM.
 type stateFn func(fsm *FSM, m *terminalapi.Mouse) (bool, State, stateFn)
 
 // wantPress is the initial state, expecting a button press inside the area.
 func wantPress(fsm *FSM, m *terminalapi.Mouse) (bool, State, stateFn) {
-	if m.Button != fsm.button || !m.Position.In(fsm.area) {
-		return false, Up, wantPress
-	}
-	return false, Down, wantRelease
+	_ = "STUB: not implemented"
+	return false, *new(State), *new(stateFn)
 }
 
 // wantRelease waits for a mouse button release in the same area as
 // the press.
 func wantRelease(fsm *FSM, m *terminalapi.Mouse) (bool, State, stateFn) {
-	switch m.Button {
-	case fsm.button:
-		if m.Position.In(fsm.area) {
-			// Remain in the same state, since termbox reports move of mouse with
-			// button held down as a series of clicks, one per position.
-			return false, Down, wantRelease
-		}
-		return false, Up, wantPress
-
-	case mouse.ButtonRelease:
-		if m.Position.In(fsm.area) {
-			// Seen both press and release, report a click.
-			return true, Up, wantPress
-		}
-		// Release the button even if the release event happened outside of the area.
-		return false, Up, wantPress
-
-	default:
-		return false, Up, wantPress
-	}
+	_ = "STUB: not implemented"
+	return false, *new(State), *new(stateFn)
 }
+
+// Remain in the same state, since termbox reports move of mouse with
+// button held down as a series of clicks, one per position.
+
+// Seen both press and release, report a click.
+
+// Release the button even if the release event happened outside of the area.

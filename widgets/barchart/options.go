@@ -17,8 +17,6 @@ package barchart
 // options.go contains configurable options for BarChart.
 
 import (
-	"fmt"
-
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/private/draw"
 )
@@ -34,10 +32,12 @@ type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// options holds the provided options.
+	return
 }
 
-// options holds the provided options.
 type options struct {
 	barChar     rune
 	barWidth    int
@@ -50,43 +50,22 @@ type options struct {
 }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	if got, min := o.barWidth, 0; got < min {
-		return fmt.Errorf("invalid BarWidth %d, must be %d <= BarWidth", got, min)
-	}
-	if got, min := o.barGap, 0; got < min {
-		return fmt.Errorf("invalid BarGap %d, must be %d <= BarGap", got, min)
-	}
-	return nil
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // newOptions returns options with the default values set.
-func newOptions() *options {
-	return &options{
-		barChar: DefaultChar,
-		barGap:  DefaultBarGap,
-	}
-}
+func newOptions() *options { _ = "STUB: not implemented"; return nil }
 
 // DefaultChar is the default value for the Char option.
 const DefaultChar = draw.DefaultRectChar
 
 // Char sets the rune that is used when drawing the rectangle representing the
 // bars.
-func Char(ch rune) Option {
-	return option(func(opts *options) {
-		opts.barChar = ch
-	})
-}
+func Char(ch rune) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // BarWidth sets the width of the bars. If not set, or set to zero, the bars
 // use all the space available to the widget. Must be a positive or zero
 // integer.
-func BarWidth(width int) Option {
-	return option(func(opts *options) {
-		opts.barWidth = width
-	})
-}
+func BarWidth(width int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultBarGap is the default value for the BarGap option.
 const DefaultBarGap = 1
@@ -94,18 +73,10 @@ const DefaultBarGap = 1
 // BarGap sets the width of the space between the bars.
 // Must be a positive or zero integer.
 // Defaults to DefaultBarGap.
-func BarGap(width int) Option {
-	return option(func(opts *options) {
-		opts.barGap = width
-	})
-}
+func BarGap(width int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ShowValues tells the bar chart to display the actual values inside each of the bars.
-func ShowValues() Option {
-	return option(func(opts *options) {
-		opts.showValues = true
-	})
-}
+func ShowValues() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultBarColor is the default color of a bar, unless specified otherwise
 // via the BarColors option.
@@ -115,11 +86,7 @@ const DefaultBarColor = cell.ColorRed
 // Bars are created on a call to Values(), each value ends up in its own Bar.
 // The first supplied color applies to the bar displaying the first value.
 // Any bars that don't have a color specified use the DefaultBarColor.
-func BarColors(colors []cell.Color) Option {
-	return option(func(opts *options) {
-		opts.barColors = colors
-	})
-}
+func BarColors(colors []cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultLabelColor is the default color of a bar label, unless specified
 // otherwise via the LabelColors option.
@@ -130,24 +97,16 @@ const DefaultLabelColor = cell.ColorGreen
 // The first supplied color applies to the label of the bar displaying the
 // first value. Any labels that don't have a color specified use the
 // DefaultLabelColor.
-func LabelColors(colors []cell.Color) Option {
-	return option(func(opts *options) {
-		opts.labelColors = colors
-	})
-}
+func LabelColors(colors []cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Labels sets the labels displayed under each bar,
 // Bars are created on a call to Values(), each value ends up in its own Bar.
 // The first supplied label applies to the bar displaying the first value.
 // If not specified, the corresponding bar (or all the bars) don't have a
 // label.
-func Labels(labels []string) Option {
-	return option(func(opts *options) {
-		// Copy to avoid external modifications. See #174.
-		opts.labels = make([]string, len(labels))
-		copy(opts.labels, labels)
-	})
-}
+func Labels(labels []string) Option { _ = "STUB: not implemented"; return *new(Option) }
+
+// Copy to avoid external modifications. See #174.
 
 // DefaultValueColor is the default color of a bar value, unless specified
 // otherwise via the ValueColors option.
@@ -157,8 +116,4 @@ const DefaultValueColor = cell.ColorYellow
 // created on a call to Values(), each value ends up in its own Bar. The first
 // supplied color applies to the bar displaying the first value. Any values
 // that don't have a color specified use the DefaultValueColor.
-func ValueColors(colors []cell.Color) Option {
-	return option(func(opts *options) {
-		opts.valueColors = colors
-	})
-}
+func ValueColors(colors []cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }

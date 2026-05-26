@@ -17,7 +17,6 @@ package draw
 // hv_line_graph.go helps to keep track of locations where lines cross.
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/linestyle"
@@ -35,10 +34,8 @@ type hVLineEdge struct {
 
 // newHVLineEdge returns a new edge between the two points.
 func newHVLineEdge(from, to image.Point) hVLineEdge {
-	return hVLineEdge{
-		from: from,
-		to:   to,
-	}
+	_ = "STUB: not implemented"
+	return *new(hVLineEdge)
 }
 
 // hVLineNode represents one node in the graph.
@@ -54,89 +51,26 @@ type hVLineNode struct {
 }
 
 // newHVLineNode creates a new newHVLineNode.
-func newHVLineNode(p image.Point) *hVLineNode {
-	return &hVLineNode{
-		p:     p,
-		edges: map[hVLineEdge]bool{},
-	}
-}
+func newHVLineNode(p image.Point) *hVLineNode { _ = "STUB: not implemented"; return nil }
 
 // hasDown determines if this node has an edge to the one below it.
-func (n *hVLineNode) hasDown() bool {
-	target := newHVLineEdge(n.p, image.Point{n.p.X, n.p.Y + 1})
-	_, ok := n.edges[target]
-	return ok
-}
+func (n *hVLineNode) hasDown() bool { _ = "STUB: not implemented"; return false }
 
 // hasUp determines if this node has an edge to the one above it.
-func (n *hVLineNode) hasUp() bool {
-	target := newHVLineEdge(image.Point{n.p.X, n.p.Y - 1}, n.p)
-	_, ok := n.edges[target]
-	return ok
-}
+func (n *hVLineNode) hasUp() bool { _ = "STUB: not implemented"; return false }
 
 // hasLeft determines if this node has an edge to the next node on the left.
-func (n *hVLineNode) hasLeft() bool {
-	target := newHVLineEdge(image.Point{n.p.X - 1, n.p.Y}, n.p)
-	_, ok := n.edges[target]
-	return ok
-}
+func (n *hVLineNode) hasLeft() bool { _ = "STUB: not implemented"; return false }
 
 // hasRight determines if this node has an edge to the next node on the right.
-func (n *hVLineNode) hasRight() bool {
-	target := newHVLineEdge(n.p, image.Point{n.p.X + 1, n.p.Y})
-	_, ok := n.edges[target]
-	return ok
-}
+func (n *hVLineNode) hasRight() bool { _ = "STUB: not implemented"; return false }
 
 // rune, given the selected line style returns the correct line character to
 // represent this node.
 // Only handles nodes with two or more edges, as returned by multiEdgeNodes().
 func (n *hVLineNode) rune(ls linestyle.LineStyle) (rune, error) {
-	parts, err := lineParts(ls)
-	if err != nil {
-		return -1, err
-	}
-
-	switch len(n.edges) {
-	case 2:
-		switch {
-		case n.hasLeft() && n.hasRight():
-			return parts[hLine], nil
-		case n.hasUp() && n.hasDown():
-			return parts[vLine], nil
-		case n.hasDown() && n.hasRight():
-			return parts[topLeftCorner], nil
-		case n.hasDown() && n.hasLeft():
-			return parts[topRightCorner], nil
-		case n.hasUp() && n.hasRight():
-			return parts[bottomLeftCorner], nil
-		case n.hasUp() && n.hasLeft():
-			return parts[bottomRightCorner], nil
-		default:
-			return -1, fmt.Errorf("unexpected two edges in node representing point %v: %v", n.p, n.edges)
-		}
-
-	case 3:
-		switch {
-		case n.hasUp() && n.hasLeft() && n.hasRight():
-			return parts[hAndUp], nil
-		case n.hasDown() && n.hasLeft() && n.hasRight():
-			return parts[hAndDown], nil
-		case n.hasUp() && n.hasDown() && n.hasRight():
-			return parts[vAndRight], nil
-		case n.hasUp() && n.hasDown() && n.hasLeft():
-			return parts[vAndLeft], nil
-
-		default:
-			return -1, fmt.Errorf("unexpected three edges in node representing point %v: %v", n.p, n.edges)
-		}
-
-	case 4:
-		return parts[vAndH], nil
-	default:
-		return -1, fmt.Errorf("unexpected number of edges(%d) in node representing point %v", len(n.edges), n.p)
-	}
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // hVLineGraph represents lines on the canvas as a bidirectional graph of
@@ -147,60 +81,19 @@ type hVLineGraph struct {
 }
 
 // newHVLineGraph creates a new hVLineGraph.
-func newHVLineGraph() *hVLineGraph {
-	return &hVLineGraph{
-		nodes: make(map[image.Point]*hVLineNode),
-	}
-}
+func newHVLineGraph() *hVLineGraph { _ = "STUB: not implemented"; return nil }
 
 // getOrCreateNode gets an existing or creates a new node for the point.
 func (g *hVLineGraph) getOrCreateNode(p image.Point) *hVLineNode {
-	if n, ok := g.nodes[p]; ok {
-		return n
-	}
-	n := newHVLineNode(p)
-	g.nodes[p] = n
-	return n
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // addLine adds a line to the graph.
 // This adds edges between all the points on the line.
-func (g *hVLineGraph) addLine(line *hVLine) {
-	switch {
-	case line.horizontal():
-		for curX := line.start.X; curX < line.end.X; curX++ {
-			from := image.Point{curX, line.start.Y}
-			to := image.Point{curX + 1, line.start.Y}
-			n1 := g.getOrCreateNode(from)
-			n2 := g.getOrCreateNode(to)
-			edge := newHVLineEdge(from, to)
-			n1.edges[edge] = true
-			n2.edges[edge] = true
-		}
-
-	case line.vertical():
-		for curY := line.start.Y; curY < line.end.Y; curY++ {
-			from := image.Point{line.start.X, curY}
-			to := image.Point{line.start.X, curY + 1}
-			n1 := g.getOrCreateNode(from)
-			n2 := g.getOrCreateNode(to)
-			edge := newHVLineEdge(from, to)
-			n1.edges[edge] = true
-			n2.edges[edge] = true
-		}
-	}
-}
+func (g *hVLineGraph) addLine(line *hVLine) { _ = "STUB: not implemented"; return }
 
 // multiEdgeNodes returns all nodes that have more than one edge.  These are
 // the nodes where we might need to use different line characters to represent
 // the crossing of multiple lines.
-func (g *hVLineGraph) multiEdgeNodes() []*hVLineNode {
-	var nodes []*hVLineNode
-	for _, n := range g.nodes {
-		if len(n.edges) <= 1 {
-			continue
-		}
-		nodes = append(nodes, n)
-	}
-	return nodes
-}
+func (g *hVLineGraph) multiEdgeNodes() []*hVLineNode { _ = "STUB: not implemented"; return nil }

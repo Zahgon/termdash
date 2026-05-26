@@ -18,7 +18,6 @@ package main
 
 import (
 	"context"
-	"math/rand"
 	"time"
 
 	"github.com/mum4k/termdash"
@@ -33,26 +32,8 @@ import (
 // playBarChart continuously changes the displayed values on the bar chart once every delay.
 // Exits when the context expires.
 func playBarChart(ctx context.Context, bc *barchart.BarChart, delay time.Duration) {
-	const max = 100
-
-	ticker := time.NewTicker(delay)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			var values []int
-			for i := 0; i < bc.ValueCapacity(); i++ {
-				values = append(values, int(rand.Int31n(max+1)))
-			}
-
-			if err := bc.Values(values, max); err != nil {
-				panic(err)
-			}
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

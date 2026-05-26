@@ -16,15 +16,10 @@
 package sparkline
 
 import (
-	"errors"
-	"fmt"
 	"image"
 	"sync"
 
-	"github.com/mum4k/termdash/cell"
-	"github.com/mum4k/termdash/private/area"
 	"github.com/mum4k/termdash/private/canvas"
-	"github.com/mum4k/termdash/private/draw"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	"github.com/mum4k/termdash/widgetapi"
 )
@@ -50,84 +45,18 @@ type SparkLine struct {
 }
 
 // New returns a new SparkLine.
-func New(opts ...Option) (*SparkLine, error) {
-	opt := newOptions()
-	for _, o := range opts {
-		o.set(opt)
-	}
-	if err := opt.validate(); err != nil {
-		return nil, err
-	}
-
-	return &SparkLine{
-		opts: opt,
-	}, nil
-}
+func New(opts ...Option) (*SparkLine, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Draw draws the SparkLine widget onto the canvas.
 // Implements widgetapi.Widget.Draw.
 func (sl *SparkLine) Draw(cvs *canvas.Canvas, meta *widgetapi.Meta) error {
-	sl.mu.Lock()
-	defer sl.mu.Unlock()
-
-	sl.lastWidth = cvs.Area().Dx()
-	needAr, err := area.FromSize(sl.minSize())
-	if err != nil {
-		return err
-	}
-	if !needAr.In(cvs.Area()) {
-		return draw.ResizeNeeded(cvs)
-	}
-
-	ar := sl.area(cvs)
-	visible, max := visibleMax(sl.data, ar.Dx())
-	var curX int
-	if len(visible) < ar.Dx() {
-		curX = ar.Max.X - len(visible)
-	} else {
-		curX = ar.Min.X
-	}
-
-	for _, v := range visible {
-		blocks := toBlocks(v, max, ar.Dy())
-		curY := ar.Max.Y - 1
-		for i := 0; i < blocks.full; i++ {
-			if _, err := cvs.SetCell(
-				image.Point{curX, curY},
-				sparks[len(sparks)-1], // Last spark represents full cell.
-				cell.FgColor(sl.opts.color),
-			); err != nil {
-				return err
-			}
-
-			curY--
-		}
-
-		if blocks.partSpark != 0 {
-			if _, err := cvs.SetCell(
-				image.Point{curX, curY},
-				blocks.partSpark,
-				cell.FgColor(sl.opts.color),
-			); err != nil {
-				return err
-			}
-		}
-
-		curX++
-	}
-
-	if sl.opts.label != "" {
-		// Label is placed immediately above the SparkLine.
-		lStart := image.Point{ar.Min.X, ar.Min.Y - 1}
-		if err := draw.Text(cvs, sl.opts.label, lStart,
-			draw.TextCellOpts(sl.opts.labelCellOpts...),
-			draw.TextOverrunMode(draw.OverrunModeThreeDot),
-		); err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Last spark represents full cell.
+
+// Label is placed immediately above the SparkLine.
 
 // ValueCapacity returns the number of values that can fit into the canvas.
 // This is essentially the number of available cells on the canvas as observed
@@ -136,11 +65,7 @@ func (sl *SparkLine) Draw(cvs *canvas.Canvas, meta *widgetapi.Meta) error {
 // Note that this capacity changes each time the terminal resizes, so there is
 // no guarantee this remains the same next time Draw is called.
 // Should be used as a hint only.
-func (sl *SparkLine) ValueCapacity() int {
-	sl.mu.Lock()
-	defer sl.mu.Unlock()
-	return sl.lastWidth
-}
+func (sl *SparkLine) ValueCapacity() int { _ = "STUB: not implemented"; return 0 }
 
 // Add adds data points to the SparkLine.
 // Each data point is represented by one bar on the SparkLine. Zero value data
@@ -156,98 +81,49 @@ func (sl *SparkLine) ValueCapacity() int {
 // visible.
 //
 // Provided options override values set when New() was called.
-func (sl *SparkLine) Add(data []int, opts ...Option) error {
-	sl.mu.Lock()
-	defer sl.mu.Unlock()
-
-	for _, opt := range opts {
-		opt.set(sl.opts)
-	}
-
-	for i, d := range data {
-		if d < 0 {
-			return fmt.Errorf("data point[%d]: %v must be a positive integer", i, d)
-		}
-	}
-	sl.data = append(sl.data, data...)
-	return nil
-}
+func (sl *SparkLine) Add(data []int, opts ...Option) error { _ = "STUB: not implemented"; return nil }
 
 // Clear removes all the data points in the SparkLine, effectively returning to
 // an empty graph.
-func (sl *SparkLine) Clear() {
-	sl.mu.Lock()
-	defer sl.mu.Unlock()
-
-	sl.data = nil
-}
+func (sl *SparkLine) Clear() { _ = "STUB: not implemented"; return }
 
 // Keyboard input isn't supported on the SparkLine widget.
 func (*SparkLine) Keyboard(k *terminalapi.Keyboard, meta *widgetapi.EventMeta) error {
-	return errors.New("the SparkLine widget doesn't support keyboard events")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Mouse input isn't supported on the SparkLine widget.
 func (*SparkLine) Mouse(m *terminalapi.Mouse, meta *widgetapi.EventMeta) error {
-	return errors.New("the SparkLine widget doesn't support mouse events")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // area returns the area of the canvas available to the SparkLine.
 func (sl *SparkLine) area(cvs *canvas.Canvas) image.Rectangle {
-	cvsAr := cvs.Area()
-	maxY := cvsAr.Max.Y
-
-	// Height is determined based on options (fixed height / label).
-	var minY int
-	if sl.opts.height > 0 {
-		minY = maxY - sl.opts.height
-	} else {
-		minY = cvsAr.Min.Y
-
-		if sl.opts.label != "" {
-			minY++ // Reserve one line for the label.
-		}
-	}
-	return image.Rect(
-		cvsAr.Min.X,
-		minY,
-		cvsAr.Max.X,
-		maxY,
-	)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle)
 }
+
+// Height is determined based on options (fixed height / label).
+
+// Reserve one line for the label.
 
 // minSize returns the minimum canvas size for the SparkLine based on the options.
 func (sl *SparkLine) minSize() image.Point {
-	const minWidth = 1 // At least one data point.
-
-	var minHeight int
-	if sl.opts.height > 0 {
-		minHeight = sl.opts.height
-	} else {
-		minHeight = 1 // At least one line of characters.
-	}
-
-	if sl.opts.label != "" {
-		minHeight++ // One line for the text label.
-	}
-	return image.Point{minWidth, minHeight}
+	_ = "STUB: not implemented"
+	// At least one data point.
+	return *new(image.Point)
 }
+
+// At least one line of characters.
+
+// One line for the text label.
 
 // Options implements widgetapi.Widget.Options.
 func (sl *SparkLine) Options() widgetapi.Options {
-	sl.mu.Lock()
-	defer sl.mu.Unlock()
-
-	min := sl.minSize()
-	var max image.Point
-	if sl.opts.height > 0 {
-		max = min // Fix the height to the one specified.
-	}
-
-	return widgetapi.Options{
-		MinimumSize:  min,
-		MaximumSize:  max,
-		WantKeyboard: widgetapi.KeyScopeNone,
-		WantMouse:    widgetapi.MouseScopeNone,
-	}
+	_ = "STUB: not implemented"
+	return *new(widgetapi.Options)
 }
+
+// Fix the height to the one specified.

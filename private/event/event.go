@@ -21,7 +21,6 @@ import (
 	"reflect"
 	"sync"
 
-	"github.com/mum4k/termdash/private/event/eventqueue"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 )
 
@@ -65,83 +64,27 @@ type subscriber struct {
 
 // newSubscriber creates a new event subscriber.
 func newSubscriber(filter []terminalapi.Event, cb Callback, opts *subscribeOptions) *subscriber {
-	f := map[reflect.Type]bool{}
-	for _, ev := range filter {
-		f[reflect.TypeOf(ev)] = true
-	}
-
-	ctx, cancel := context.WithCancel(context.Background())
-	var q queue
-	if opts.throttle {
-		q = eventqueue.NewThrottled(opts.maxRep)
-	} else {
-		q = eventqueue.New()
-	}
-
-	s := &subscriber{
-		cb:     cb,
-		filter: f,
-		queue:  q,
-		cancel: cancel,
-	}
-
-	// Terminates when stop() is called.
-	go s.run(ctx)
-	return s
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Terminates when stop() is called.
 
 // callback sends the event to the callback.
-func (s *subscriber) callback(ev terminalapi.Event) {
-	s.cb(ev)
-
-	func() {
-		s.mu.Lock()
-		defer s.mu.Unlock()
-		s.processed++
-	}()
-}
+func (s *subscriber) callback(ev terminalapi.Event) { _ = "STUB: not implemented"; return }
 
 // run periodically forwards events towards the subscriber.
 // Terminates when the context expires.
-func (s *subscriber) run(ctx context.Context) {
-	for {
-		ev := s.queue.Pull(ctx)
-		if ev != nil {
-			s.callback(ev)
-		}
-
-		select {
-		case <-ctx.Done():
-			return
-		default:
-		}
-	}
-}
+func (s *subscriber) run(ctx context.Context) { _ = "STUB: not implemented"; return }
 
 // event forwards an event to the subscriber.
-func (s *subscriber) event(ev terminalapi.Event) {
-	if len(s.filter) == 0 {
-		s.queue.Push(ev)
-	}
-
-	t := reflect.TypeOf(ev)
-	if s.filter[t] {
-		s.queue.Push(ev)
-	}
-}
+func (s *subscriber) event(ev terminalapi.Event) { _ = "STUB: not implemented"; return }
 
 // processedEvents returns the number of events processed by this subscriber.
-func (s *subscriber) processedEvents() int {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-	return s.processed
-}
+func (s *subscriber) processedEvents() int { _ = "STUB: not implemented"; return 0 }
 
 // stop stops the event subscriber.
-func (s *subscriber) stop() {
-	s.cancel()
-	s.queue.Close()
-}
+func (s *subscriber) stop() { _ = "STUB: not implemented"; return }
 
 // DistributionSystem distributes events to subscribers.
 //
@@ -166,22 +109,11 @@ type DistributionSystem struct {
 }
 
 // NewDistributionSystem creates a new event distribution system.
-func NewDistributionSystem() *DistributionSystem {
-	return &DistributionSystem{
-		subscribers: map[int]*subscriber{},
-	}
-}
+func NewDistributionSystem() *DistributionSystem { _ = "STUB: not implemented"; return nil }
 
 // Event should be called with events coming from the terminal.
 // The distribution system will distribute these to all the subscribers.
-func (eds *DistributionSystem) Event(ev terminalapi.Event) {
-	eds.mu.Lock()
-	defer eds.mu.Unlock()
-
-	for _, sub := range eds.subscribers {
-		sub.event(ev)
-	}
-}
+func (eds *DistributionSystem) Event(ev terminalapi.Event) { _ = "STUB: not implemented"; return }
 
 // StopFunc when called unsubscribes the subscriber from all events and
 // releases resources tied to the subscriber.
@@ -204,18 +136,18 @@ type subscribeOption func(*subscribeOptions)
 
 // set implements SubscribeOption.set.
 func (o subscribeOption) set(sOpts *subscribeOptions) {
-	o(sOpts)
+	_ = "STUB: not implemented"
+
+	// MaxRepetitive when provided, instructs the system to drop repetitive
+	// events instead of delivering them.
+	// The argument maxRep indicates the maximum number of repetitive events to
+	// enqueue towards the subscriber.
+	return
 }
 
-// MaxRepetitive when provided, instructs the system to drop repetitive
-// events instead of delivering them.
-// The argument maxRep indicates the maximum number of repetitive events to
-// enqueue towards the subscriber.
 func MaxRepetitive(maxRep int) SubscribeOption {
-	return subscribeOption(func(sOpts *subscribeOptions) {
-		sOpts.throttle = true
-		sOpts.maxRep = maxRep
-	})
+	_ = "STUB: not implemented"
+	return *new(SubscribeOption)
 }
 
 // Subscribe subscribes to events according to the filter.
@@ -224,37 +156,10 @@ func MaxRepetitive(maxRep int) SubscribeOption {
 // be sent to the subscriber.
 // Returns a function that allows the subscriber to unsubscribe.
 func (eds *DistributionSystem) Subscribe(filter []terminalapi.Event, cb Callback, opts ...SubscribeOption) StopFunc {
-	eds.mu.Lock()
-	defer eds.mu.Unlock()
-
-	opt := &subscribeOptions{}
-	for _, o := range opts {
-		o.set(opt)
-	}
-
-	id := eds.nextID
-	eds.nextID++
-	sub := newSubscriber(filter, cb, opt)
-	eds.subscribers[id] = sub
-
-	return func() {
-		eds.mu.Lock()
-		defer eds.mu.Unlock()
-
-		sub.stop()
-		delete(eds.subscribers, id)
-	}
+	_ = "STUB: not implemented"
+	return *new(StopFunc)
 }
 
 // Processed returns the number of events that were fully processed, i.e.
 // delivered to all the subscribers and their callbacks returned.
-func (eds *DistributionSystem) Processed() int {
-	eds.mu.Lock()
-	defer eds.mu.Unlock()
-
-	var res int
-	for _, sub := range eds.subscribers {
-		res += sub.processedEvents()
-	}
-	return res
-}
+func (eds *DistributionSystem) Processed() int { _ = "STUB: not implemented"; return 0 }

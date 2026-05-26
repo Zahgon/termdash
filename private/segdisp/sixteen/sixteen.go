@@ -40,25 +40,15 @@ The following outlines segments in the display and their names.
 package sixteen
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/private/canvas"
-	"github.com/mum4k/termdash/private/segdisp"
-	"github.com/mum4k/termdash/private/segdisp/segment"
 )
 
 // Segment represents a single segment in the display.
 type Segment int
 
 // String implements fmt.Stringer()
-func (s Segment) String() string {
-	if n, ok := segmentNames[s]; ok {
-		return n
-	}
-	return "SegmentUnknown"
-}
+func (s Segment) String() string { _ = "STUB: not implemented"; return "" }
 
 // segmentNames maps Segment values to human readable names.
 var segmentNames = map[Segment]string{
@@ -230,43 +220,14 @@ var characterSegments = map[rune][]Segment{
 // provided string.
 // The display only supports a subset of ASCII characters.
 // Returns any unsupported runes found in the string in an unspecified order.
-func SupportsChars(s string) (bool, []rune) {
-	unsupp := map[rune]bool{}
-	for _, r := range s {
-		if _, ok := characterSegments[r]; !ok {
-			unsupp[r] = true
-		}
-	}
-
-	var res []rune
-	for r := range unsupp {
-		res = append(res, r)
-	}
-	return len(res) == 0, res
-}
+func SupportsChars(s string) (bool, []rune) { _ = "STUB: not implemented"; return false, nil }
 
 // Sanitize returns a copy of the string, replacing all unsupported characters
 // with a space character.
-func Sanitize(s string) string {
-	var b strings.Builder
-	for _, r := range s {
-		if _, ok := characterSegments[r]; !ok {
-			b.WriteRune(' ')
-			continue
-		}
-		b.WriteRune(r)
-	}
-	return b.String()
-}
+func Sanitize(s string) string { _ = "STUB: not implemented"; return "" }
 
 // AllSegments returns all 16 segments in an undefined order.
-func AllSegments() []Segment {
-	var res []Segment
-	for s := range segmentNames {
-		res = append(res, s)
-	}
-	return res
-}
+func AllSegments() []Segment { _ = "STUB: not implemented"; return nil }
 
 // Option is used to provide options.
 type Option interface {
@@ -279,15 +240,13 @@ type option func(*Display)
 
 // set implements Option.set.
 func (o option) set(d *Display) {
-	o(d)
+	_ = "STUB: not implemented"
+
+	// CellOpts sets the cell options on the cells that contain the segment display.
+	return
 }
 
-// CellOpts sets the cell options on the cells that contain the segment display.
-func CellOpts(cOpts ...cell.Option) Option {
-	return option(func(d *Display) {
-		d.cellOpts = cOpts
-	})
-}
+func CellOpts(cOpts ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Display represents the segment display.
 // This object is not thread-safe.
@@ -300,141 +259,35 @@ type Display struct {
 
 // New creates a new segment display.
 // Initially all the segments are off.
-func New(opts ...Option) *Display {
-	d := &Display{
-		segments: map[Segment]bool{},
-	}
-
-	for _, opt := range opts {
-		opt.set(d)
-	}
-	return d
-}
+func New(opts ...Option) *Display { _ = "STUB: not implemented"; return nil }
 
 // Clear clears the entire display, turning all segments off.
-func (d *Display) Clear(opts ...Option) {
-	for _, opt := range opts {
-		opt.set(d)
-	}
-
-	d.segments = map[Segment]bool{}
-}
+func (d *Display) Clear(opts ...Option) { _ = "STUB: not implemented"; return }
 
 // SetSegment sets the specified segment on.
 // This method is idempotent.
-func (d *Display) SetSegment(s Segment) error {
-	if s <= segmentUnknown || s >= segmentMax {
-		return fmt.Errorf("unknown segment %v(%d)", s, s)
-	}
-	d.segments[s] = true
-	return nil
-}
+func (d *Display) SetSegment(s Segment) error { _ = "STUB: not implemented"; return nil }
 
 // ClearSegment sets the specified segment off.
 // This method is idempotent.
-func (d *Display) ClearSegment(s Segment) error {
-	if s <= segmentUnknown || s >= segmentMax {
-		return fmt.Errorf("unknown segment %v(%d)", s, s)
-	}
-	d.segments[s] = false
-	return nil
-}
+func (d *Display) ClearSegment(s Segment) error { _ = "STUB: not implemented"; return nil }
 
 // ToggleSegment toggles the state of the specified segment, i.e it either sets
 // or clears it depending on its current state.
-func (d *Display) ToggleSegment(s Segment) error {
-	if s <= segmentUnknown || s >= segmentMax {
-		return fmt.Errorf("unknown segment %v(%d)", s, s)
-	}
-	if d.segments[s] {
-		d.segments[s] = false
-	} else {
-		d.segments[s] = true
-	}
-	return nil
-}
+func (d *Display) ToggleSegment(s Segment) error { _ = "STUB: not implemented"; return nil }
 
 // SetCharacter sets all the segments that are needed to display the provided
 // character.
 // The display only supports a subset of ASCII characters, use SupportsChars()
 // or Sanitize() to ensure the provided character is supported.
 // Doesn't clear the display of segments set previously.
-func (d *Display) SetCharacter(c rune) error {
-	seg, ok := characterSegments[c]
-	if !ok {
-		return fmt.Errorf("display doesn't support character %q rune(%v)", c, c)
-	}
-
-	for _, s := range seg {
-		if err := d.SetSegment(s); err != nil {
-			return err
-		}
-	}
-	return nil
-}
+func (d *Display) SetCharacter(c rune) error { _ = "STUB: not implemented"; return nil }
 
 // Draw draws the current state of the segment display onto the canvas.
 // The canvas must be at least MinCols x MinRows cells, or an error will be
 // returned.
 // Any options provided to draw overwrite the values provided to New.
 func (d *Display) Draw(cvs *canvas.Canvas, opts ...Option) error {
-	for _, o := range opts {
-		o.set(d)
-	}
-
-	bc, bcAr, err := segdisp.ToBraille(cvs)
-	if err != nil {
-		return err
-	}
-
-	attr := NewAttributes(bcAr)
-	var sOpts []segment.Option
-	if len(d.cellOpts) > 0 {
-		sOpts = append(sOpts, segment.CellOpts(d.cellOpts...))
-	}
-	for _, segArg := range []struct {
-		s    Segment
-		opts []segment.Option
-	}{
-		{A1, nil},
-		{A2, nil},
-
-		{F, nil},
-		{J, []segment.Option{segment.SkipSlopesLTE(2)}},
-		{B, []segment.Option{segment.ReverseSlopes()}},
-
-		{G1, []segment.Option{segment.SkipSlopesLTE(2)}},
-		{G2, []segment.Option{segment.SkipSlopesLTE(2)}},
-
-		{E, nil},
-		{M, []segment.Option{segment.SkipSlopesLTE(2)}},
-		{C, []segment.Option{segment.ReverseSlopes()}},
-
-		{D1, []segment.Option{segment.ReverseSlopes()}},
-		{D2, []segment.Option{segment.ReverseSlopes()}},
-	} {
-		if !d.segments[segArg.s] {
-			continue
-		}
-		sOpts := append(sOpts, segArg.opts...)
-		ar := attr.hvSegArea(segArg.s)
-		if err := segment.HV(bc, ar, hvSegType[segArg.s], sOpts...); err != nil {
-			return fmt.Errorf("failed to draw segment %v, segment.HV => %v", segArg.s, err)
-		}
-	}
-
-	var dsOpts []segment.DiagonalOption
-	if len(d.cellOpts) > 0 {
-		dsOpts = append(dsOpts, segment.DiagonalCellOpts(d.cellOpts...))
-	}
-	for _, seg := range []Segment{H, K, N, L} {
-		if !d.segments[seg] {
-			continue
-		}
-		ar := attr.diaSegArea(seg)
-		if err := segment.Diagonal(bc, ar, attr.segSize, diaSegType[seg], dsOpts...); err != nil {
-			return fmt.Errorf("failed to draw segment %v, segment.Diagonal => %v", seg, err)
-		}
-	}
-	return bc.CopyTo(cvs)
+	_ = "STUB: not implemented"
+	return nil
 }

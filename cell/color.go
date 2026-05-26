@@ -14,22 +14,13 @@
 
 package cell
 
-import (
-	"fmt"
-)
-
 // color.go defines constants for cell colors.
 
 // Color is the color of a cell.
 type Color int
 
 // String implements fmt.Stringer()
-func (cc Color) String() string {
-	if n, ok := colorNames[cc]; ok {
-		return n
-	}
-	return fmt.Sprintf("Color:%d", cc)
-}
+func (cc Color) String() string { _ = "STUB: not implemented"; return "" }
 
 // colorNames maps Color values to human readable names.
 var colorNames = map[Color]string{
@@ -81,12 +72,9 @@ const (
 //
 // For reference on these colors see the Xterm number in:
 // https://jonasjacek.github.io/colors/
-func ColorNumber(n int) Color {
-	if n < 0 || n > 255 {
-		return ColorDefault
-	}
-	return Color(n + 1) // Colors are off-by-one due to ColorDefault being zero.
-}
+func ColorNumber(n int) Color { _ = "STUB: not implemented"; return *new(Color) }
+
+// Colors are off-by-one due to ColorDefault being zero.
 
 // ColorRGB6 sets a color using the 6x6x6 terminal color.
 // Make sure your terminal is set to the terminalapi.ColorMode256 mode.
@@ -95,16 +83,11 @@ func ColorNumber(n int) Color {
 //
 // For reference on these colors see:
 // https://superuser.com/questions/783656/whats-the-deal-with-terminal-colors
-func ColorRGB6(r, g, b int) Color {
-	for _, c := range []int{r, g, b} {
-		if c < 0 || c > 5 {
-			return ColorDefault
-		}
-	}
-	// Explanation:
-	// https://stackoverflow.com/questions/27159322/rgb-values-of-the-colors-in-the-ansi-extended-colors-index-17-255
-	return Color(0x10 + 36*r + 6*g + b + 1) // Colors are off-by-one due to ColorDefault being zero.
-}
+func ColorRGB6(r, g, b int) Color { _ = "STUB: not implemented"; return *new(Color) }
+
+// Explanation:
+// https://stackoverflow.com/questions/27159322/rgb-values-of-the-colors-in-the-ansi-extended-colors-index-17-255
+// Colors are off-by-one due to ColorDefault being zero.
 
 // ColorRGB24 sets a color using the 24 bit web color scheme.
 // Make sure your terminal is set to the terminalapi.ColorMode256 mode.
@@ -113,11 +96,4 @@ func ColorRGB6(r, g, b int) Color {
 //
 // For reference on these colors see the RGB column in:
 // https://jonasjacek.github.io/colors/
-func ColorRGB24(r, g, b int) Color {
-	for _, c := range []int{r, g, b} {
-		if c < 0 || c > 255 {
-			return ColorDefault
-		}
-	}
-	return ColorRGB6(r/51, g/51, b/51)
-}
+func ColorRGB24(r, g, b int) Color { _ = "STUB: not implemented"; return *new(Color) }

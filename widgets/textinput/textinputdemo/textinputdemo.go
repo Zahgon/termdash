@@ -40,76 +40,16 @@ import (
 //	inputs[1] -> inputs[0]
 //
 // And so on.
-func rotate(inputs []rune, step int) []rune {
-	return append(inputs[step:], inputs[:step]...)
-}
+func rotate(inputs []rune, step int) []rune { _ = "STUB: not implemented"; return nil }
 
 // textState creates a rotated state for the text we are displaying.
-func textState(text string, capacity, step int) []rune {
-	if capacity == 0 {
-		return nil
-	}
-
-	var state []rune
-	for i := 0; i < capacity; i++ {
-		state = append(state, ' ')
-	}
-	state = append(state, []rune(text)...)
-	step = step % len(state)
-	return rotate(state, step)
-}
+func textState(text string, capacity, step int) []rune { _ = "STUB: not implemented"; return nil }
 
 // rollText rolls a text across the segment display.
 // Exists when the context expires.
 func rollText(ctx context.Context, sd *segmentdisplay.SegmentDisplay, updateText <-chan string) {
-	colors := []cell.Color{
-		cell.ColorNumber(33),
-		cell.ColorRed,
-		cell.ColorYellow,
-		cell.ColorNumber(33),
-		cell.ColorGreen,
-		cell.ColorRed,
-		cell.ColorGreen,
-		cell.ColorRed,
-	}
-
-	text := "Termdash"
-	step := 0
-	ticker := time.NewTicker(500 * time.Millisecond)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ticker.C:
-			state := textState(text, sd.Capacity(), step)
-			var chunks []*segmentdisplay.TextChunk
-			for i := 0; i < sd.Capacity(); i++ {
-				if i >= len(state) {
-					break
-				}
-
-				color := colors[i%len(colors)]
-				chunks = append(chunks, segmentdisplay.NewChunk(
-					string(state[i]),
-					segmentdisplay.WriteCellOpts(cell.FgColor(color)),
-				))
-			}
-			if len(chunks) == 0 {
-				continue
-			}
-			if err := sd.Write(chunks); err != nil {
-				panic(err)
-			}
-			step++
-
-		case t := <-updateText:
-			text = t
-			sd.Reset()
-			step = 0
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

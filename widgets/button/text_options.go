@@ -33,53 +33,41 @@ type textOptions struct {
 
 // setDefaultFgColor configures a default color for text if one isn't specified
 // in the text options.
-func (to *textOptions) setDefaultFgColor(c cell.Color) {
-	to.cellOpts = append(
-		[]cell.Option{cell.FgColor(c)},
-		to.cellOpts...,
-	)
-}
+func (to *textOptions) setDefaultFgColor(c cell.Color) { _ = "STUB: not implemented"; return }
 
 // newTextOptions returns new textOptions instance.
-func newTextOptions(tOpts ...TextOption) *textOptions {
-	to := &textOptions{}
-	for _, o := range tOpts {
-		o.set(to)
-	}
-	return to
-}
+func newTextOptions(tOpts ...TextOption) *textOptions { _ = "STUB: not implemented"; return nil }
 
 // textOption implements TextOption.
 type textOption func(*textOptions)
 
 // set implements TextOption.set.
 func (to textOption) set(tOpts *textOptions) {
-	to(tOpts)
+	_ = "STUB: not implemented"
+
+	// TextCellOpts sets options on the cells that contain the button text.
+	// If not specified, all cells will just have their foreground color set to the
+	// value of TextColor().
+	return
 }
 
-// TextCellOpts sets options on the cells that contain the button text.
-// If not specified, all cells will just have their foreground color set to the
-// value of TextColor().
 func TextCellOpts(opts ...cell.Option) TextOption {
-	return textOption(func(tOpts *textOptions) {
-		tOpts.cellOpts = opts
-	})
+	_ = "STUB: not implemented"
+	return *new(TextOption)
 }
 
 // FocusedTextCellOpts sets options on the cells that contain the button text
 // when the widget's container is focused.
 // If not specified, TextCellOpts will be used instead.
 func FocusedTextCellOpts(opts ...cell.Option) TextOption {
-	return textOption(func(tOpts *textOptions) {
-		tOpts.focusedCellOpts = opts
-	})
+	_ = "STUB: not implemented"
+	return *new(TextOption)
 }
 
 // PressedTextCellOpts sets options on the cells that contain the button text
 // when it is pressed.
 // If not specified, TextCellOpts will be used instead.
 func PressedTextCellOpts(opts ...cell.Option) TextOption {
-	return textOption(func(tOpts *textOptions) {
-		tOpts.pressedCellOpts = opts
-	})
+	_ = "STUB: not implemented"
+	return *new(TextOption)
 }

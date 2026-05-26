@@ -36,85 +36,47 @@ type Options struct {
 
 // Set allows existing options to be passed as an option.
 func (o *Options) Set(other *Options) {
-	*other = *o
+	_ = "STUB: not implemented"
+
+	// NewOptions returns a new Options instance after applying the provided options.
+	return
 }
 
-// NewOptions returns a new Options instance after applying the provided options.
-func NewOptions(opts ...Option) *Options {
-	o := &Options{}
-	for _, opt := range opts {
-		opt.Set(o)
-	}
-	return o
-}
+func NewOptions(opts ...Option) *Options { _ = "STUB: not implemented"; return nil }
 
 // option implements Option.
 type option func(*Options)
 
 // Set implements Option.set.
 func (co option) Set(opts *Options) {
-	co(opts)
+	_ = "STUB: not implemented"
+
+	// FgColor sets the foreground color of the cell.
+	return
 }
 
-// FgColor sets the foreground color of the cell.
-func FgColor(color Color) Option {
-	return option(func(co *Options) {
-		co.FgColor = color
-	})
-}
+func FgColor(color Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // BgColor sets the background color of the cell.
-func BgColor(color Color) Option {
-	return option(func(co *Options) {
-		co.BgColor = color
-	})
-}
+func BgColor(color Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Bold makes cell's text bold.
-func Bold() Option {
-	return option(func(co *Options) {
-		co.Bold = true
-	})
-}
+func Bold() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Italic makes cell's text italic. Only works when using the tcell backend.
-func Italic() Option {
-	return option(func(co *Options) {
-		co.Italic = true
-	})
-}
+func Italic() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Underline makes cell's text underlined.
-func Underline() Option {
-	return option(func(co *Options) {
-		co.Underline = true
-	})
-}
+func Underline() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Strikethrough strikes through the cell's text. Only works when using the tcell backend.
-func Strikethrough() Option {
-	return option(func(co *Options) {
-		co.Strikethrough = true
-	})
-}
+func Strikethrough() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Inverse inverts the colors of the cell's text.
-func Inverse() Option {
-	return option(func(co *Options) {
-		co.Inverse = true
-	})
-}
+func Inverse() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Blink makes the cell's text blink. Only works when using the tcell backend.
-func Blink() Option {
-	return option(func(co *Options) {
-		co.Blink = true
-	})
-}
+func Blink() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Dim makes the cell foreground color dim. Only works when using the tcell backend.
-func Dim() Option {
-	return option(func(co *Options) {
-		co.Dim = true
-	})
-}
+func Dim() Option { _ = "STUB: not implemented"; return *new(Option) }

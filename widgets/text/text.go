@@ -16,15 +16,11 @@
 package text
 
 import (
-	"fmt"
 	"image"
-	"strings"
 	"sync"
 
 	"github.com/mum4k/termdash/private/canvas"
 	"github.com/mum4k/termdash/private/canvas/buffer"
-	"github.com/mum4k/termdash/private/runewidth"
-	"github.com/mum4k/termdash/private/wrap"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	"github.com/mum4k/termdash/widgetapi"
 )
@@ -65,42 +61,17 @@ type Text struct {
 }
 
 // New returns a new text widget.
-func New(opts ...Option) (*Text, error) {
-	opt := newOptions(opts...)
-	if err := opt.validate(); err != nil {
-		return nil, err
-	}
-	return &Text{
-		scroll: newScrollTracker(opt),
-		opts:   opt,
-	}, nil
-}
+func New(opts ...Option) (*Text, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Reset resets the widget back to empty content.
-func (t *Text) Reset() {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-	t.reset()
-}
+func (t *Text) Reset() { _ = "STUB: not implemented"; return }
 
 // reset implements Reset, caller must hold t.mu.
-func (t *Text) reset() {
-	t.content = nil
-	t.wrapped = nil
-	t.scroll = newScrollTracker(t.opts)
-	t.lastWidth = 0
-	t.contentChanged = true
-}
+func (t *Text) reset() { _ = "STUB: not implemented"; return }
 
 // contentCells calculates the number of cells the content takes to display on
 // terminal.
-func (t *Text) contentCells() int {
-	cells := 0
-	for _, c := range t.content {
-		cells += runewidth.RuneWidth(c.Rune, runewidth.CountAsWidth('\n', 1))
-	}
-	return cells
-}
+func (t *Text) contentCells() int { _ = "STUB: not implemented"; return 0 }
 
 // Write writes text for the widget to display. Multiple calls append
 // additional text. The text contain cannot control characters
@@ -111,33 +82,11 @@ func (t *Text) contentCells() int {
 // Any newline ('\n') characters are interpreted as newlines when displaying
 // the text.
 func (t *Text) Write(text string, wOpts ...WriteOption) error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	if err := wrap.ValidText(text); err != nil {
-		return err
-	}
-
-	opts := newWriteOptions(wOpts...)
-	if opts.replace {
-		t.reset()
-	}
-
-	truncated := truncateToCells(text, t.opts.maxTextCells)
-	textCells := runewidth.StringWidth(truncated, runewidth.CountAsWidth('\n', 1))
-	contentCells := t.contentCells()
-	// If MaxTextCells has been set, limit the content if needed.
-	if t.opts.maxTextCells > 0 && contentCells+textCells > t.opts.maxTextCells {
-		diff := contentCells + textCells - t.opts.maxTextCells
-		t.content = t.content[diff:]
-	}
-
-	for _, r := range truncated {
-		t.content = append(t.content, buffer.NewCell(r, opts.cellOpts))
-	}
-	t.contentChanged = true
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// If MaxTextCells has been set, limit the content if needed.
 
 // minLinesForMarkers are the minimum amount of lines required on the canvas in
 // order to draw the scroll markers ('⇧' and '⇩').
@@ -147,17 +96,7 @@ const minLinesForMarkers = 3
 // text "above" the canvas due to the scrolling position. Returns true if the
 // marker was drawn.
 func (t *Text) drawScrollUp(cvs *canvas.Canvas, cur image.Point, fromLine int) (bool, error) {
-	height := cvs.Area().Dy()
-	if cur.Y == 0 && height >= minLinesForMarkers && fromLine > 0 {
-		cells, err := cvs.SetCell(cur, t.opts.scrollUp)
-		if err != nil {
-			return false, err
-		}
-		if cells != 1 {
-			panic(fmt.Errorf("invalid scroll up marker, it occupies %d cells, the implementation only supports scroll markers that occupy exactly one cell", cells))
-		}
-		return true, nil
-	}
+	_ = "STUB: not implemented"
 	return false, nil
 }
 
@@ -165,171 +104,64 @@ func (t *Text) drawScrollUp(cvs *canvas.Canvas, cur image.Point, fromLine int) (
 // more text "below" the canvas due to the scrolling position. Returns true if
 // the marker was drawn.
 func (t *Text) drawScrollDown(cvs *canvas.Canvas, cur image.Point, fromLine int) (bool, error) {
-	height := cvs.Area().Dy()
-	lines := len(t.wrapped)
-	if cur.Y == height-1 && height >= minLinesForMarkers && height < lines-fromLine {
-		cells, err := cvs.SetCell(cur, t.opts.scrollDown)
-		if err != nil {
-			return false, err
-		}
-		if cells != 1 {
-			panic(fmt.Errorf("invalid scroll down marker, it occupies %d cells, the implementation only supports scroll markers that occupy exactly one cell", cells))
-		}
-		return true, nil
-	}
+	_ = "STUB: not implemented"
 	return false, nil
 }
 
 // draw draws the text context on the canvas starting at the specified line.
 func (t *Text) draw(cvs *canvas.Canvas) error {
-	var cur image.Point // Tracks the current drawing position on the canvas.
-	height := cvs.Area().Dy()
-	fromLine := t.scroll.firstLine(len(t.wrapped), height)
-
-	for _, line := range t.wrapped[fromLine:] {
-		// Scroll up marker.
-		scrlUp, err := t.drawScrollUp(cvs, cur, fromLine)
-		if err != nil {
-			return err
-		}
-		if scrlUp {
-			cur = image.Point{0, cur.Y + 1} // Move to the next line.
-			// Skip one line of text, the marker replaced it.
-			continue
-		}
-
-		// Scroll down marker.
-		scrlDown, err := t.drawScrollDown(cvs, cur, fromLine)
-		if err != nil {
-			return err
-		}
-		if scrlDown || cur.Y >= height {
-			break // Skip all lines falling after (under) the canvas.
-		}
-
-		for _, cell := range line {
-			tr, err := lineTrim(cvs, cur, cell.Rune, t.opts)
-			if err != nil {
-				return err
-			}
-			cur = tr.curPoint
-			if tr.trimmed {
-				break // Skip over any characters trimmed on the current line.
-			}
-
-			cells, err := cvs.SetCell(cur, cell.Rune, cell.Opts)
-			if err != nil {
-				return err
-			}
-			cur = image.Point{cur.X + cells, cur.Y} // Move within the same line.
-		}
-		cur = image.Point{0, cur.Y + 1} // Move to the next line.
-	}
+	_ = "STUB: not implemented"
+	// Tracks the current drawing position on the canvas.
 	return nil
 }
+
+// Scroll up marker.
+
+// Move to the next line.
+// Skip one line of text, the marker replaced it.
+
+// Scroll down marker.
+
+// Skip all lines falling after (under) the canvas.
+
+// Skip over any characters trimmed on the current line.
+
+// Move within the same line.
+
+// Move to the next line.
 
 // Draw draws the text onto the canvas.
 // Implements widgetapi.Widget.Draw.
 func (t *Text) Draw(cvs *canvas.Canvas, meta *widgetapi.Meta) error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	width := cvs.Area().Dx()
-	if len(t.content) > 0 && (t.contentChanged || t.lastWidth != width) {
-		// The previous text preprocessing (line wrapping) is invalidated when
-		// new text is added or the width of the canvas changed.
-		wr, err := wrap.Cells(t.content, width, t.opts.wrapMode)
-		if err != nil {
-			return err
-		}
-		t.wrapped = wr
-	}
-	t.lastWidth = width
-
-	if len(t.wrapped) == 0 {
-		return nil // Nothing to draw if there's no text.
-	}
-
-	if err := t.draw(cvs); err != nil {
-		return err
-	}
-	t.contentChanged = false
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// The previous text preprocessing (line wrapping) is invalidated when
+// new text is added or the width of the canvas changed.
+
+// Nothing to draw if there's no text.
+
 // Keyboard implements widgetapi.Widget.Keyboard.
 func (t *Text) Keyboard(k *terminalapi.Keyboard, meta *widgetapi.EventMeta) error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	switch {
-	case k.Key == t.opts.keyUp:
-		t.scroll.upOneLine()
-	case k.Key == t.opts.keyDown:
-		t.scroll.downOneLine()
-	case k.Key == t.opts.keyPgUp:
-		t.scroll.upOnePage()
-	case k.Key == t.opts.keyPgDown:
-		t.scroll.downOnePage()
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Mouse implements widgetapi.Widget.Mouse.
 func (t *Text) Mouse(m *terminalapi.Mouse, meta *widgetapi.EventMeta) error {
-	t.mu.Lock()
-	defer t.mu.Unlock()
-
-	switch b := m.Button; {
-	case b == t.opts.mouseUpButton:
-		t.scroll.upOneLine()
-	case b == t.opts.mouseDownButton:
-		t.scroll.downOneLine()
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Options of the widget
 func (t *Text) Options() widgetapi.Options {
-	var ks widgetapi.KeyScope
-	var ms widgetapi.MouseScope
-	if t.opts.disableScrolling {
-		ks = widgetapi.KeyScopeNone
-		ms = widgetapi.MouseScopeNone
-	} else {
-		ks = widgetapi.KeyScopeFocused
-		ms = widgetapi.MouseScopeWidget
-	}
-
-	return widgetapi.Options{
-		// At least one line with at least one full-width rune.
-		MinimumSize:  image.Point{1, 1},
-		WantMouse:    ms,
-		WantKeyboard: ks,
-	}
+	_ = "STUB: not implemented"
+	return *new(widgetapi.Options)
 }
+
+// At least one line with at least one full-width rune.
 
 // truncateToCells truncates the beginning of text, so that it can be displayed
 // in at most maxCells. Setting maxCells to zero disables truncating.
-func truncateToCells(text string, maxCells int) string {
-	textCells := runewidth.StringWidth(text, runewidth.CountAsWidth('\n', 1))
-	if maxCells == 0 || textCells <= maxCells {
-		return text
-	}
-
-	haveCells := 0
-	textRunes := []rune(text)
-	i := len(textRunes) - 1
-	for ; i >= 0; i-- {
-		haveCells += runewidth.RuneWidth(textRunes[i], runewidth.CountAsWidth('\n', 1))
-		if haveCells > maxCells {
-			break
-		}
-	}
-
-	var b strings.Builder
-	for j := i + 1; j < len(textRunes); j++ {
-		b.WriteRune(textRunes[j])
-	}
-	return b.String()
-}
+func truncateToCells(text string, maxCells int) string { _ = "STUB: not implemented"; return "" }

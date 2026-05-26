@@ -22,14 +22,7 @@ package keyboard
 type Key rune
 
 // String implements fmt.Stringer()
-func (b Key) String() string {
-	if n, ok := buttonNames[b]; ok {
-		return n
-	} else if b >= 0 {
-		return string(b)
-	}
-	return "KeyUnknown"
-}
+func (b Key) String() string { _ = "STUB: not implemented"; return "" }
 
 // buttonNames maps Key values to human readable names.
 var buttonNames = map[Key]string{

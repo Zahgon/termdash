@@ -16,8 +16,6 @@ package text
 
 // scroll.go contains code that tracks the current scrolling position.
 
-import "math"
-
 // scrollTracker tracks the current scrolling position for the Text widget.
 //
 // The text widget displays the contained text buffer as lines of text that fit
@@ -55,49 +53,47 @@ type scrollTracker struct {
 }
 
 // newScrollTracker returns a new scroll tracker.
-func newScrollTracker(opts *options) *scrollTracker {
-	if opts.rollContent {
-		return &scrollTracker{state: rollToEnd}
-	}
-	return &scrollTracker{state: rollingDisabled}
-}
+func newScrollTracker(opts *options) *scrollTracker { _ = "STUB: not implemented"; return nil }
 
 // upOneLine processes a user request to scroll up by one line.
 func (st *scrollTracker) upOneLine() {
-	st.scroll--
+	_ = "STUB: not implemented"
+
+	// downOneLine processes a user request to scroll down by one line.
+	return
 }
 
-// downOneLine processes a user request to scroll down by one line.
 func (st *scrollTracker) downOneLine() {
-	st.scroll++
+	_ = "STUB: not implemented"
+
+	// upOnePage processes a user request to scroll up by one page.
+	return
 }
 
-// upOnePage processes a user request to scroll up by one page.
 func (st *scrollTracker) upOnePage() {
-	st.scrollPage--
+	_ = "STUB: not implemented"
+
+	// downOnePage processes a user request to scroll down by one page.
+	return
 }
 
-// downOnePage processes a user request to scroll down by one page.
 func (st *scrollTracker) downOnePage() {
-	st.scrollPage++
+	_ = "STUB: not implemented"
+
+	// doScroll processes any outstanding scroll requests and calculates the
+	// resulting first line.
+	return
 }
 
-// doScroll processes any outstanding scroll requests and calculates the
-// resulting first line.
-func (st *scrollTracker) doScroll(lines, height int) int {
-	first := st.first + st.scroll + st.scrollPage*height
-	st.scroll = 0
-	st.scrollPage = 0
-	return normalizeScroll(first, lines, height)
-}
+func (st *scrollTracker) doScroll(lines, height int) int { _ = "STUB: not implemented"; return 0 }
 
 // firstLine returns the number of the first line that should be drawn on a
 // canvas of the specified height if there is the provided number of lines of
 // text.
 func (st *scrollTracker) firstLine(lines, height int) int {
+	_ = "STUB: not implemented"
 	// Execute the scrolling FSM.
-	st.state = st.state(st, lines, height)
-	return st.first
+	return 0
 }
 
 // rollState is a state in the scrolling FSM.
@@ -106,60 +102,35 @@ type rollState func(st *scrollTracker, lines, height int) rollState
 // rollingDisabled is a state where content rolling was disabled by the
 // configuration of the Text widget.
 func rollingDisabled(st *scrollTracker, lines, height int) rollState {
-	st.first = st.doScroll(lines, height)
-	return rollingDisabled
+	_ = "STUB: not implemented"
+	return *new(rollState)
 }
 
 // rollToEnd is a state in which the last line of the content is always
 // visible. When new content arrives, it is rolled upwards.
 func rollToEnd(st *scrollTracker, lines, height int) rollState {
+	_ = "STUB: not implemented"
 	// If the user didn't scroll, just roll the content so that the last line
 	// is visible.
-	if st.scroll == 0 && st.scrollPage == 0 {
-		st.first = normalizeScroll(math.MaxInt32, lines, height)
-		return rollToEnd
-	}
-
-	st.first = st.doScroll(lines, height)
-	if lastLineVisible(st.first, lines, height) {
-		return rollToEnd
-	}
-	return rollingPaused
+	return *new(rollState)
 }
 
 // rollingPaused is a state in which the user scrolled up and made the last
 // line scroll out of the view, so the content rolling is paused.
 func rollingPaused(st *scrollTracker, lines, height int) rollState {
-	st.first = st.doScroll(lines, height)
-	if lastLineVisible(st.first, lines, height) {
-		return rollToEnd
-	}
-	return rollingPaused
+	_ = "STUB: not implemented"
+	return *new(rollState)
 }
 
 // lastLineVisible returns true if the last text line from within the buffer of
 // the text widget is visible on the canvas when drawing of the text starts
 // from the specified start line, there is the provided total amount of lines
 // and the canvas has the height.
-func lastLineVisible(start, lines, height int) bool {
-	return lines-start <= height
-}
+func lastLineVisible(start, lines, height int) bool { _ = "STUB: not implemented"; return false }
 
 // normalizeScroll returns normalized position of the first line that should be
 // drawn when drawing the specified number of lines on a canvas with the
 // provided height.
-func normalizeScroll(first, lines, height int) int {
-	if first < 0 || lines <= 0 || height <= 0 {
-		return 0
-	}
+func normalizeScroll(first, lines, height int) int { _ = "STUB: not implemented"; return 0 }
 
-	if lines <= height {
-		return 0 // Scrolling not necessary if the content fits.
-	}
-
-	max := lines - height
-	if first > max {
-		return max
-	}
-	return first
-}
+// Scrolling not necessary if the content fits.

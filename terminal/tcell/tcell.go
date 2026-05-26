@@ -16,11 +16,9 @@ package tcell
 
 import (
 	"context"
-	"fmt"
 	"image"
 
 	tcell "github.com/gdamore/tcell/v2"
-	"github.com/gdamore/tcell/v2/encoding"
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/private/event/eventqueue"
 	"github.com/mum4k/termdash/terminal/terminalapi"
@@ -37,30 +35,21 @@ type option func(*Terminal)
 
 // set implements Option.set.
 func (o option) set(t *Terminal) {
-	o(t)
+	_ = "STUB: not implemented"
+
+	// DefaultColorMode is the default value for the ColorMode option.
+	return
 }
 
-// DefaultColorMode is the default value for the ColorMode option.
 const DefaultColorMode = terminalapi.ColorMode256
 
 // ColorMode sets the terminal color mode.
 // Defaults to DefaultColorMode.
-func ColorMode(cm terminalapi.ColorMode) Option {
-	return option(func(t *Terminal) {
-		t.colorMode = cm
-	})
-}
+func ColorMode(cm terminalapi.ColorMode) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ClearStyle sets the style to use for tcell when clearing the screen.
 // Defaults to ColorDefault for foreground and background.
-func ClearStyle(fg, bg cell.Color) Option {
-	return option(func(t *Terminal) {
-		t.clearStyle = &cell.Options{
-			FgColor: fg,
-			BgColor: bg,
-		}
-	})
-}
+func ClearStyle(fg, bg cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Terminal provides input and output to a real terminal. Wraps the
 // gdamore/tcell terminal implementation. This object is not thread-safe.
@@ -84,121 +73,49 @@ type Terminal struct {
 var tcellNewScreen = tcell.NewScreen
 
 // newTerminal creates the terminal and applies the options.
-func newTerminal(opts ...Option) (*Terminal, error) {
-	screen, err := tcellNewScreen()
-	if err != nil {
-		return nil, fmt.Errorf("tcell.NewScreen => %v", err)
-	}
-
-	t := &Terminal{
-		events:    eventqueue.New(),
-		done:      make(chan struct{}),
-		colorMode: DefaultColorMode,
-		clearStyle: &cell.Options{
-			FgColor: cell.ColorDefault,
-			BgColor: cell.ColorDefault,
-		},
-		screen: screen,
-	}
-	for _, opt := range opts {
-		opt.set(t)
-	}
-
-	return t, nil
-}
+func newTerminal(opts ...Option) (*Terminal, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // New returns a new tcell based Terminal.
 // Call Close() when the terminal isn't required anymore.
 func New(opts ...Option) (*Terminal, error) {
+	_ = "STUB: not implemented"
 	// Enable full character set support for tcell
-	encoding.Register()
-
-	t, err := newTerminal(opts...)
-	if err != nil {
-		return nil, err
-	}
-	if err = t.screen.Init(); err != nil {
-		return nil, err
-	}
-
-	clearStyle := cellOptsToStyle(t.clearStyle, t.colorMode)
-	t.screen.EnableMouse()
-	t.screen.SetStyle(clearStyle)
-
-	go t.pollEvents() // Stops when Close() is called.
-	return t, nil
+	return nil, nil
 }
+
+// Stops when Close() is called.
 
 // Size implements terminalapi.Terminal.Size.
-func (t *Terminal) Size() image.Point {
-	w, h := t.screen.Size()
-	return image.Point{
-		X: w,
-		Y: h,
-	}
-}
+func (t *Terminal) Size() image.Point { _ = "STUB: not implemented"; return *new(image.Point) }
 
 // Clear implements terminalapi.Terminal.Clear.
-func (t *Terminal) Clear(opts ...cell.Option) error {
-	o := cell.NewOptions(opts...)
-	st := cellOptsToStyle(o, t.colorMode)
-	t.screen.Fill(' ', st)
-	return nil
-}
+func (t *Terminal) Clear(opts ...cell.Option) error { _ = "STUB: not implemented"; return nil }
 
 // Flush implements terminalapi.Terminal.Flush.
-func (t *Terminal) Flush() error {
-	t.screen.Show()
-	return nil
-}
+func (t *Terminal) Flush() error { _ = "STUB: not implemented"; return nil }
 
 // SetCursor implements terminalapi.Terminal.SetCursor.
-func (t *Terminal) SetCursor(p image.Point) {
-	t.screen.ShowCursor(p.X, p.Y)
-}
+func (t *Terminal) SetCursor(p image.Point) { _ = "STUB: not implemented"; return }
 
 // HideCursor implements terminalapi.Terminal.HideCursor.
-func (t *Terminal) HideCursor() {
-	t.screen.HideCursor()
-}
+func (t *Terminal) HideCursor() { _ = "STUB: not implemented"; return }
 
 // SetCell implements terminalapi.Terminal.SetCell.
 func (t *Terminal) SetCell(p image.Point, r rune, opts ...cell.Option) error {
-	o := cell.NewOptions(opts...)
-	st := cellOptsToStyle(o, t.colorMode)
-	t.screen.SetContent(p.X, p.Y, r, nil, st)
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // pollEvents polls and enqueues the input events.
-func (t *Terminal) pollEvents() {
-	for {
-		select {
-		case <-t.done:
-			return
-		default:
-		}
-
-		events := toTermdashEvents(t.screen.PollEvent())
-		for _, ev := range events {
-			t.events.Push(ev)
-		}
-	}
-}
+func (t *Terminal) pollEvents() { _ = "STUB: not implemented"; return }
 
 // Event implements terminalapi.Terminal.Event.
 func (t *Terminal) Event(ctx context.Context) terminalapi.Event {
-	ev := t.events.Pull(ctx)
-	if ev == nil {
-		return nil
-	}
-	return ev
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
 
 // Close closes the terminal, should be called when the terminal isn't required
 // anymore to return the screen to a sane state.
 // Implements terminalapi.Terminal.Close.
-func (t *Terminal) Close() {
-	close(t.done)
-	t.screen.Fini()
-}
+func (t *Terminal) Close() { _ = "STUB: not implemented"; return }

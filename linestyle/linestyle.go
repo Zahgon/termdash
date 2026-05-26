@@ -19,12 +19,7 @@ package linestyle
 type LineStyle int
 
 // String implements fmt.Stringer()
-func (ls LineStyle) String() string {
-	if n, ok := lineStyleNames[ls]; ok {
-		return n
-	}
-	return "LineStyleUnknown"
-}
+func (ls LineStyle) String() string { _ = "STUB: not implemented"; return "" }
 
 // lineStyleNames maps LineStyle values to human readable names.
 var lineStyleNames = map[LineStyle]string{

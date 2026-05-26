@@ -18,14 +18,8 @@ package dotseg
 // segments.
 
 import (
-	"fmt"
 	"image"
-	"math"
 
-	"github.com/mum4k/termdash/align"
-	"github.com/mum4k/termdash/private/alignfor"
-	"github.com/mum4k/termdash/private/area"
-	"github.com/mum4k/termdash/private/segdisp"
 	"github.com/mum4k/termdash/private/segdisp/sixteen"
 )
 
@@ -46,72 +40,25 @@ type attributes struct {
 
 // newAttributes calculates attributes needed to place the segments for the
 // provided pixel area.
-func newAttributes(bcAr image.Rectangle) *attributes {
-	segSize := segdisp.SegmentSize(bcAr)
-	return &attributes{
-		bcAr:    bcAr,
-		segSize: segSize,
-		sixteen: sixteen.NewAttributes(bcAr),
-	}
-}
+func newAttributes(bcAr image.Rectangle) *attributes { _ = "STUB: not implemented"; return nil }
 
 // segArea returns the area for the specified segment.
 func (a *attributes) segArea(seg Segment) (image.Rectangle, error) {
+	_ = "STUB: not implemented"
 	// Dots have double width of normal segments to fill more space in the
 	// segment display.
-	segSize := a.segSize * 2
-
-	// An area representing the dot which gets aligned and moved into position
-	// below.
-	dotAr := image.Rect(
-		a.bcAr.Min.X,
-		a.bcAr.Min.Y,
-		a.bcAr.Min.X+segSize,
-		a.bcAr.Min.Y+segSize,
-	)
-	mid, err := alignfor.Rectangle(a.bcAr, dotAr, align.HorizontalCenter, align.VerticalMiddle)
-	if err != nil {
-		return image.ZR, err
-	}
-
-	// moveBySize is the multiplier of segment size to determine by how many
-	// pixels to move D1 and D2 up and down from the center.
-	const moveBySize = 1.5
-	moveBy := int(math.Round(moveBySize * float64(segSize)))
-	switch seg {
-	case D1:
-		moved, err := area.MoveUp(mid, moveBy)
-		if err != nil {
-			return image.ZR, err
-		}
-		return moved, nil
-
-	case D2:
-		moved, err := area.MoveDown(mid, moveBy)
-		if err != nil {
-			return image.ZR, err
-		}
-		return moved, nil
-
-	case D3:
-		// Align at the middle of the bottom.
-		bot, err := alignfor.Rectangle(a.bcAr, dotAr, align.HorizontalCenter, align.VerticalBottom)
-		if err != nil {
-			return image.ZR, err
-		}
-
-		// Shift up to where the sixteen segment actually places its bottom
-		// segments.
-		diff := bot.Min.Y - a.sixteen.VertBotY
-		// Shift further up by one segment size, since the dots have double width.
-		diff += a.segSize
-		moved, err := area.MoveUp(bot, diff)
-		if err != nil {
-			return image.ZR, err
-		}
-		return moved, nil
-
-	default:
-		return image.ZR, fmt.Errorf("cannot calculate area for %v(%d)", seg, seg)
-	}
+	return *new(image.Rectangle), nil
 }
+
+// An area representing the dot which gets aligned and moved into position
+// below.
+
+// moveBySize is the multiplier of segment size to determine by how many
+// pixels to move D1 and D2 up and down from the center.
+
+// Align at the middle of the bottom.
+
+// Shift up to where the sixteen segment actually places its bottom
+// segments.
+
+// Shift further up by one segment size, since the dots have double width.

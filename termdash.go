@@ -25,8 +25,6 @@ package termdash
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"sync"
 	"time"
 
@@ -49,68 +47,54 @@ type option func(td *termdash)
 
 // set implements Option.set.
 func (o option) set(td *termdash) {
-	o(td)
+	_ = "STUB: not implemented"
+
+	// RedrawInterval sets how often termdash redraws the container and all the widgets.
+	// Defaults to DefaultRedrawInterval. Use the controller to disable the
+	// periodic redraw.
+	return
 }
 
-// RedrawInterval sets how often termdash redraws the container and all the widgets.
-// Defaults to DefaultRedrawInterval. Use the controller to disable the
-// periodic redraw.
-func RedrawInterval(t time.Duration) Option {
-	return option(func(td *termdash) {
-		td.redrawInterval = t
-	})
-}
+func RedrawInterval(t time.Duration) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ErrorHandler is used to provide a function that will be called with all
 // errors that occur while the dashboard is running. If not provided, any
 // errors panic the application.
 // The provided function must be thread-safe.
-func ErrorHandler(f func(error)) Option {
-	return option(func(td *termdash) {
-		td.errorHandler = f
-	})
-}
+func ErrorHandler(f func(error)) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // KeyboardSubscriber registers a subscriber for Keyboard events. Each
 // keyboard event is forwarded to the container and the registered subscriber.
 // The provided function must be thread-safe.
 func KeyboardSubscriber(f func(*terminalapi.Keyboard)) Option {
-	return option(func(td *termdash) {
-		td.keyboardSubscriber = f
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // MouseSubscriber registers a subscriber for Mouse events. Each mouse event
 // is forwarded to the container and the registered subscriber.
 // The provided function must be thread-safe.
 func MouseSubscriber(f func(*terminalapi.Mouse)) Option {
-	return option(func(td *termdash) {
-		td.mouseSubscriber = f
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // withEDS indicates that termdash should run with the provided event
 // distribution system instead of creating one.
 // Useful for tests.
-func withEDS(eds *event.DistributionSystem) Option {
-	return option(func(td *termdash) {
-		td.eds = eds
-	})
-}
+func withEDS(eds *event.DistributionSystem) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Run runs the terminal dashboard with the provided container on the terminal.
 // Redraws the terminal periodically. If you prefer a manual redraw, use the
 // Controller instead.
 // Blocks until the context expires.
 func Run(ctx context.Context, t terminalapi.Terminal, c *container.Container, opts ...Option) error {
-	td := newTermdash(t, c, opts...)
-
-	err := td.start(ctx)
-	// Only return the status (error or nil) after the termdash event
-	// processing goroutine actually exits.
-	td.stop()
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Only return the status (error or nil) after the termdash event
+// processing goroutine actually exits.
 
 // Controller controls a termdash instance.
 // The controller instance is only valid until Close() is called.
@@ -125,37 +109,17 @@ type Controller struct {
 // option is ignored.
 // Close the controller when it isn't needed anymore.
 func NewController(t terminalapi.Terminal, c *container.Container, opts ...Option) (*Controller, error) {
-	ctx, cancel := context.WithCancel(context.Background())
-	ctrl := &Controller{
-		td:     newTermdash(t, c, opts...),
-		cancel: cancel,
-	}
-
-	// stops when Close() is called.
-	go ctrl.td.processEvents(ctx)
-	if err := ctrl.td.periodicRedraw(); err != nil {
-		return nil, err
-	}
-	return ctrl, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// stops when Close() is called.
 
 // Redraw triggers redraw of the terminal.
-func (c *Controller) Redraw() error {
-	if c.td == nil {
-		return errors.New("the termdash instance is no longer running, this controller is now invalid")
-	}
-
-	c.td.mu.Lock()
-	defer c.td.mu.Unlock()
-	return c.td.redraw()
-}
+func (c *Controller) Redraw() error { _ = "STUB: not implemented"; return nil }
 
 // Close closes the Controller and its termdash instance.
-func (c *Controller) Close() {
-	c.cancel()
-	c.td.stop()
-	c.td = nil
-}
+func (c *Controller) Close() { _ = "STUB: not implemented"; return }
 
 // termdash is a terminal based dashboard.
 // This object is thread-safe.
@@ -191,172 +155,64 @@ type termdash struct {
 
 // newTermdash creates a new termdash.
 func newTermdash(t terminalapi.Terminal, c *container.Container, opts ...Option) *termdash {
-	td := &termdash{
-		term:           t,
-		container:      c,
-		eds:            event.NewDistributionSystem(),
-		closeCh:        make(chan struct{}),
-		exitCh:         make(chan struct{}),
-		redrawInterval: DefaultRedrawInterval,
-	}
-
-	for _, opt := range opts {
-		opt.set(td)
-	}
-	td.subscribers()
-	c.Subscribe(td.eds)
-	return td
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // subscribers subscribes event receivers that live in this package to EDS.
 func (td *termdash) subscribers() {
+	_ = "STUB: not implemented"
 	// Handler for all errors that occur during input event processing.
-	td.eds.Subscribe([]terminalapi.Event{terminalapi.NewError("")}, func(ev terminalapi.Event) {
-		td.handleError(ev.(*terminalapi.Error).Error())
-	})
-
-	// Handles terminal resize events.
-	td.eds.Subscribe([]terminalapi.Event{&terminalapi.Resize{}}, func(terminalapi.Event) {
-		td.setClearNeeded()
-	})
-
-	// Redraws the screen on Keyboard and Mouse events.
-	// These events very likely change the content of the widgets (e.g. zooming
-	// a LineChart) so a redraw is needed to make that visible.
-	td.eds.Subscribe([]terminalapi.Event{
-		&terminalapi.Keyboard{},
-		&terminalapi.Mouse{},
-	}, func(terminalapi.Event) {
-		td.evRedraw()
-	}, event.MaxRepetitive(0)) // No repetitive events that cause terminal redraw.
-
-	// Keyboard and Mouse subscribers specified via options.
-	if td.keyboardSubscriber != nil {
-		td.eds.Subscribe([]terminalapi.Event{&terminalapi.Keyboard{}}, func(ev terminalapi.Event) {
-			td.keyboardSubscriber(ev.(*terminalapi.Keyboard))
-		})
-	}
-	if td.mouseSubscriber != nil {
-		td.eds.Subscribe([]terminalapi.Event{&terminalapi.Mouse{}}, func(ev terminalapi.Event) {
-			td.mouseSubscriber(ev.(*terminalapi.Mouse))
-		})
-	}
+	return
 }
+
+// Handles terminal resize events.
+
+// Redraws the screen on Keyboard and Mouse events.
+// These events very likely change the content of the widgets (e.g. zooming
+// a LineChart) so a redraw is needed to make that visible.
+
+// No repetitive events that cause terminal redraw.
+
+// Keyboard and Mouse subscribers specified via options.
 
 // handleError forwards the error to the error handler if one was
 // provided or panics.
-func (td *termdash) handleError(err error) {
-	if td.errorHandler != nil {
-		td.errorHandler(err)
-	} else {
-		panic(err)
-	}
-}
+func (td *termdash) handleError(err error) { _ = "STUB: not implemented"; return }
 
 // setClearNeeded flags that the terminal needs to be cleared next time we're
 // drawing it.
-func (td *termdash) setClearNeeded() {
-	td.mu.Lock()
-	defer td.mu.Unlock()
-	td.clearNeeded = true
-}
+func (td *termdash) setClearNeeded() { _ = "STUB: not implemented"; return }
 
 // redraw redraws the container and its widgets.
 // The caller must hold td.mu.
-func (td *termdash) redraw() error {
-	if td.clearNeeded {
-		if err := td.term.Clear(); err != nil {
-			return fmt.Errorf("term.Clear => error: %v", err)
-		}
-		td.clearNeeded = false
-	}
-
-	if err := td.container.Draw(); err != nil {
-		return fmt.Errorf("container.Draw => error: %v", err)
-	}
-
-	if err := td.term.Flush(); err != nil {
-		return fmt.Errorf("term.Flush => error: %v", err)
-	}
-	return nil
-}
+func (td *termdash) redraw() error { _ = "STUB: not implemented"; return nil }
 
 // evRedraw redraws the container and its widgets.
-func (td *termdash) evRedraw() error {
-	td.mu.Lock()
-	defer td.mu.Unlock()
+func (td *termdash) evRedraw() error { _ = "STUB: not implemented"; return nil }
 
-	// Don't redraw immediately, give widgets that are performing enough time
-	// to update.
-	// We don't want to actually synchronize until all widgets update, we are
-	// purposefully leaving slow widgets behind.
-	time.Sleep(25 * time.Millisecond)
-	return td.redraw()
-}
+// Don't redraw immediately, give widgets that are performing enough time
+// to update.
+// We don't want to actually synchronize until all widgets update, we are
+// purposefully leaving slow widgets behind.
 
 // periodicRedraw is called once each RedrawInterval.
-func (td *termdash) periodicRedraw() error {
-	td.mu.Lock()
-	defer td.mu.Unlock()
-	return td.redraw()
-}
+func (td *termdash) periodicRedraw() error { _ = "STUB: not implemented"; return nil }
 
 // processEvents processes terminal input events.
 // This is the body of the event collecting goroutine.
-func (td *termdash) processEvents(ctx context.Context) {
-	defer close(td.exitCh)
-
-	for {
-		ev := td.term.Event(ctx)
-		if ev != nil {
-			td.eds.Event(ev)
-		}
-
-		select {
-		case <-ctx.Done():
-			return
-		default:
-		}
-	}
-}
+func (td *termdash) processEvents(ctx context.Context) { _ = "STUB: not implemented"; return }
 
 // start starts the terminal dashboard. Blocks until the context expires or
 // until stop() is called.
 func (td *termdash) start(ctx context.Context) error {
+	_ = "STUB: not implemented"
 	// Redraw once to initialize the container sizes.
-	if err := td.periodicRedraw(); err != nil {
-		close(td.exitCh)
-		return err
-	}
-
-	redrawTimer := time.NewTicker(td.redrawInterval)
-	defer redrawTimer.Stop()
-
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	// stops when stop() is called or the context expires.
-	go td.processEvents(ctx)
-
-	for {
-		select {
-		case <-redrawTimer.C:
-			if err := td.periodicRedraw(); err != nil {
-				return err
-			}
-
-		case <-ctx.Done():
-			return nil
-
-		case <-td.closeCh:
-			return nil
-		}
-	}
+	return nil
 }
+
+// stops when stop() is called or the context expires.
 
 // stop tells the event collecting goroutine to stop.
 // Blocks until it exits.
-func (td *termdash) stop() {
-	close(td.closeCh)
-	<-td.exitCh
-}
+func (td *termdash) stop() { _ = "STUB: not implemented"; return }

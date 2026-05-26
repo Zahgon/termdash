@@ -18,7 +18,6 @@ package main
 
 import (
 	"context"
-	"math"
 	"time"
 
 	"github.com/mum4k/termdash"
@@ -31,46 +30,13 @@ import (
 )
 
 // sineInputs generates values from -1 to 1 for display on the line chart.
-func sineInputs() []float64 {
-	var res []float64
-
-	for i := 0; i < 200; i++ {
-		v := math.Sin(float64(i) / 100 * math.Pi)
-		res = append(res, v)
-	}
-	return res
-}
+func sineInputs() []float64 { _ = "STUB: not implemented"; return nil }
 
 // playLineChart continuously adds values to the LineChart, once every delay.
 // Exits when the context expires.
 func playLineChart(ctx context.Context, lc *linechart.LineChart, delay time.Duration) {
-	inputs := sineInputs()
-	ticker := time.NewTicker(delay)
-	defer ticker.Stop()
-	for i := 0; ; {
-		select {
-		case <-ticker.C:
-			i = (i + 1) % len(inputs)
-			rotated := append(inputs[i:], inputs[:i]...)
-			if err := lc.Series("first", rotated,
-				linechart.SeriesCellOpts(cell.FgColor(cell.ColorNumber(33))),
-				linechart.SeriesXLabels(map[int]string{
-					0: "zero",
-				}),
-			); err != nil {
-				panic(err)
-			}
-
-			i2 := (i + 100) % len(inputs)
-			rotated2 := append(inputs[i2:], inputs[:i2]...)
-			if err := lc.Series("second", rotated2, linechart.SeriesCellOpts(cell.FgColor(cell.ColorWhite))); err != nil {
-				panic(err)
-			}
-
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func main() {

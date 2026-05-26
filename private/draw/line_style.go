@@ -82,23 +82,15 @@ func init() {
 
 // lineParts returns the line component characters for the provided line style.
 func lineParts(ls linestyle.LineStyle) (map[linePart]rune, error) {
-	parts, ok := lineStyleChars[ls]
-	if !ok {
-		return nil, fmt.Errorf("unsupported line style %d", ls)
-	}
-	return parts, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // linePart identifies individual line parts.
 type linePart int
 
 // String implements fmt.Stringer()
-func (lp linePart) String() string {
-	if n, ok := linePartNames[lp]; ok {
-		return n
-	}
-	return "linePartUnknown"
-}
+func (lp linePart) String() string { _ = "STUB: not implemented"; return "" }
 
 // linePartNames maps linePart values to human readable names.
 var linePartNames = map[linePart]string{

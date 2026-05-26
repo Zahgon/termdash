@@ -17,8 +17,6 @@ package sparkline
 // options.go contains configurable options for SparkLine.
 
 import (
-	"fmt"
-
 	"github.com/mum4k/termdash/cell"
 )
 
@@ -33,10 +31,12 @@ type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// options holds the provided options.
+	return
 }
 
-// options holds the provided options.
 type options struct {
 	label         string
 	labelCellOpts []cell.Option
@@ -45,44 +45,25 @@ type options struct {
 }
 
 // newOptions returns options with the default values set.
-func newOptions() *options {
-	return &options{
-		color: DefaultColor,
-	}
-}
+func newOptions() *options { _ = "STUB: not implemented"; return nil }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	if got, min := o.height, 0; got < min {
-		return fmt.Errorf("invalid Height %d, must be %d <= Height", got, min)
-	}
-	return nil
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // Label adds a label above the SparkLine.
 func Label(text string, cOpts ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.label = text
-		opts.labelCellOpts = cOpts
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // Height sets a fixed height for the SparkLine.
 // If not provided or set to zero, the SparkLine takes all the available
 // vertical space in the container. Must be a positive or zero integer.
-func Height(h int) Option {
-	return option(func(opts *options) {
-		opts.height = h
-	})
-}
+func Height(h int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultColor is the default value for the Color option.
 const DefaultColor = cell.ColorGreen
 
 // Color sets the color of the SparkLine.
 // Defaults to DefaultColor if not set.
-func Color(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.color = c
-	})
-}
+func Color(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }

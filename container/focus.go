@@ -19,7 +19,6 @@ package container
 import (
 	"image"
 
-	"github.com/mum4k/termdash/mouse"
 	"github.com/mum4k/termdash/private/button"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 )
@@ -27,19 +26,7 @@ import (
 // pointCont finds the top-most (on the screen) container whose area contains
 // the given point. Returns nil if none of the containers in the tree contain
 // this point.
-func pointCont(c *Container, p image.Point) *Container {
-	var (
-		errStr string
-		cont   *Container
-	)
-	postOrder(rootCont(c), &errStr, visitFunc(func(c *Container) error {
-		if p.In(c.area) && cont == nil {
-			cont = c
-		}
-		return nil
-	}))
-	return cont
-}
+func pointCont(c *Container, p image.Point) *Container { _ = "STUB: not implemented"; return nil }
 
 // focusTracker tracks the active (focused) container.
 // This is not thread-safe, the implementation assumes that the owner of
@@ -59,155 +46,63 @@ type focusTracker struct {
 
 // newFocusTracker returns a new focus tracker with focus set at the provided
 // container.
-func newFocusTracker(c *Container) *focusTracker {
-	return &focusTracker{
-		container: c,
-		// Mouse FSM tracking clicks inside the entire area for the root
-		// container.
-		buttonFSM: button.NewFSM(mouse.ButtonLeft, c.area),
-	}
-}
+func newFocusTracker(c *Container) *focusTracker { _ = "STUB: not implemented"; return nil }
+
+// Mouse FSM tracking clicks inside the entire area for the root
+// container.
 
 // active returns container that is currently active.
-func (ft *focusTracker) active() *Container {
-	return ft.container
-}
+func (ft *focusTracker) active() *Container { _ = "STUB: not implemented"; return nil }
 
 // isActive determines if the provided container is the currently active container.
-func (ft *focusTracker) isActive(c *Container) bool {
-	return ft.container == c
-}
+func (ft *focusTracker) isActive(c *Container) bool { _ = "STUB: not implemented"; return false }
 
 // setActive sets the currently active container to the one provided.
 func (ft *focusTracker) setActive(c *Container) {
-	ft.container = c
+	_ = "STUB: not implemented"
+
+	// next moves focus to the next container.
+	// If group is not nil, focus will only move between containers with a matching
+	// focus group number.
+	return
 }
 
-// next moves focus to the next container.
-// If group is not nil, focus will only move between containers with a matching
-// focus group number.
-func (ft *focusTracker) next(group *FocusGroup) {
-	var (
-		errStr    string
-		firstCont *Container
-		nextCont  *Container
-		focusNext bool
-	)
-	preOrder(rootCont(ft.container), &errStr, visitFunc(func(c *Container) error {
-		if nextCont != nil {
-			// Already found the next container, nothing to do.
-			return nil
-		}
+func (ft *focusTracker) next(group *FocusGroup) { _ = "STUB: not implemented"; return }
 
-		if firstCont == nil && c.isLeaf() {
-			// Remember the first eligible container in case we "wrap" over,
-			// i.e. finish the iteration before finding the next container.
-			switch {
-			case group == nil && !c.opts.keyFocusSkip:
-				fallthrough
-			case group != nil && c.inFocusGroup(*group):
-				firstCont = c
-			}
-		}
+// Already found the next container, nothing to do.
 
-		if ft.container == c {
-			// Visiting the currently focused container, going to focus the
-			// next one.
-			focusNext = true
-			return nil
-		}
+// Remember the first eligible container in case we "wrap" over,
+// i.e. finish the iteration before finding the next container.
 
-		if focusNext && c.isLeaf() {
-			switch {
-			case group == nil && !c.opts.keyFocusSkip:
-				fallthrough
-			case group != nil && c.inFocusGroup(*group):
-				nextCont = c
-			}
-		}
-		return nil
-	}))
+// Visiting the currently focused container, going to focus the
+// next one.
 
-	if nextCont == nil && firstCont != nil {
-		// If the traversal finishes without finding the next container, move
-		// focus back to the first container.
-		ft.setActive(firstCont)
-	} else if nextCont != nil {
-		ft.setActive(nextCont)
-	}
-}
+// If the traversal finishes without finding the next container, move
+// focus back to the first container.
 
 // previous moves focus to the previous container.
 // If group is not nil, focus will only move between containers with a matching
 // focus group number.
-func (ft *focusTracker) previous(group *FocusGroup) {
-	var (
-		errStr      string
-		prevCont    *Container
-		lastCont    *Container
-		visitedCurr bool
-	)
-	preOrder(rootCont(ft.container), &errStr, visitFunc(func(c *Container) error {
-		if ft.container == c {
-			visitedCurr = true
-		}
+func (ft *focusTracker) previous(group *FocusGroup) { _ = "STUB: not implemented"; return }
 
-		if c.isLeaf() {
-			switch {
-			case group == nil && !c.opts.keyFocusSkip:
-				fallthrough
-			case group != nil && c.inFocusGroup(*group):
-				if !visitedCurr {
-					// Remember the last eligible container closest to the one
-					// currently focused.
-					prevCont = c
-				}
-				lastCont = c
-			}
-		}
-		return nil
-	}))
-
-	if prevCont != nil {
-		ft.setActive(prevCont)
-	} else if lastCont != nil {
-		ft.setActive(lastCont)
-	}
-}
+// Remember the last eligible container closest to the one
+// currently focused.
 
 // mouse identifies mouse events that change the focused container and track
 // the focused container in the tree.
 // The argument c is the container onto which the mouse event landed.
 func (ft *focusTracker) mouse(target *Container, m *terminalapi.Mouse) {
-	clicked, bs := ft.buttonFSM.Event(m)
-	switch {
-	case bs == button.Down:
-		ft.candidate = target
-	case bs == button.Up && clicked:
-		if target == ft.candidate {
-			ft.container = target
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // updateArea updates the area that the focus tracker considers active for
 // mouse clicks.
-func (ft *focusTracker) updateArea(ar image.Rectangle) {
-	ft.buttonFSM.UpdateArea(ar)
-}
+func (ft *focusTracker) updateArea(ar image.Rectangle) { _ = "STUB: not implemented"; return }
 
 // reachableFrom asserts whether the currently focused container is reachable
 // from the provided node in the tree.
 func (ft *focusTracker) reachableFrom(node *Container) bool {
-	var (
-		errStr    string
-		reachable bool
-	)
-	preOrder(node, &errStr, visitFunc(func(c *Container) error {
-		if c == ft.container {
-			reachable = true
-		}
-		return nil
-	}))
-	return reachable
+	_ = "STUB: not implemented"
+	return false
 }

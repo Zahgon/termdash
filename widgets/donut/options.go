@@ -17,8 +17,6 @@ package donut
 // options.go contains configurable options for Donut.
 
 import (
-	"fmt"
-
 	"github.com/mum4k/termdash/align"
 	"github.com/mum4k/termdash/cell"
 )
@@ -34,10 +32,12 @@ type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// options holds the provided options.
+	return
 }
 
-// options holds the provided options.
 type options struct {
 	donutHolePercent int
 	hideTextProgress bool
@@ -57,31 +57,10 @@ type options struct {
 }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	if min, max := 0, 100; o.donutHolePercent < min || o.donutHolePercent > max {
-		return fmt.Errorf("invalid donut hole percent %d, must be in range %d <= p <= %d", o.donutHolePercent, min, max)
-	}
-
-	if min, max := 0, 360; o.startAngle < min || o.startAngle >= max {
-		return fmt.Errorf("invalid start angle %d, must be in range %d <= angle < %d", o.startAngle, min, max)
-	}
-
-	return nil
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // newOptions returns options with the default values set.
-func newOptions() *options {
-	return &options{
-		donutHolePercent: DefaultHolePercent,
-		startAngle:       DefaultStartAngle,
-		direction:        -1,
-		textCellOpts: []cell.Option{
-			cell.FgColor(cell.ColorDefault),
-			cell.BgColor(cell.ColorDefault),
-		},
-		labelAlign: DefaultLabelAlign,
-	}
-}
+func newOptions() *options { _ = "STUB: not implemented"; return nil }
 
 // DefaultHolePercent is the default value for the HolePercent
 // option.
@@ -91,11 +70,7 @@ const DefaultHolePercent = 35
 // percentage of the donut's radius.
 // Setting this to zero disables the hole so that the donut will become just a
 // circle. Valid range is 0 <= p <= 100.
-func HolePercent(p int) Option {
-	return option(func(opts *options) {
-		opts.donutHolePercent = p
-	})
-}
+func HolePercent(p int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ShowTextProgress configures the Gauge so that it also displays a text
 // enumerating the progress. This is the default behavior.
@@ -107,33 +82,17 @@ func HolePercent(p int) Option {
 // of the drawn donut.
 //
 // Providing this option also sets HolePercent to its default value.
-func ShowTextProgress() Option {
-	return option(func(opts *options) {
-		opts.hideTextProgress = false
-	})
-}
+func ShowTextProgress() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // HideTextProgress disables the display of a text enumerating the progress.
-func HideTextProgress() Option {
-	return option(func(opts *options) {
-		opts.hideTextProgress = true
-	})
-}
+func HideTextProgress() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // TextCellOpts sets cell options on cells that contain the displayed text
 // progress.
-func TextCellOpts(cOpts ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.textCellOpts = cOpts
-	})
-}
+func TextCellOpts(cOpts ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // CellOpts sets cell options on cells that contain the donut.
-func CellOpts(cOpts ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.cellOpts = cOpts
-	})
-}
+func CellOpts(cOpts ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // DefaultStartAngle is the default value for the StartAngle option.
 const DefaultStartAngle = 90
@@ -142,42 +101,24 @@ const DefaultStartAngle = 90
 // represent both 0% and 100% of progress.
 // Valid values are in range 0 <= angle < 360.
 // Angles start at the X axis and grow counter-clockwise.
-func StartAngle(angle int) Option {
-	return option(func(opts *options) {
-		opts.startAngle = angle
-	})
-}
+func StartAngle(angle int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Clockwise sets the donut widget for a progression in the clockwise
 // direction. This is the default option.
-func Clockwise() Option {
-	return option(func(opts *options) {
-		opts.direction = -1
-	})
-}
+func Clockwise() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // CounterClockwise sets the donut widget for a progression in the counter-clockwise
 // direction.
-func CounterClockwise() Option {
-	return option(func(opts *options) {
-		opts.direction = 1
-	})
-}
+func CounterClockwise() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // Label sets a text label to be displayed under the donut.
 func Label(text string, cOpts ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.label = text
-		opts.labelCellOpts = cOpts
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // DefaultLabelAlign is the default value for the LabelAlign option.
 const DefaultLabelAlign = align.HorizontalCenter
 
 // LabelAlign sets the alignment of the label under the donut.
-func LabelAlign(la align.Horizontal) Option {
-	return option(func(opts *options) {
-		opts.labelAlign = la
-	})
-}
+func LabelAlign(la align.Horizontal) Option { _ = "STUB: not implemented"; return *new(Option) }

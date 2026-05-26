@@ -15,7 +15,6 @@
 package heatmap
 
 import (
-	"errors"
 	"github.com/mum4k/termdash/cell"
 )
 
@@ -36,47 +35,27 @@ type options struct {
 }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	return errors.New("not implemented")
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // newOptions returns a new options instance.
-func newOptions(opts ...Option) *options {
-	opt := &options{
-		cellWidth: 3,
-	}
-	for _, o := range opts {
-		o.set(opt)
-	}
-	return opt
-}
+func newOptions(opts ...Option) *options { _ = "STUB: not implemented"; return nil }
 
 // option implements Option.
 type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// CellWidth set the width of cells (or grids) in the heat map, not the terminal cell.
+	// The default height of each cell (grid) is 1 and the width is 3.
+	return
 }
 
-// CellWidth set the width of cells (or grids) in the heat map, not the terminal cell.
-// The default height of each cell (grid) is 1 and the width is 3.
-func CellWidth(w int) Option {
-	return option(func(opts *options) {
-		opts.cellWidth = w
-	})
-}
+func CellWidth(w int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // XLabelCellOpts set the cell options for the labels on the X axis.
-func XLabelCellOpts(co ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.xLabelCellOpts = co
-	})
-}
+func XLabelCellOpts(co ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // YLabelCellOpts set the cell options for the labels on the Y axis.
-func YLabelCellOpts(co ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.yLabelCellOpts = co
-	})
-}
+func YLabelCellOpts(co ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }

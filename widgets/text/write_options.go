@@ -33,35 +33,24 @@ type writeOptions struct {
 }
 
 // newWriteOptions returns new writeOptions instance.
-func newWriteOptions(wOpts ...WriteOption) *writeOptions {
-	wo := &writeOptions{
-		cellOpts: cell.NewOptions(),
-	}
-	for _, o := range wOpts {
-		o.set(wo)
-	}
-	return wo
-}
+func newWriteOptions(wOpts ...WriteOption) *writeOptions { _ = "STUB: not implemented"; return nil }
 
 // writeOption implements WriteOption.
 type writeOption func(*writeOptions)
 
 // set implements WriteOption.set.
 func (wo writeOption) set(wOpts *writeOptions) {
-	wo(wOpts)
+	_ = "STUB: not implemented"
+
+	// WriteCellOpts sets options on the cells that contain the text.
+	return
 }
 
-// WriteCellOpts sets options on the cells that contain the text.
 func WriteCellOpts(opts ...cell.Option) WriteOption {
-	return writeOption(func(wOpts *writeOptions) {
-		wOpts.cellOpts = cell.NewOptions(opts...)
-	})
+	_ = "STUB: not implemented"
+	return *new(WriteOption)
 }
 
 // WriteReplace instructs the text widget to replace the entire text content on
 // this write instead of appending.
-func WriteReplace() WriteOption {
-	return writeOption(func(wOpts *writeOptions) {
-		wOpts.replace = true
-	})
-}
+func WriteReplace() WriteOption { _ = "STUB: not implemented"; return *new(WriteOption) }

@@ -16,11 +16,8 @@
 package segdisp
 
 import (
-	"fmt"
 	"image"
-	"math"
 
-	"github.com/mum4k/termdash/private/area"
 	"github.com/mum4k/termdash/private/canvas"
 	"github.com/mum4k/termdash/private/canvas/braille"
 )
@@ -44,47 +41,26 @@ var aspectRatio = image.Point{3, 5}
 // Returns an error if the area is too small to draw a segment display, i.e.
 // smaller than MinCols x MinRows.
 func Required(cellArea image.Rectangle) (image.Rectangle, error) {
-	if cols, rows := cellArea.Dx(), cellArea.Dy(); cols < MinCols || rows < MinRows {
-		return image.ZR, fmt.Errorf("cell area %v is too small to draw the segment display, has %dx%d cells, need at least %dx%d cells",
-			cellArea, cols, rows, MinCols, MinRows)
-	}
-
-	bcAr := image.Rect(cellArea.Min.X, cellArea.Min.Y, cellArea.Max.X*braille.ColMult, cellArea.Max.Y*braille.RowMult)
-	bcArAdj := area.WithRatio(bcAr, aspectRatio)
-
-	needCols := int(math.Ceil(float64(bcArAdj.Dx()) / braille.ColMult))
-	needRows := int(math.Ceil(float64(bcArAdj.Dy()) / braille.RowMult))
-	needAr := image.Rect(cellArea.Min.X, cellArea.Min.Y, cellArea.Min.X+needCols, cellArea.Min.Y+needRows)
-	return needAr, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), nil
 }
 
 // ToBraille converts the canvas into a braille canvas and returns a pixel area
 // with aspect ratio adjusted for the segment display.
 func ToBraille(cvs *canvas.Canvas) (*braille.Canvas, image.Rectangle, error) {
-	ar, err := Required(cvs.Area())
-	if err != nil {
-		return nil, image.ZR, fmt.Errorf("Required => %v", err)
-	}
-
-	bc, err := braille.New(ar)
-	if err != nil {
-		return nil, image.ZR, fmt.Errorf("braille.New => %v", err)
-	}
-	return bc, area.WithRatio(bc.Area(), aspectRatio), nil
+	_ = "STUB: not implemented"
+	return nil, *new(image.Rectangle), nil
 }
 
 // SegmentSize given an area for the display segment determines the size of
 // individual segments, i.e. the width of a vertical or the height of a
 // horizontal segment.
 func SegmentSize(ar image.Rectangle) int {
+	_ = "STUB: not implemented"
 	// widthPerc is the relative width of a segment to the width of the canvas.
-	const widthPerc = 9
-	s := int(math.Round(float64(ar.Dx()) * widthPerc / 100))
-	if s > 3 && s%2 == 0 {
-		// Segments with odd number of pixels in their width/height look
-		// better, since the spike at the top of their slopes has only one
-		// pixel.
-		s++
-	}
-	return s
+	return 0
 }
+
+// Segments with odd number of pixels in their width/height look
+// better, since the spike at the top of their slopes has only one
+// pixel.

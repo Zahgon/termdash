@@ -17,7 +17,6 @@ package axes
 // label.go contains code that calculates the positions of labels on the axes.
 
 import (
-	"errors"
 	"image"
 )
 
@@ -37,20 +36,23 @@ type Label struct {
 // Labels are returned with Y coordinates in ascending order.
 // Y coordinates grow down.
 func yLabels(graphHeight, labelWidth int, labels []string) ([]*Label, error) {
-	return nil, errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // rowLabel returns one label for the specified row.
 // The row is the Y coordinate of the row, Y coordinates grow down.
 func rowLabel(row int, label string, labelWidth int) (*Label, error) {
-	return nil, errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // xLabels returns labels that should be placed under the cells.
 // Labels are returned with X coordinates in ascending order.
 // X coordinates grow right.
 func xLabels(yEnd image.Point, graphWidth int, labels []string, cellWidth int) ([]*Label, error) {
-	return nil, errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // paddedLabelLength calculates the length of the padded X label and
@@ -60,5 +62,6 @@ func xLabels(yEnd image.Point, graphWidth int, labels []string, cellWidth int) (
 // the X label belongs to the middle column of the three columns,
 // and the padded length is 3*3 (cellWidth multiplies the number of columns), which is 9.
 func paddedLabelLength(graphWidth, longest, cellWidth int) (l, index int) {
-	return
+	_ = "STUB: not implemented"
+	return 0, 0
 }

@@ -15,12 +15,8 @@
 package linechart
 
 import (
-	"fmt"
-	"math"
-
 	"github.com/mum4k/termdash/cell"
 	"github.com/mum4k/termdash/widgets/linechart/internal/axes"
-	"github.com/mum4k/termdash/widgets/linechart/internal/zoom"
 )
 
 // options.go contains configurable options for LineChart.
@@ -46,77 +42,37 @@ type options struct {
 }
 
 // validate validates the provided options.
-func (o *options) validate() error {
-	if o.yAxisCustomScale != nil {
-		if math.IsNaN(o.yAxisCustomScale.min) || math.IsNaN(o.yAxisCustomScale.max) {
-			return fmt.Errorf("both the min(%v) and the max(%v) provided as custom Y scale must be valid numbers", o.yAxisCustomScale.min, o.yAxisCustomScale.max)
-		}
-		if o.yAxisCustomScale.min >= o.yAxisCustomScale.max {
-			return fmt.Errorf("the min(%v) must be less than the max(%v) provided as custom Y scale", o.yAxisCustomScale.min, o.yAxisCustomScale.max)
-		}
-	}
-	if got, min, max := o.zoomStepPercent, 1, 100; got < min || got > max {
-		return fmt.Errorf("invalid ZoomStepPercent %d, must be in range %d <= value <= %d", got, min, max)
-	}
-	return nil
-}
+func (o *options) validate() error { _ = "STUB: not implemented"; return nil }
 
 // newOptions returns a new options instance.
-func newOptions(opts ...Option) *options {
-	opt := &options{
-		zoomHightlightColor: cell.ColorNumber(235),
-		zoomStepPercent:     zoom.DefaultScrollStep,
-	}
-	for _, o := range opts {
-		o.set(opt)
-	}
-	return opt
-}
+func newOptions(opts ...Option) *options { _ = "STUB: not implemented"; return nil }
 
 // option implements Option.
 type option func(*options)
 
 // set implements Option.set.
 func (o option) set(opts *options) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// AxesCellOpts set the cell options for the X and Y axes.
+	return
 }
 
-// AxesCellOpts set the cell options for the X and Y axes.
-func AxesCellOpts(co ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.axesCellOpts = co
-	})
-}
+func AxesCellOpts(co ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // XLabelCellOpts set the cell options for the labels on the X axis.
-func XLabelCellOpts(co ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.xLabelCellOpts = co
-	})
-}
+func XLabelCellOpts(co ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // XLabelsVertical makes the labels under the X axis flow vertically.
 // Defaults to labels that flow horizontally.
-func XLabelsVertical() Option {
-	return option(func(opts *options) {
-		opts.xLabelOrientation = axes.LabelOrientationVertical
-	})
-}
+func XLabelsVertical() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // XLabelsHorizontal makes the labels under the X axis flow horizontally.
 // This is the default option.
-func XLabelsHorizontal() Option {
-	return option(func(opts *options) {
-		opts.xLabelOrientation = axes.LabelOrientationHorizontal
-	})
-}
+func XLabelsHorizontal() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // YLabelCellOpts set the cell options for the labels on the Y axis.
-func YLabelCellOpts(co ...cell.Option) Option {
-	return option(func(opts *options) {
-		opts.yLabelCellOpts = co
-	})
-}
+func YLabelCellOpts(co ...cell.Option) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // YAxisAdaptive makes the Y axis adapt its base value depending on the
 // provided series.
@@ -126,11 +82,7 @@ func YLabelCellOpts(co ...cell.Option) Option {
 // axis will be adapted to the minimum value for all-positive series or the
 // maximum value for all-negative series. The Y axis still starts at the zero
 // value if the series contain both positive and negative values.
-func YAxisAdaptive() Option {
-	return option(func(opts *options) {
-		opts.yAxisMode = axes.YScaleModeAdaptive
-	})
-}
+func YAxisAdaptive() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // customScale is the custom scale provided via the YAxisCustomScale option.
 type customScale struct {
@@ -150,15 +102,7 @@ type customScale struct {
 // be smaller than the maximum.
 //
 // Providing this option also sets YAxisAdaptive.
-func YAxisCustomScale(min, max float64) Option {
-	return option(func(opts *options) {
-		opts.yAxisCustomScale = &customScale{
-			min: min,
-			max: max,
-		}
-		opts.yAxisMode = axes.YScaleModeAdaptive
-	})
-}
+func YAxisCustomScale(min, max float64) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // XAxisUnscaled when provided, stops the LineChart from rescaling the X axis
 // when it can't fit all the values in the series, instead the LineCharts only
@@ -171,39 +115,26 @@ func YAxisCustomScale(min, max float64) Option {
 // The default behavior is to rescale the X axis to display all the values.
 // This option takes no effect if all the values on the series fit into the
 // LineChart area.
-func XAxisUnscaled() Option {
-	return option(func(opts *options) {
-		opts.xAxisUnscaled = true
-	})
-}
+func XAxisUnscaled() Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ZoomHightlightColor sets the background color of the area that is selected
 // with mouse in order to zoom the linechart.
 // Defaults to color number 235.
-func ZoomHightlightColor(c cell.Color) Option {
-	return option(func(opts *options) {
-		opts.zoomHightlightColor = c
-	})
-}
+func ZoomHightlightColor(c cell.Color) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // ZoomStepPercent sets the zooming step on each mouse scroll event as the
 // percentage of the size of the X axis.
 // The value must be in range 0 < value <= 100.
 // Defaults to zoom.DefaultScrollStep.
-func ZoomStepPercent(perc int) Option {
-	return option(func(opts *options) {
-		opts.zoomStepPercent = perc
-	})
-}
+func ZoomStepPercent(perc int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // YAxisFormattedValues sets a value formatter for the Y axis values.
 // If a formatter is set, it will format the values with the desired
 // ValueFormatter and will use the retuning string from the formatter
 // instead of the numeric value to represent this value on the Y axis.
 func YAxisFormattedValues(vfmt ValueFormatter) Option {
-	return option(func(opts *options) {
-		opts.yAxisValueFormatter = vfmt
-	})
+	_ = "STUB: not implemented"
+	return *new(Option)
 }
 
 // ValueFormatter will be used to format values onto string based

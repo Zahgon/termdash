@@ -19,12 +19,7 @@ package mouse
 type Button int
 
 // String implements fmt.Stringer()
-func (b Button) String() string {
-	if n, ok := buttonNames[b]; ok {
-		return n
-	}
-	return "ButtonUnknown"
-}
+func (b Button) String() string { _ = "STUB: not implemented"; return "" }
 
 // buttonNames maps Button values to human readable names.
 var buttonNames = map[Button]string{

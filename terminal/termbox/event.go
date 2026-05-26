@@ -17,10 +17,7 @@ package termbox
 // event.go converts termbox events to the termdash format.
 
 import (
-	"image"
-
 	"github.com/mum4k/termdash/keyboard"
-	"github.com/mum4k/termdash/mouse"
 	"github.com/mum4k/termdash/terminal/terminalapi"
 	tbx "github.com/nsf/termbox-go"
 )
@@ -87,93 +84,21 @@ var tbxToTd = map[tbx.Key]keyboard.Key{
 
 // convKey converts a termbox keyboard event to the termdash format.
 func convKey(tbxEv tbx.Event) terminalapi.Event {
-	if tbxEv.Key != 0 && tbxEv.Ch != 0 {
-		return terminalapi.NewErrorf("the key event contain both a key(%v) and a character(%v)", tbxEv.Key, tbxEv.Ch)
-	}
-
-	if tbxEv.Ch != 0 {
-		return &terminalapi.Keyboard{
-			Key: keyboard.Key(tbxEv.Ch),
-		}
-	}
-
-	k, ok := tbxToTd[tbxEv.Key]
-	if !ok {
-		return terminalapi.NewErrorf("unknown keyboard key '%v' in a keyboard event", k)
-	}
-	return &terminalapi.Keyboard{
-		Key: k,
-	}
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
 
 // convMouse converts a termbox mouse event to the termdash format.
 func convMouse(tbxEv tbx.Event) terminalapi.Event {
-	var button mouse.Button
-
-	switch k := tbxEv.Key; k {
-	case tbx.MouseLeft:
-		button = mouse.ButtonLeft
-	case tbx.MouseMiddle:
-		button = mouse.ButtonMiddle
-	case tbx.MouseRight:
-		button = mouse.ButtonRight
-	case tbx.MouseRelease:
-		button = mouse.ButtonRelease
-	case tbx.MouseWheelUp:
-		button = mouse.ButtonWheelUp
-	case tbx.MouseWheelDown:
-		button = mouse.ButtonWheelDown
-	default:
-		return terminalapi.NewErrorf("unknown mouse key %v in a mouse event", k)
-	}
-
-	return &terminalapi.Mouse{
-		Position: image.Point{tbxEv.MouseX, tbxEv.MouseY},
-		Button:   button,
-	}
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
 
 // convResize converts a termbox resize event to the termdash format.
 func convResize(tbxEv tbx.Event) terminalapi.Event {
-	size := image.Point{tbxEv.Width, tbxEv.Height}
-	if size.X < 0 || size.Y < 0 {
-		return terminalapi.NewErrorf("terminal resized to negative size: %v", size)
-	}
-	return &terminalapi.Resize{
-		Size: size,
-	}
+	_ = "STUB: not implemented"
+	return *new(terminalapi.Event)
 }
 
 // toTermdashEvents converts a termbox event to the termdash event format.
-func toTermdashEvents(tbxEv tbx.Event) []terminalapi.Event {
-	switch t := tbxEv.Type; t {
-	case tbx.EventInterrupt:
-		return []terminalapi.Event{
-			terminalapi.NewError("event type EventInterrupt isn't supported"),
-		}
-	case tbx.EventRaw:
-		return []terminalapi.Event{
-			terminalapi.NewError("event type EventRaw isn't supported"),
-		}
-	case tbx.EventNone:
-		return []terminalapi.Event{
-			terminalapi.NewError("event type EventNone isn't supported"),
-		}
-	case tbx.EventError:
-		return []terminalapi.Event{
-			terminalapi.NewErrorf("input error occurred: %v", tbxEv.Err),
-		}
-	case tbx.EventResize:
-		return []terminalapi.Event{convResize(tbxEv)}
-	case tbx.EventMouse:
-		return []terminalapi.Event{convMouse(tbxEv)}
-	case tbx.EventKey:
-		return []terminalapi.Event{
-			convKey(tbxEv),
-		}
-	default:
-		return []terminalapi.Event{
-			terminalapi.NewErrorf("unknown termbox event type: %v", t),
-		}
-	}
-}
+func toTermdashEvents(tbxEv tbx.Event) []terminalapi.Event { _ = "STUB: not implemented"; return nil }

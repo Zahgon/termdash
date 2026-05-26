@@ -15,8 +15,6 @@
 package terminalapi
 
 import (
-	"errors"
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/keyboard"
@@ -37,12 +35,14 @@ type Keyboard struct {
 	Key keyboard.Key
 }
 
-func (*Keyboard) isEvent() {}
+func (*Keyboard) isEvent() {
+	_ = "STUB: not implemented"
 
-// String implements fmt.Stringer.
-func (k Keyboard) String() string {
-	return fmt.Sprintf("Keyboard{Key: %v}", k.Key)
+	// String implements fmt.Stringer.
+	return
 }
+
+func (k Keyboard) String() string { _ = "STUB: not implemented"; return "" }
 
 // Resize is the event used when the terminal was resized.
 // Implements terminalapi.Event.
@@ -51,12 +51,14 @@ type Resize struct {
 	Size image.Point
 }
 
-func (*Resize) isEvent() {}
+func (*Resize) isEvent() {
+	_ = "STUB: not implemented"
 
-// String implements fmt.Stringer.
-func (r Resize) String() string {
-	return fmt.Sprintf("Resize{Size: %v}", r.Size)
+	// String implements fmt.Stringer.
+	return
 }
+
+func (r Resize) String() string { _ = "STUB: not implemented"; return "" }
 
 // Mouse is the event used when the mouse is moved or a mouse button is
 // pressed.
@@ -68,39 +70,32 @@ type Mouse struct {
 	Button mouse.Button
 }
 
-func (*Mouse) isEvent() {}
+func (*Mouse) isEvent() {
+	_ = "STUB: not implemented"
 
-// String implements fmt.Stringer.
-func (m Mouse) String() string {
-	return fmt.Sprintf("Mouse{Position: %v, Button: %v}", m.Position, m.Button)
+	// String implements fmt.Stringer.
+	return
 }
+
+func (m Mouse) String() string { _ = "STUB: not implemented"; return "" }
 
 // Error is an event indicating an error while processing input.
 type Error string
 
 // NewError returns a new Error event.
-func NewError(e string) *Error {
-	err := Error(e)
-	return &err
-}
+func NewError(e string) *Error { _ = "STUB: not implemented"; return nil }
 
 // NewErrorf returns a new Error event, arguments are similar to fmt.Sprintf.
-func NewErrorf(format string, args ...interface{}) *Error {
-	err := Error(fmt.Sprintf(format, args...))
-	return &err
+func NewErrorf(format string, args ...interface{}) *Error { _ = "STUB: not implemented"; return nil }
+
+func (*Error) isEvent() {
+	_ = "STUB: not implemented"
+
+	// Error returns the error that occurred.
+	return
 }
 
-func (*Error) isEvent() {}
-
-// Error returns the error that occurred.
-func (e *Error) Error() error {
-	if e == nil || *e == "" {
-		return nil
-	}
-	return errors.New(string(*e))
-}
+func (e *Error) Error() error { _ = "STUB: not implemented"; return nil }
 
 // String implements fmt.Stringer.
-func (e Error) String() string {
-	return string(e)
-}
+func (e Error) String() string { _ = "STUB: not implemented"; return "" }

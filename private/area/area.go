@@ -16,26 +16,16 @@
 package area
 
 import (
-	"fmt"
 	"image"
-
-	"github.com/mum4k/termdash/private/numbers"
 )
 
 // Size returns the size of the provided area.
-func Size(area image.Rectangle) image.Point {
-	return image.Point{
-		area.Dx(),
-		area.Dy(),
-	}
-}
+func Size(area image.Rectangle) image.Point { _ = "STUB: not implemented"; return *new(image.Point) }
 
 // FromSize returns the corresponding area for the provided size.
 func FromSize(size image.Point) (image.Rectangle, error) {
-	if size.X < 0 || size.Y < 0 {
-		return image.Rectangle{}, fmt.Errorf("cannot convert zero or negative size to an area, got: %+v", size)
-	}
-	return image.Rect(0, 0, size.X, size.Y), nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), nil
 }
 
 // hSplit returns two new areas created by splitting the provided area at the
@@ -44,28 +34,8 @@ func FromSize(size image.Point) (image.Rectangle, error) {
 // range 0 <= heightPerc <= 100.
 // Can return zero size areas.
 func hSplit(area image.Rectangle, heightPerc int, reversed bool) (top image.Rectangle, bottom image.Rectangle, err error) {
-	if min, max := 0, 100; heightPerc < min || heightPerc > max {
-		return image.ZR, image.ZR, fmt.Errorf("invalid heightPerc %d, must be in range %d <= heightPerc <= %d", heightPerc, min, max)
-	}
-
-	height := area.Dy() * heightPerc / 100
-
-	if reversed {
-		top = image.Rect(area.Min.X, area.Min.Y, area.Max.X, area.Max.Y-height)
-		bottom = image.Rect(area.Min.X, area.Max.Y-height, area.Max.X, area.Max.Y)
-	} else {
-		top = image.Rect(area.Min.X, area.Min.Y, area.Max.X, area.Min.Y+height)
-		bottom = image.Rect(area.Min.X, area.Min.Y+height, area.Max.X, area.Max.Y)
-	}
-
-	if top.Dy() == 0 {
-		top = image.ZR
-	}
-	if bottom.Dy() == 0 {
-		bottom = image.ZR
-	}
-
-	return top, bottom, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // HSplit returns two new areas created by splitting the provided area at the
@@ -73,7 +43,8 @@ func hSplit(area image.Rectangle, heightPerc int, reversed bool) (top image.Rect
 // The percentage must be in the range 0 <= heightPerc <= 100.
 // Can return zero size areas.
 func HSplit(area image.Rectangle, heightPerc int) (top image.Rectangle, bottom image.Rectangle, err error) {
-	return hSplit(area, heightPerc, false)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // HSplitReversed returns two new areas created by splitting the provided area
@@ -81,7 +52,8 @@ func HSplit(area image.Rectangle, heightPerc int) (top image.Rectangle, bottom i
 // bottom area. The percentage must be in the range 0 <= heightPerc <= 100.
 // Can return zero size areas.
 func HSplitReversed(area image.Rectangle, heightPerc int) (top image.Rectangle, bottom image.Rectangle, err error) {
-	return hSplit(area, heightPerc, true)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // vSplit returns two new areas created by splitting the provided area at the
@@ -90,28 +62,8 @@ func HSplitReversed(area image.Rectangle, heightPerc int) (top image.Rectangle, 
 // range 0 <= widthPerc <= 100.
 // Can return zero size areas.
 func vSplit(area image.Rectangle, widthPerc int, reversed bool) (left image.Rectangle, right image.Rectangle, err error) {
-	if min, max := 0, 100; widthPerc < min || widthPerc > max {
-		return image.ZR, image.ZR, fmt.Errorf("invalid widthPerc %d, must be in range %d <= widthPerc <= %d", widthPerc, min, max)
-	}
-
-	width := area.Dx() * widthPerc / 100
-
-	if reversed {
-		left = image.Rect(area.Min.X, area.Min.Y, area.Max.X-width, area.Max.Y)
-		right = image.Rect(area.Max.X-width, area.Min.Y, area.Max.X, area.Max.Y)
-	} else {
-		left = image.Rect(area.Min.X, area.Min.Y, area.Min.X+width, area.Max.Y)
-		right = image.Rect(area.Min.X+width, area.Min.Y, area.Max.X, area.Max.Y)
-	}
-
-	if left.Dx() == 0 {
-		left = image.ZR
-	}
-	if right.Dx() == 0 {
-		right = image.ZR
-	}
-
-	return left, right, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // VSplit returns two new areas created by splitting the provided area at the
@@ -119,7 +71,8 @@ func vSplit(area image.Rectangle, widthPerc int, reversed bool) (left image.Rect
 // The percentage must be in the range 0 <= widthPerc <= 100.
 // Can return zero size areas.
 func VSplit(area image.Rectangle, widthPerc int) (left image.Rectangle, right image.Rectangle, err error) {
-	return vSplit(area, widthPerc, false)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // VSplitReversed returns two new areas created by splitting the provided area
@@ -127,7 +80,8 @@ func VSplit(area image.Rectangle, widthPerc int) (left image.Rectangle, right im
 // right area. The percentage must be in the range 0 <= widthPerc <= 100.
 // Can return zero size areas.
 func VSplitReversed(area image.Rectangle, widthPerc int) (left image.Rectangle, right image.Rectangle, err error) {
-	return vSplit(area, widthPerc, true)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // vSplitCells returns two new areas created by splitting the provided area
@@ -137,35 +91,8 @@ func VSplitReversed(area image.Rectangle, widthPerc int) (left image.Rectangle, 
 // right=area. Providing a number equal or larger to area's width returns
 // left=area, right=image.ZR.
 func vSplitCells(area image.Rectangle, cells int, reversed bool) (left image.Rectangle, right image.Rectangle, err error) {
-	if min := 0; cells < min {
-		return image.ZR, image.ZR, fmt.Errorf("invalid cells %d, must be a positive integer", cells)
-	}
-	if cells == 0 {
-		if reversed {
-			return area, image.ZR, nil
-		}
-		return image.ZR, area, nil
-	}
-
-	width := area.Dx()
-	if cells >= width {
-		if reversed {
-			return image.ZR, area, nil
-		}
-		return area, image.ZR, nil
-	}
-
-	splitX := area.Min.X
-	if reversed {
-		splitX = area.Max.X - cells
-	} else {
-		splitX = area.Min.X + cells
-	}
-
-	left = image.Rect(area.Min.X, area.Min.Y, splitX, area.Max.Y)
-	right = image.Rect(splitX, area.Min.Y, area.Max.X, area.Max.Y)
-
-	return left, right, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // VSplitCells returns two new areas created by splitting the provided area
@@ -174,7 +101,8 @@ func vSplitCells(area image.Rectangle, cells int, reversed bool) (left image.Rec
 // zero returns left=image.ZR, right=area. Providing a number equal or larger to
 // area's width returns left=area, right=image.ZR.
 func VSplitCells(area image.Rectangle, cells int) (left image.Rectangle, right image.Rectangle, err error) {
-	return vSplitCells(area, cells, false)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // VSplitCellsReversed returns two new areas created by splitting the provided
@@ -183,7 +111,8 @@ func VSplitCells(area image.Rectangle, cells int) (left image.Rectangle, right i
 // Providing a zero returns left=image.ZR, right=area. Providing a number equal
 // or larger to area's width returns left=area, right=image.ZR.
 func VSplitCellsReversed(area image.Rectangle, cells int) (left image.Rectangle, right image.Rectangle, err error) {
-	return vSplitCells(area, cells, true)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // hSplitCells returns two new areas created by splitting the provided area
@@ -193,35 +122,8 @@ func VSplitCellsReversed(area image.Rectangle, cells int) (left image.Rectangle,
 // bottom=area. Providing a number equal or larger to area's height returns
 // top=area, bottom=image.ZR.
 func hSplitCells(area image.Rectangle, cells int, reversed bool) (top image.Rectangle, bottom image.Rectangle, err error) {
-	if min := 0; cells < min {
-		return image.ZR, image.ZR, fmt.Errorf("invalid cells %d, must be a positive integer", cells)
-	}
-	if cells == 0 {
-		if reversed {
-			return area, image.ZR, nil
-		}
-		return image.ZR, area, nil
-	}
-
-	height := area.Dy()
-	if cells >= height {
-		if reversed {
-			return image.ZR, area, nil
-		}
-		return area, image.ZR, nil
-	}
-
-	splitY := area.Min.Y
-	if reversed {
-		splitY = area.Max.Y - cells
-	} else {
-		splitY = area.Min.Y + cells
-	}
-
-	top = image.Rect(area.Min.X, area.Min.Y, area.Max.X, splitY)
-	bottom = image.Rect(area.Min.X, splitY, area.Max.X, area.Max.Y)
-
-	return top, bottom, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // HSplitCells returns two new areas created by splitting the provided area
@@ -230,7 +132,8 @@ func hSplitCells(area image.Rectangle, cells int, reversed bool) (top image.Rect
 // zero returns top=image.ZR, bottom=area. Providing a number equal or larger to
 // area's height returns top=area, bottom=image.ZR.
 func HSplitCells(area image.Rectangle, cells int) (top image.Rectangle, bottom image.Rectangle, err error) {
-	return hSplitCells(area, cells, false)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // HSplitCellsReversed returns two new areas created by splitting the provided
@@ -239,81 +142,34 @@ func HSplitCells(area image.Rectangle, cells int) (top image.Rectangle, bottom i
 // Providing a zero returns top=area, bottom=image.ZR. Providing a number equal
 // or larger to area's height returns top=image.ZR, bottom=area.
 func HSplitCellsReversed(area image.Rectangle, cells int) (top image.Rectangle, bottom image.Rectangle, err error) {
-	return hSplitCells(area, cells, true)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), *new(image.Rectangle), nil
 }
 
 // ExcludeBorder returns a new area created by subtracting a border around the
 // provided area. Return the zero area if there isn't enough space to exclude
 // the border.
 func ExcludeBorder(area image.Rectangle) image.Rectangle {
+	_ = "STUB: not implemented"
 	// If the area dimensions are smaller than this, subtracting a point for the
 	// border on each of its sides results in a zero area.
-	const minDim = 2
-	if area.Dx() < minDim || area.Dy() < minDim {
-		return image.ZR
-	}
-	return image.Rect(
-		numbers.Abs(area.Min.X+1),
-		numbers.Abs(area.Min.Y+1),
-		numbers.Abs(area.Max.X-1),
-		numbers.Abs(area.Max.Y-1),
-	)
+	return *new(image.Rectangle)
 }
 
 // WithRatio returns the largest area that has the requested ratio but is
 // either equal or smaller than the provided area. Returns zero area if the
 // area or the ratio are zero, or if there is no such area.
 func WithRatio(area image.Rectangle, ratio image.Point) image.Rectangle {
-	ratio = numbers.SimplifyRatio(ratio)
-	if area == image.ZR || ratio == image.ZP {
-		return image.ZR
-	}
-
-	wFact := area.Dx() / ratio.X
-	hFact := area.Dy() / ratio.Y
-
-	var fact int
-	if wFact < hFact {
-		fact = wFact
-	} else {
-		fact = hFact
-	}
-	return image.Rect(
-		area.Min.X,
-		area.Min.Y,
-		ratio.X*fact+area.Min.X,
-		ratio.Y*fact+area.Min.Y,
-	)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle)
 }
 
 // Shrink returns a new area whose size is reduced by the specified amount of
 // cells. Can return a zero area if there is no space left in the area.
 // The values must be zero or positive integers.
 func Shrink(area image.Rectangle, topCells, rightCells, bottomCells, leftCells int) (image.Rectangle, error) {
-	for _, v := range []struct {
-		name  string
-		value int
-	}{
-		{"topCells", topCells},
-		{"rightCells", rightCells},
-		{"bottomCells", bottomCells},
-		{"leftCells", leftCells},
-	} {
-		if min := 0; v.value < min {
-			return image.ZR, fmt.Errorf("invalid %s(%d), must be in range %d <= value", v.name, v.value, min)
-		}
-	}
-
-	shrunk := area
-	shrunk.Min.X, _ = numbers.MinMaxInts([]int{shrunk.Min.X + leftCells, shrunk.Max.X})
-	_, shrunk.Max.X = numbers.MinMaxInts([]int{shrunk.Max.X - rightCells, shrunk.Min.X})
-	shrunk.Min.Y, _ = numbers.MinMaxInts([]int{shrunk.Min.Y + topCells, shrunk.Max.Y})
-	_, shrunk.Max.Y = numbers.MinMaxInts([]int{shrunk.Max.Y - bottomCells, shrunk.Min.Y})
-
-	if shrunk.Dx() == 0 || shrunk.Dy() == 0 {
-		return image.ZR, nil
-	}
-	return shrunk, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), nil
 }
 
 // ShrinkPercent returns a new area whose size is reduced by percentage of its
@@ -322,55 +178,22 @@ func Shrink(area image.Rectangle, topCells, rightCells, bottomCells, leftCells i
 // The rightPerc and leftPerc indicate the percentage of area's width.
 // The percentages must be in range 0 <= v <= 100.
 func ShrinkPercent(area image.Rectangle, topPerc, rightPerc, bottomPerc, leftPerc int) (image.Rectangle, error) {
-	for _, v := range []struct {
-		name  string
-		value int
-	}{
-		{"topPerc", topPerc},
-		{"rightPerc", rightPerc},
-		{"bottomPerc", bottomPerc},
-		{"leftPerc", leftPerc},
-	} {
-		if min, max := 0, 100; v.value < min || v.value > max {
-			return image.ZR, fmt.Errorf("invalid %s(%d), must be in range %d <= value <= %d", v.name, v.value, min, max)
-		}
-	}
-
-	top := area.Dy() * topPerc / 100
-	bottom := area.Dy() * bottomPerc / 100
-	right := area.Dx() * rightPerc / 100
-	left := area.Dx() * leftPerc / 100
-	return Shrink(area, top, right, bottom, left)
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), nil
 }
 
 // MoveUp returns a new area that is moved up by the specified amount of cells.
 // Returns an error if the move would result in negative Y coordinates.
 // The values must be zero or positive integers.
 func MoveUp(area image.Rectangle, cells int) (image.Rectangle, error) {
-	if min := 0; cells < min {
-		return image.ZR, fmt.Errorf("cannot move area %v up by %d cells, must be in range %d <= value", area, cells, min)
-	}
-
-	if area.Min.Y < cells {
-		return image.ZR, fmt.Errorf("cannot move area %v up by %d cells, would result in negative Y coordinate", area, cells)
-	}
-
-	moved := area
-	moved.Min.Y -= cells
-	moved.Max.Y -= cells
-	return moved, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), nil
 }
 
 // MoveDown returns a new area that is moved down by the specified amount of
 // cells.
 // The values must be zero or positive integers.
 func MoveDown(area image.Rectangle, cells int) (image.Rectangle, error) {
-	if min := 0; cells < min {
-		return image.ZR, fmt.Errorf("cannot move area %v down by %d cells, must be in range %d <= value", area, cells, min)
-	}
-
-	moved := area
-	moved.Min.Y += cells
-	moved.Max.Y += cells
-	return moved, nil
+	_ = "STUB: not implemented"
+	return *new(image.Rectangle), nil
 }

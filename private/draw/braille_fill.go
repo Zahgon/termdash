@@ -17,7 +17,6 @@ package draw
 // braille_fill.go implements the flood-fill algorithm for filling shapes on the braille canvas.
 
 import (
-	"fmt"
 	"image"
 
 	"github.com/mum4k/termdash/cell"
@@ -37,68 +36,41 @@ type brailleFillOptions struct {
 }
 
 // newBrailleFillOptions returns a new brailleFillOptions instance.
-func newBrailleFillOptions() *brailleFillOptions {
-	return &brailleFillOptions{
-		pixelChange: braillePixelChangeSet,
-	}
-}
+func newBrailleFillOptions() *brailleFillOptions { _ = "STUB: not implemented"; return nil }
 
 // brailleFillOption implements BrailleFillOption.
 type brailleFillOption func(*brailleFillOptions)
 
 // set implements BrailleFillOption.set.
 func (o brailleFillOption) set(opts *brailleFillOptions) {
-	o(opts)
+	_ = "STUB: not implemented"
+
+	// BrailleFillCellOpts sets options on the cells that are set as part of
+	// filling shapes.
+	// Cell options on a braille canvas can only be set on the entire cell, not per
+	// pixel.
+	return
 }
 
-// BrailleFillCellOpts sets options on the cells that are set as part of
-// filling shapes.
-// Cell options on a braille canvas can only be set on the entire cell, not per
-// pixel.
 func BrailleFillCellOpts(cOpts ...cell.Option) BrailleFillOption {
-	return brailleFillOption(func(opts *brailleFillOptions) {
-		opts.cellOpts = cOpts
-	})
+	_ = "STUB: not implemented"
+	return *new(BrailleFillOption)
 }
 
 // BrailleFillClearPixels changes the behavior of BrailleFill, so that it
 // clears the pixels instead of setting them.
 // Useful in order to "erase" the filled area as opposed to drawing one.
 func BrailleFillClearPixels() BrailleFillOption {
-	return brailleFillOption(func(opts *brailleFillOptions) {
-		opts.pixelChange = braillePixelChangeClear
-	})
+	_ = "STUB: not implemented"
+	return *new(BrailleFillOption)
 }
 
 // BrailleFill fills the braille canvas starting at the specified point.
 // The function will not fill or cross over any points in the defined border.
 // The start point must be in the canvas.
 func BrailleFill(bc *braille.Canvas, start image.Point, border []image.Point, opts ...BrailleFillOption) error {
-	if ar := bc.Area(); !start.In(ar) {
-		return fmt.Errorf("unable to start filling canvas at point %v which is outside of the braille canvas area %v", start, ar)
-	}
-
-	opt := newBrailleFillOptions()
-	for _, o := range opts {
-		o.set(opt)
-	}
-
-	b := map[image.Point]struct{}{}
-	for _, p := range border {
-		b[p] = struct{}{}
-	}
-
-	v := newVisitable(bc.Area(), b)
-	visitor := func(p image.Point) error {
-		switch opt.pixelChange {
-		case braillePixelChangeSet:
-			return bc.SetPixel(p, opt.cellOpts...)
-		case braillePixelChangeClear:
-			return bc.ClearPixel(p, opt.cellOpts...)
-		}
-		return nil
-	}
-	return brailleDFS(v, start, visitor)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // visitable represents an area that can be visited.
@@ -111,50 +83,20 @@ type visitable struct {
 // newVisitable returns a new visitable object initialized for the provided
 // area and already visited nodes.
 func newVisitable(ar image.Rectangle, visited map[image.Point]struct{}) *visitable {
-	if visited == nil {
-		visited = map[image.Point]struct{}{}
-	}
-	return &visitable{
-		area:    ar,
-		visited: visited,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // neighborsAt returns all valid neighbors for the specified point.
-func (v *visitable) neighborsAt(p image.Point) []image.Point {
-	var res []image.Point
-	for _, neigh := range []image.Point{
-		{p.X - 1, p.Y}, // left
-		{p.X + 1, p.Y}, // right
-		{p.X, p.Y - 1}, // up
-		{p.X, p.Y + 1}, // down
-	} {
-		if !neigh.In(v.area) {
-			continue
-		}
-		if _, ok := v.visited[neigh]; ok {
-			continue
-		}
-		v.visited[neigh] = struct{}{}
-		res = append(res, neigh)
-	}
-	return res
-}
+func (v *visitable) neighborsAt(p image.Point) []image.Point { _ = "STUB: not implemented"; return nil }
+
+// left
+// right
+// up
+// down
 
 // brailleDFS visits every point in the area and runs the visitor function.
 func brailleDFS(v *visitable, p image.Point, visitFn func(image.Point) error) error {
-	neigh := v.neighborsAt(p)
-	if len(neigh) == 0 {
-		return nil
-	}
-
-	for _, n := range neigh {
-		if err := visitFn(n); err != nil {
-			return err
-		}
-		if err := brailleDFS(v, n, visitFn); err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }

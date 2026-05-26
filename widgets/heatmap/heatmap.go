@@ -16,7 +16,6 @@
 package heatmap
 
 import (
-	"errors"
 	"image"
 	"sync"
 
@@ -62,9 +61,7 @@ type HeatMap struct {
 }
 
 // New returns a new HeatMap widget.
-func New(opts ...Option) (*HeatMap, error) {
-	return nil, errors.New("not implemented")
-}
+func New(opts ...Option) (*HeatMap, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Values sets the values to be displayed by the HeatMap.
 //
@@ -76,72 +73,87 @@ func New(opts ...Option) (*HeatMap, error) {
 // Each call to Values overwrites any previously provided values.
 // Provided options override values set when New() was called.
 func (hp *HeatMap) Values(xLabels []string, yLabels []string, values [][]float64, opts ...Option) error {
-	return errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ClearXLabels clear the X labels.
 func (hp *HeatMap) ClearXLabels() {
-	hp.xLabels = nil
+	_ = "STUB: not implemented"
+
+	// ClearYLabels clear the Y labels.
+	return
 }
 
-// ClearYLabels clear the Y labels.
 func (hp *HeatMap) ClearYLabels() {
-	hp.yLabels = nil
+	_ = "STUB: not implemented"
+
+	// ValueCapacity returns the number of values that can fit into the canvas.
+	// This is essentially the number of available cells on the canvas as observed
+	// on the last call to draw. Returns zero if draw wasn't called.
+	//
+	// Note that this capacity changes each time the terminal resizes, so there is
+	// no guarantee this remains the same next time Draw is called.
+	// Should be used as a hint only.
+	return
 }
 
-// ValueCapacity returns the number of values that can fit into the canvas.
-// This is essentially the number of available cells on the canvas as observed
-// on the last call to draw. Returns zero if draw wasn't called.
-//
-// Note that this capacity changes each time the terminal resizes, so there is
-// no guarantee this remains the same next time Draw is called.
-// Should be used as a hint only.
 func (hp *HeatMap) ValueCapacity() int {
+	_ = "STUB: not implemented"
+
+	// axesDetails determines the details about the X and Y axes.
 	return 0
 }
 
-// axesDetails determines the details about the X and Y axes.
 func (hp *HeatMap) axesDetails(cvs *canvas.Canvas) (*axes.XDetails, *axes.YDetails, error) {
-	return nil, nil, errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil, nil
 }
 
 // Draw draws cells, X labels and Y labels as HeatMap.
 // Implements widgetapi.Widget.Draw.
 func (hp *HeatMap) Draw(cvs *canvas.Canvas, meta *widgetapi.Meta) error {
-	return errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // drawCells draws m*n cells (rectangles) representing the stored values.
 // The height of each cell is 1 and the default width is 3.
 func (hp *HeatMap) drawCells(cvs *canvas.Canvas, xd *axes.XDetails, yd *axes.YDetails) error {
-	return errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // drawAxes draws X labels (under the cells) and Y Labels (on the left side of the cell).
 func (hp *HeatMap) drawLabels(cvs *canvas.Canvas, xd *axes.XDetails, yd *axes.YDetails) error {
-	return errors.New("not implemented")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // minSize determines the minimum required size to draw HeatMap.
 func (hp *HeatMap) minSize() image.Point {
-	return image.Point{}
+	_ = "STUB: not implemented"
+	return *
+
+	// Keyboard input isn't supported on the HeatMap widget.
+	new(image.Point)
 }
 
-// Keyboard input isn't supported on the HeatMap widget.
 func (*HeatMap) Keyboard(k *terminalapi.Keyboard, meta *widgetapi.EventMeta) error {
-	return errors.New("the HeatMap widget doesn't support keyboard events")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Mouse input isn't supported on the HeatMap widget.
 func (*HeatMap) Mouse(m *terminalapi.Mouse, meta *widgetapi.EventMeta) error {
-	return errors.New("the HeatMap widget doesn't support mouse events")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Options implements widgetapi.Widget.Options.
 func (hp *HeatMap) Options() widgetapi.Options {
-	hp.mu.Lock()
-	defer hp.mu.Unlock()
-	return widgetapi.Options{}
+	_ = "STUB: not implemented"
+	return *new(widgetapi.Options)
 }
 
 // getCellColor returns the color of the cell according to its value.
@@ -149,5 +161,6 @@ func (hp *HeatMap) Options() widgetapi.Options {
 // The color range is in Xterm color, from 232 to 255.
 // Refer to https://jonasjacek.github.io/colors/.
 func (hp *HeatMap) getCellColor(value float64) cell.Color {
-	return cell.ColorDefault
+	_ = "STUB: not implemented"
+	return *new(cell.Color)
 }
